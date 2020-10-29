@@ -10,7 +10,6 @@ switch(process.env.NODE_ENV) {
         config = require('./env/development');
         break;
 }
-process.env.BASE_URL = config.baseURL;
 
 module.exports = config;
 

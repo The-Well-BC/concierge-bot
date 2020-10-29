@@ -7,7 +7,6 @@ module.exports = {
     cors: {
         origin: ['http://localhost:8000', 'http://localhost:8080', 'http://localhost:8081', 'http://localhost:8082'],
         credentials: true
-    },
-    baseURL: 'http://localhost:3000'
+    }
 }
 
