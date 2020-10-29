@@ -1,0 +1,34 @@
+{
+  "name": "dropbot",
+  "version": "1.0.0",
+  "description": "A telegram bot that broadcasts trading drops on Foundation and Xora",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "mocha --recursive tests/ --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/littlezigy/traddropbot.git"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "cryptotokens"
+  ],
+  "author": "Adesuwa T. Dawodu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/littlezigy/traddropbot/issues"
+  },
+  "homepage": "https://github.com/littlezigy/traddropbot#readme",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-things": "^0.2.0",
+    "mocha": "^8.2.0"
+  }
+}
