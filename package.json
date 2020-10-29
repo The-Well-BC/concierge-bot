@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": ". ./.env && NODE_ENV=test node ./index.js",
-    "dev": "nodemon index.js",
+    "dev": ". ./.env && NODE_ENV=development nodemon index.js",
     "test": ". ./.env && NODE_ENV=test mocha --timeout 10000 --recursive tests/ --require tests/hooks.js",
     "test:dev": ". ./.env && NODE_ENV=test mocha --timeout 10000 --recursive tests/ --grep='#dev' --require tests/hooks.js --watch",
     "test:unit": "mocha --recursive tests/unit.tests --watch"
