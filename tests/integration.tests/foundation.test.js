@@ -1,6 +1,6 @@
 const chai = require('chai').use(require('chai-things'));
 const expect = chai.expect;
-const foundation = require('../../components/foundation');
+const foundation = require('../../components/resources/foundation');
 
 describe('Fetch drops from foundation', function() {
     return foundation.fetchDrops()
