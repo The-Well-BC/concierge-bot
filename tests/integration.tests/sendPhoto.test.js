@@ -3,13 +3,11 @@ const expect = chai.expect;
 
 const sendPhoto = require('../../components/sendPhoto');
 
-describe('#dev Send Photo', function() {
+describe('Send Photo', function() {
     it('Send photo with caption', function() {
         const message = {
             url: 'https://picsum.photos/200',
-            text: `Testing... testing...
-                Multiline string
-                Howwill bot handle this??
+            text: `Testing... testing...\nMultiline string\nHowwill bot handle this??
             `, 
             chat_id: 641574672
         }
