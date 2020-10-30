@@ -45,6 +45,29 @@
                     { "offset":0,"length":6,"type":"bot_command"}
                 ]
             }
+        },
+        "fetchSubscriptions": {
+            "update_id":221739650,
+            "message": {
+                "message_id":1,
+                "from": {
+                    "id":641574672,
+                    "is_bot":false,
+                    "first_name":"Adesuwa",
+                    "username":"littlezigy"
+                },
+                "chat":{
+                    "id":641574672,
+                    "first_name":"Adesuwa",
+                    "username":"littlezigy",
+                    "type":"private"
+                },
+                "date":1603967034,
+                "text":"/fetch_subscriptions",
+                "entities":[
+                    { "offset":0,"length":6,"type":"bot_command"}
+                ]
+            }
         }
     },
     "chat": {
