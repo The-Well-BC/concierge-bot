@@ -6,17 +6,19 @@ const request = require('supertest');
 const clone = require('rfdc')();
 const subdao = require('../../components/subscription.dao');
 
+const links = require('../../config/links');
+
 const samplePayloads = require('../samplePayload.json');
 
-describe('User subscribes to foundation', function() {
+describe('#dev User subscribes to foundation', function() {
     before(() => {
         const teardown = require('../teardown');
         return teardown();
     });
 
-    it('#dev First run', function() {
+    it('First run', function() {
         const payload = clone(samplePayloads.commands.start);
-        return request(app).post('/webhook/telegram/secret').send(payload)
+        return request(app).post(links.webhook).send(payload)
         .then(res => {
             expect(res.body).to.have.keys('chat_id', 'text', 'reply_markup', 'method');
 
@@ -32,9 +34,10 @@ describe('User subscribes to foundation', function() {
 
         const chat_id = payload.message.chat.id;
 
-        return request(app).post('/webhook/telegram/secret').send(payload)
+        return request(app).post(links.webhook).send(payload)
         .then(res => {
-            expect(res.body).to.have.keys('chat_id', 'text');
+            expect(res.body).to.have.keys('chat_id', 'text', 'method');
+            expect(res.body).to.have.property('method', 'sendMessage');
 
             expect(res.body.chat_id).to.equal(payload.message.chat.id);
             expect(res.body.text).to.have.string("subscribed to", "You");
@@ -54,9 +57,9 @@ describe('User subscribes to foundation', function() {
         const chat_id = payload.message.chat.id;
         payload.message.text = '/subscribe zora';
 
-        return request(app).post('/webhook/telegram/secret').send(payload)
+        return request(app).post(links.webhook).send(payload)
         .then(res => {
-            expect(res.body).to.have.keys('chat_id', 'text');
+            expect(res.body).to.have.keys('chat_id', 'text', 'method');
 
             expect(res.body.chat_id).to.equal(payload.message.chat.id);
             expect(res.body.text).to.have.string("subscribed to", "You");
@@ -75,7 +78,7 @@ describe('User subscribes to foundation', function() {
         const chat_id = payload.message.chat.id;
         payload.message.text = '/subscribe xora';
 
-        return request(app).post('/webhook/telegram/secret').send(payload)
+        return request(app).post(links.webhook).send(payload)
         .then(res => {
             expect(res.body).to.have.keys('chat_id', 'text');
 

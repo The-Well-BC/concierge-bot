@@ -17,7 +17,9 @@ cron.schedule('0 */3 * * *', function() {
     return alertsModel.sendAlerts()
 });
 
-app.post('/webhook/telegram/secret/', function(req, res) {
+const links = require('./config/links');
+
+app.post(links.webhook, function(req, res) {
     return bot.receiveMessage(req.body)
     .then(result => {
         return res.send(result);
