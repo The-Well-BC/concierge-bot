@@ -1,10 +1,8 @@
-const tables = require('../config/tables');
-const db = require('postgresorm');
+const teardown = require('./teardown');
 
 exports.mochaHooks = {
-    beforeEach(){
-        db.debug(false);
-        let querytext = `TRUNCATE TABLE ${ Object.values(tables)} CASCADE`;
-        return db.customquery(querytext);
-    }
+    beforeAll(){
+        console.log('BEFOR ALL');
+        return teardown();
+    },
 }
