@@ -11,7 +11,9 @@ module.exports = {
                 let additionalMessage;
                 if(res !== true)
                     additionalMessage = res;
-                return botMessages.prepareResponse(payload, additionalMessage);
+                let message = botMessages.prepareResponse(payload, additionalMessage)
+                message.method = 'sendMessage';
+                return message;
             }
         });
     }

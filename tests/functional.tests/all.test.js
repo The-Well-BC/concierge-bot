@@ -14,12 +14,13 @@ describe('User subscribes to foundation', function() {
         return teardown();
     });
 
-    it('First run', function() {
+    it('#dev First run', function() {
         const payload = clone(samplePayloads.commands.start);
         return request(app).post('/webhook/telegram/secret').send(payload)
         .then(res => {
-            expect(res.body).to.have.keys('chat_id', 'text', 'reply_markup');
+            expect(res.body).to.have.keys('chat_id', 'text', 'reply_markup', 'method');
 
+            expect(res.body).to.have.property('method', 'sendMessage');
             expect(res.body.chat_id).to.equal(payload.message.chat.id);
             expect(res.body.text).to.have.string("Hello " + payload.message.chat.first_name);
             expect(res.body.reply_markup.keyboard[0].length).to.be.greaterThan(1);
