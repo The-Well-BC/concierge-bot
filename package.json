@@ -8,7 +8,8 @@
     "dev": ". ./.env && NODE_ENV=development nodemon index.js",
     "test": ". ./.env && NODE_ENV=test mocha --timeout 10000 --recursive tests/ --require tests/hooks.js",
     "test:dev": ". ./.env && NODE_ENV=test mocha --timeout 10000 --recursive tests/ --grep='#dev' --require tests/hooks.js --watch",
-    "test:unit": "mocha --recursive tests/unit.tests --watch"
+    "test:unit": "mocha --recursive tests/unit.tests --watch",
+    "dev:exportSchema": ". ./SQL/scripts/exportDevSchema.sh"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
   "dependencies": {
     "axios": "^0.21.0",
     "express": "^4.17.1",
+    "node-cron": "^2.0.3",
     "postgresorm": "^4.9.1",
     "rfdc": "^1.1.4"
   },
