@@ -34,6 +34,14 @@ module.exports = {
         }
 
         return { ...message, chat_id: chatID };
+    },
+
+    prepareFailMessage: function(payload) {
+        let chatID = payload.message.chat.id;
+        return {
+            text: 'Action failed. Please check parameters and try again',
+            chat_id: chatID
+        }
     }
 
 }

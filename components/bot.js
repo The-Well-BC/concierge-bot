@@ -6,7 +6,7 @@ module.exports = {
         return commands.runCommand(payload)
         .then(res => {
             if( res === false )
-                return false
+                return botMessages.prepareFailMessage(payload);
             else {
                 let additionalMessage;
                 if(res !== true)
