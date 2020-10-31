@@ -1,9 +1,18 @@
 # Trading Drops Telegram Bot
+### Team
+Telegram: @littlezigy
+
+### About The Project
 It's a telegram bot that alerts users of product and artwork releases (drops) on [Zora](https://ourzora.com/) and [Foundation](https://foundation.app/).
+
+### Link to a live demo or working project
+Add @tradedrops_bot on Telegram or click https://t.me/tradedrops_bot to open Telegram automatically
+
 ![Screenshot 1](https://raw.githubusercontent.com/littlezigy/traddropbot/main/docResources/images/Screenshot_2020-10-30-20-30-23-696_org.telegram.messenger.jpg)
 
 ## How to Use
 https://t.me/tradedrops_bot
+Or add @tradedrops_bot on Telegram
 
 ### Commands
 - `/start`
