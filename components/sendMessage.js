@@ -5,7 +5,6 @@ module.exports = (message) => {
     const body = { ...message }
     return axios.post(url, body)
     .then(res => {
-        console.log('DONE',res.data);
         return res.data;
     }).catch(e => {
         console.log('ERRO', e);
