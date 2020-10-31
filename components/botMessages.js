@@ -12,7 +12,7 @@ const start = function(payload) {
     else
         text += ".";
 
-    text += 'I\'m here to alert you on products, artwork released by varying artists.';
+    text += '\nI\'m here to alert you on products, artwork released by varying artists.';
     text += '\nRight now, you can choose to subscribe to all new releases, or drops. Eventually, you will have artists you look forward to and then you can subscribe to those artists.'
     text += '\nChoose \'Subscribe\' to learn more about the different services you could subscribe to.';
     return {
@@ -34,8 +34,8 @@ const subscribeText = function(payload) {
     }
     else if(text.indexOf('Subscribe') === 0) {
         answer = 'Right now, we support two platforms: Zora and Foundation.'
-        answer += 'To Subscribe, simply type */subscribe*. This will subscribe you to alerts from both platforms. To subscribe to alerts from Foundation, type */subscribe foundation*.';
-        answer += 'If you would like to receive updates from Zora instead, type */subscribe zora**.';
+        answer += '\nTo Subscribe, simply type */subscribe*. This will subscribe you to alerts from both platforms. To subscribe to alerts from Foundation, type */subscribe foundation*.';
+        answer += '\nIf you would like to receive updates from Zora instead, type */subscribe zora**.';
     }
     return answer;
 }
