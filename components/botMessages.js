@@ -35,7 +35,7 @@ const subscribeText = function(payload) {
     else if(text.indexOf('Subscribe') === 0) {
         answer = 'Right now, we support two platforms: Zora and Foundation.'
         answer += '\nTo Subscribe, simply type */subscribe*. This will subscribe you to alerts from both platforms. To subscribe to alerts from Foundation, type */subscribe foundation*.';
-        answer += '\nIf you would like to receive updates from Zora instead, type */subscribe zora**.';
+        answer += '\nIf you would like to receive updates from Zora instead, type */subscribe zora*.';
     }
     return answer;
 }

@@ -62,6 +62,6 @@ describe('Messages', function() {
         let message = botMessages.prepareResponse(payload);
         expect(message).to.be.an('object');
         expect(message).to.have.keys('text', 'chat_id', 'parse_mode');
-        expect(message.text).to.equal('Right now, we support two platforms: Zora and Foundation.\nTo Subscribe, simply type */subscribe*. This will subscribe you to alerts from both platforms. To subscribe to alerts from Foundation, type */subscribe foundation*.\nIf you would like to receive updates from Zora instead, type */subscribe zora**.');
+        expect(message.text).to.equal('Right now, we support two platforms: Zora and Foundation.\nTo Subscribe, simply type */subscribe*. This will subscribe you to alerts from both platforms. To subscribe to alerts from Foundation, type */subscribe foundation*.\nIf you would like to receive updates from Zora instead, type */subscribe zora*.');
     });
 });
