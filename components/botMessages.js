@@ -54,7 +54,9 @@ module.exports = {
         } else
             message.text = 'I don\'t understand what you are trying to say';
 
-        return { ...message, chat_id: chatID };
+        let parse_mode = 'Markdown';
+
+        return { ...message, chat_id: chatID, parse_mode };
     },
 
     prepareFailMessage: function(payload) {
