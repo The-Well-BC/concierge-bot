@@ -1,3 +1,5 @@
+const conversation = require('./conversation.js');
+
 const start = function(payload) {
     let text = "Hello";
     let replyMarkup = {
@@ -20,24 +22,22 @@ const start = function(payload) {
         reply_markup: replyMarkup
     };
 }
+
 const subscribeText = function(payload) {
     let text = payload.message.text;
+    let replyMarkup = null;
 
     let answer;
     if(text.indexOf('/subscribe') === 0) {
         if(text.includes('zora'))
             answer = 'You have subscribed to updates from Zora. Whenever releases are made on Zora, you will receive a notification.';
         else if(text.includes('foundation'))
-            answer = 'You have subscribed to updates from Foundation. Whenever releases are made on Foundation, you will receive a notification.';
+            answer = 'You have subscribed to updates from [Foundation](foundation.app). Whenever releases are made on Foundation, you will receive a notification.';
         else
             answer = 'You will receive alerts whenever releases are made on Zora and Foundation';
     }
-    else if(text.indexOf('Subscribe') === 0) {
-        answer = 'Right now, we support two platforms: Zora and Foundation.'
-        answer += '\nTo Subscribe, simply type */subscribe*. This will subscribe you to alerts from both platforms. To subscribe to alerts from Foundation, type */subscribe foundation*.';
-        answer += '\nIf you would like to receive updates from Zora instead, type */subscribe zora*.';
-    }
-    return answer;
+
+    return { text: answer, ...(replyMarkup != null) && {reply_markup: replyMarkup} };
 }
 
 module.exports = {
@@ -45,14 +45,16 @@ module.exports = {
         let message = {};
         let chatID = payload.message.chat.id;
         let text = payload.message.text;
-        if(text.indexOf('/start') === 0) {
+        if(text.indexOf('/start') === 0 || 
+            text.indexOf('/help') === 0 ||
+            text.match(/Start/i) || 
+            text.match(/Hello/i)
+        ) {
             message = start(payload);
         } else if(text.indexOf('/subscribe') === 0) {
-            message.text = subscribeText(payload);
-        } else if(text.indexOf('Subscribe') === 0) {
-            message.text = subscribeText(payload)
+            message = subscribeText(payload);
         } else
-            message.text = 'I don\'t understand what you are trying to say';
+            message = conversation(payload);
 
         let parse_mode = 'Markdown';
 
