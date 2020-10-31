@@ -7,7 +7,7 @@ const alertsModel = require('../../components/alerts.model');
 
 const samplePayloads = require('../samplePayload.json');
 
-describe('Sending alerts', function() {
+describe('#dev Sending alerts', function() {
     before(() => {
         console.log('ALERTS BEFOERLL');
         return bot.receiveMessage(samplePayloads.commands.subscribe);
@@ -17,7 +17,7 @@ describe('Sending alerts', function() {
         return alertsModel.sendAlerts()
         .then(res => {
             console.log('RSSS', res);
-            // expect(res).to.be.an('object');
+            return expect(res).to.be.an('object');
         });
     });
 });
