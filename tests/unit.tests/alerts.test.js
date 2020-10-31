@@ -20,7 +20,7 @@ describe('Returns Alerts Message Object', function() {
         expect(alertmessage).to.all.have.keys('chat_id', 'text');
         expect(alertmessage).to.all.not.have.key('photo');
         expect(alertmessage).to.include.something.with.property('chat_id', chatids[0]);
-        expect(alertmessage[0]).to.have.property('text', 'Unit—002 dropped on August 31, 2020.\nIt is currently trading at $73.58');
+        expect(alertmessage[0]).to.have.property('text', 'Unit—002 dropped on August 31, 2020.\nIt is currently trading at $73.58\nBrand: postdigital\n\n_via Foundation_');
     });
 
     it('When image is supplied', function() {
@@ -39,6 +39,6 @@ describe('Returns Alerts Message Object', function() {
         expect(alertmessage).to.all.have.keys('chat_id', 'text', 'photo');
         expect(alertmessage).to.all.have.property('photo', 'https://boon.com/boon.jpg');
         expect(alertmessage).to.include.something.with.property('chat_id', chatids[0]);
-        expect(alertmessage[0]).to.have.property('text', 'Unit—002 dropped on August 31, 2020.\nIt is currently trading at $73.58');
+        expect(alertmessage[0]).to.have.property('text', 'Unit—002 dropped on August 31, 2020.\nIt is currently trading at $73.58\nBrand: postdigital\n\n_via Foundation_');
     });
 });
