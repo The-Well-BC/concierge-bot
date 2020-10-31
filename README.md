@@ -6,6 +6,8 @@ Telegram: @littlezigy
 It's a telegram bot that alerts users of product and artwork releases (drops) on [Zora](https://ourzora.com/) and [Foundation](https://foundation.app/).
 
 ### Link to a live demo or working project
+
+[![Video](https://img.youtube.com/vi/-4K-OTvkvtc/0.jpg)](https://www.youtube.com/watch?v=-4K-OTvkvtc)
 Add @tradedrops_bot on Telegram or click https://t.me/tradedrops_bot to open Telegram automatically
 
 ![Screenshot 1](https://raw.githubusercontent.com/littlezigy/traddropbot/main/docResources/images/Screenshot_2020-10-30-20-30-23-696_org.telegram.messenger.jpg)
