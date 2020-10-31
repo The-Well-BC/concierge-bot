@@ -22,8 +22,23 @@ const start = function(payload) {
     };
 }
 const subscribeText = function(payload) {
-    let text = 'You have just subscribed to updates';
-    return text;
+    let text = payload.message.text;
+
+    let answer;
+    if(text.indexOf('/subscribe') === 0) {
+        if(text.includes('zora'))
+            answer = 'You have subscribed to updates from Zora. Whenever releases are made on Zora, you will receive a notification.';
+        else if(text.includes('foundation'))
+            answer = 'You have subscribed to updates from Foundation. Whenever releases are made on Foundation, you will receive a notification.';
+        else
+            answer = 'You will receive alerts whenever releases are made on Zora and Foundation';
+    }
+    else if(text.indexOf('Subscribe') === 0) {
+        answer = 'Right now, we support two platforms: Zora and Foundation.'
+        answer += 'To Subscribe, simply type */subscribe*. This will subscribe you to alerts from both platforms. To subscribe to alerts from Foundation, type */subscribe foundation*.';
+        answer += 'If you would like to receive updates from Zora instead, type */subscribe zora**.';
+    }
+    return answer;
 }
 
 module.exports = {
@@ -35,7 +50,10 @@ module.exports = {
             message = start(payload);
         } else if(text.indexOf('/subscribe') === 0) {
             message.text = subscribeText(payload);
-        }
+        } else if(text.indexOf('Subscribe') === 0) {
+            message.text = subscribeText(payload)
+        } else
+            message.text = 'I don\'t understand what you are trying to say';
 
         return { ...message, chat_id: chatID };
     },
