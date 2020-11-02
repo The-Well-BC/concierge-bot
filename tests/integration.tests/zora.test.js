@@ -13,7 +13,8 @@ describe('Fetch drops from Zora', function() {
             expect(price0[0]).to.equal('$');
             expect(price0.length - price0.indexOf('.')).to.equal(3);
             expect(res[0]).to.have.property('service', 'zora');
-            expect(res).to.all.have.keys('date', 'name', 'price', 'service', 'brand', 'img');
+            expect(res).to.all.have.keys('date', 'name', 'price', 'service', 'brand', 'img', 'action');
+            // expect(res).to.all.have.keys('date', 'name', 'price', 'service', 'brand', 'img', 'action');
         });
     });
 });

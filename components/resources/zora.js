@@ -5,20 +5,17 @@ module.exports = {
         const url = 'https://api.ourzora.com/graphql';
         const query = `{
             products {
-                name
-                organisation {
-                    name
-                }
-                releaseDate
+                name 
                 title
-                featuredImage {
-                    mediaURL
-                }
+                featuredImage { mediaURL }
+                organisation { name }
                 variants {
                     token {
+                        name
                         latestPrice
                     }
                 }
+                releaseDate
             }
         }`
 
@@ -33,6 +30,7 @@ module.exports = {
                     brand: organisation.name,
                     img,
                     price,
+                    action: 'release',
                     service: 'zora',
                     date: releaseDate
                 }
