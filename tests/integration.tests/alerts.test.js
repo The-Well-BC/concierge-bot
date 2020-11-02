@@ -7,7 +7,7 @@ const alertsModel = require('../../components/alerts.model');
 
 const samplePayloads = require('../samplePayload.json');
 
-describe('#dev Sending alerts', function() {
+describe('Sending alerts', function() {
     before(() => {
         console.log('ALERTS BEFOERLL');
         return bot.receiveMessage(samplePayloads.commands.subscribe);

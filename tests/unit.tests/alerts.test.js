@@ -2,43 +2,119 @@ const alerts = require('../../components/alerts');
 const chai = require('chai');
 chai.use( require('chai-things') );
 const expect = chai.expect;
+const clone = require('rfdc')();
 
 describe('Returns Alerts Message Object', function() {
-    it('When no image is supplied', function() {
-        const chatids = [93892, 1345241, 45252];
-        const resourcePayload = {
+    let resourcePayload = [
+        {
             price: '$73.58',
             name: 'Unit—002',
             date: '2020-08-31T19:00:00.000Z',
             service: 'foundation',
             brand: 'postdigital',
+            action: 'Buy',
             img: null
-        };
+        }, {
+            price: '$73.58',
+            name: 'Unit—002',
+            date: '2020-08-31T19:00:00.000Z',
+            service: 'foundation',
+            brand: 'postdigital',
+            img: 'https://boon.com/boon.jpg',
+            action: 'Sell'
+        }, {
+            price: '$73.58',
+            name: 'Unit—002',
+            date: '2020-08-31T19:00:00.000Z',
+            service: 'foundation',
+            brand: 'postdigital',
+            img: 'https://boon.com/boon.jpg',
+            action: 'Redeem'
+        }, {
+            price: '$73.58',
+            name: 'Unit—002',
+            date: '2020-10-31T19:00:00.000Z',
+            service: 'foundation',
+            brand: 'postdigital',
+            img: 'https://boon.com/boon.jpg',
+            status: 'open'
+        }, {
+            price: '$73.58',
+            name: 'Unit—002',
+            date: '2020-10-30T19:00:00.000Z',
+            service: 'foundation',
+            brand: 'postdigital',
+            img: 'https://boon.com/boon.jpg',
+            closedOn: '2020-10-31T19:00:00.000Z',
+            status: 'close'
+        }
+    ]
 
-        let alertmessage = alerts.alertMessage(chatids, resourcePayload);
+    const chatids = [93892, 1345241, 45252];
 
-        expect(alertmessage).to.all.have.keys('chat_id', 'text');
-        expect(alertmessage).to.all.not.have.key('photo');
-        expect(alertmessage).to.include.something.with.property('chat_id', chatids[0]);
-        expect(alertmessage[0]).to.have.property('text', 'Unit—002 dropped on August 31, 2020.\nIt is currently trading at $73.58\nBrand: postdigital\n\n_via Foundation_');
+
+    it('Check that all keys are present', function() {
+        let alertMessage = [];
+        alertMessage.push( ...alerts.alertMessage(chatids, resourcePayload[0]));
+        alertMessage.push( ...alerts.alertMessage(chatids, resourcePayload[1]));
+
+        expect(alertMessage).to.all.include.keys('chat_id', 'text', 'parse_mode');
     });
 
-    it('When image is supplied', function() {
-        const chatids = [93892, 1345241, 45252];
-        const resourcePayload = {
-            price: '$73.58',
-            name: 'Unit—002',
-            date: '2020-08-31T19:00:00.000Z',
-            service: 'foundation',
-            brand: 'postdigital',
-            img: 'https://boon.com/boon.jpg'
-        };
+    it('Make sure parse mode is turned to Markup', function() {
+        let alertMessage = [];
+        alertMessage.push( ...alerts.alertMessage(chatids, resourcePayload[0]));
+        alertMessage.push( ...alerts.alertMessage(chatids, resourcePayload[1]));
 
-        let alertmessage = alerts.alertMessage(chatids, resourcePayload);
+        expect(alertMessage).to.all.have.property('parse_mode', 'Markdown');
+    });
 
-        expect(alertmessage).to.all.have.keys('chat_id', 'text', 'photo');
-        expect(alertmessage).to.all.have.property('photo', 'https://boon.com/boon.jpg');
+    it('Check that text output is correct', function() {
+        let alertMessage = [];
+        alertMessage.push( alerts.alertMessage(chatids, resourcePayload[0]));
+        alertMessage.push( alerts.alertMessage(chatids, resourcePayload[1]));
+        alertMessage.push( alerts.alertMessage(chatids, resourcePayload[2]));
+
+        expect(alertMessage[0]).to.all.have.property('text', 'Unit—002 was bought on August 31, 2020.\nIt is currently trading at $73.58\nBrand: postdigital\n\n_via: Foundation_');
+        expect(alertMessage[1]).to.all.have.property('text', 'Unit—002 was sold on August 31, 2020.\nIt is currently trading at $73.58\nBrand: postdigital\n\n_via: Foundation_');
+        expect(alertMessage[2]).to.all.have.property('text', 'Unit—002 was redeemed on August 31, 2020.\nIt is currently trading at $73.58\nBrand: postdigital\n\n_via: Foundation_');
+    });
+
+    describe('If action is not present, but status is, treat as bid', function() {
+        it('Open bid', function() {
+            let alertMessage =  alerts.alertMessage(chatids, resourcePayload[3]);
+            expect(alertMessage).to.all.have.property('text', 'Unit—002 opened on October 31, 2020 at a price of $73.58.\nIt is currently trading at $73.58.\nBrand: postdigital\n\n_via: Foundation_');
+        });
+
+        it('Closed bid, closedOn date is supplied', function() {
+            let alertMessage =  alerts.alertMessage(chatids, resourcePayload[4]);
+            expect(alertMessage).to.all.have.property('text', 'Unit—002 closed on October 31, 2020 at a price of $73.58.\nBrand: postdigital\n\n_via: Foundation_');
+        });
+
+        it('Closed bid, closedOn date is not supplied', function() {
+            let payload = clone(resourcePayload[4]);
+            delete payload.closedOn;
+            let alertMessage =  alerts.alertMessage(chatids, payload);
+            expect(alertMessage).to.all.have.property('text', 'Unit—002 closed on October 30, 2020 at a price of $73.58.\nBrand: postdigital\n\n_via: Foundation_');
+        });
+    });
+
+    it('Check that chat ids are present', function() {
+        let alertmessage = alerts.alertMessage(chatids, resourcePayload[0]);
         expect(alertmessage).to.include.something.with.property('chat_id', chatids[0]);
-        expect(alertmessage[0]).to.have.property('text', 'Unit—002 dropped on August 31, 2020.\nIt is currently trading at $73.58\nBrand: postdigital\n\n_via Foundation_');
+        expect(alertmessage).to.include.something.with.property('chat_id', chatids[1]);
+        expect(alertmessage).to.include.something.with.property('chat_id', chatids[2]);
+    });
+
+    it('When no image is supplied, check that property \'photo\' is NOT present', function() {
+        let alertmessage = alerts.alertMessage(chatids, resourcePayload[0]);
+
+        expect(alertmessage).to.all.not.have.key('photo');
+    });
+
+    it('When image is supplied, check that property \'photo\' IS present', function() {
+        let alertmessage = alerts.alertMessage(chatids, resourcePayload[1]);
+
+        expect(alertmessage).to.all.have.property('photo', 'https://boon.com/boon.jpg');
     });
 });

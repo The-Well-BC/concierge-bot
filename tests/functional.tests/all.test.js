@@ -10,7 +10,7 @@ const links = require('../../config/links');
 
 const samplePayloads = require('../samplePayload.json');
 
-describe('#dev User subscribes to foundation', function() {
+describe('User subscribes to foundation', function() {
     before(() => {
         const teardown = require('../teardown');
         return teardown();
