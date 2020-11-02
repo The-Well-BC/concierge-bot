@@ -23,7 +23,7 @@ module.exports = {
                 }
                 text += ` closed on ${ dateStr } at a price of ${ payload.price }.`;
             } else {
-                text += ` opened on ${ dateStr } at a price of ${ payload.price }.\nIt is currently trading at ${ payload.price }.`;
+                text += ` opened on ${ dateStr } at a price of ${ payload.price }.\nIt is currently trading at ${ payload.minBid || payload.price }.`;
             }
         }
 

@@ -4,7 +4,7 @@ module.exports = {
     fetchDrops: function() {
         let url = 'https://api.thegraph.com/subgraphs/name/f8n/f8n-xdai';
         const now = new Date();
-        let startTime = new Date().setDate(now.getDate() - 1);
+        let startTime = new Date().setHours(now.getHours() - 24);
         startTime = parseInt(startTime/1000);
 
         let marketAction;
@@ -41,6 +41,7 @@ module.exports = {
             nftmarketBids(where: { placedOn_gt: ${ startTime } }) {
                 value
                 status
+                placedOn
                 nft {
                     id
                     tokenId
@@ -82,10 +83,8 @@ module.exports = {
                 return axios.get(url)
                 .then(res => {
                     counter++;
-                    console.log('NMFT DATA', res.data);
                     nft.name = res.data.name;
                     nft.image = res.data.image;
-                    console.log('neft update', nft);
                     return fetchNftDetails();
                 });
             }
@@ -119,25 +118,24 @@ module.exports = {
                 }
             });
 
-            let bidDrops = nftMarketBids.map( item => {
+            let bidDrops = nftMarketBids.map( bidItem => {
                 let type = 'nft';
 
-                const showcase = item.nft;
+                const nft = bidItem.nft;
 
-                showcase.price = showcase.minBidNow
-
-                const brand = item.nft.brand;
-                item.date = item.timestamp;
+                const brand = bidItem.nft.brand;
+                bidItem.date = bidItem.timestamp;
 
                 return {
-                    price: '$' + (showcase.price / 1000000000000000000).toFixed(2),
-                    name: showcase.name,
-                    date: new Date(item.date * 1000),
+                    price: '$' + nft.minBidPrice,
+                    minBid: '$' + bidItem.value,
+                    name: nft.name,
+                    date: new Date(bidItem.placedOn * 1000),
                     service: 'foundation',
                     brand: brand.name,
-                    status: item.status,
-                    action: item.actionType,
-                    img: showcase.image
+                    status: bidItem.status,
+                    action: bidItem.actionType,
+                    img: nft.image
                 }
             });
 

@@ -31,27 +31,29 @@ describe('Returns Alerts Message Object', function() {
             img: 'https://boon.com/boon.jpg',
             action: 'Redeem'
         }, {
-            price: '$73.58',
-            name: 'Unit—002',
-            date: '2020-10-31T19:00:00.000Z',
+            price: '$80.53',
+            minBid: '$66.55',
+            name: 'Mystery Box X',
+            date: '2020-11-01T19:42:45.000Z',
             service: 'foundation',
-            brand: 'postdigital',
-            img: 'https://boon.com/boon.jpg',
-            status: 'open'
+            brand: 'Neue Goods',
+            status: 'Open',
+            action: undefined,
+            img: 'https://images.ctfassets.net/9tp4nbs38ooy/4UmMq3wdsrhbRq8sK7YNbR/f0d1d4cf77dfe6ffdb1f1e63ef990360/Neuegoods_Box_006.jpg'
         }, {
-            price: '$73.58',
-            name: 'Unit—002',
-            date: '2020-10-30T19:00:00.000Z',
+            price: '$80.53',
+            minBid: '$60.5',
+            name: 'Mystery Box X',
+            date: '2020-11-01T19:37:30.000Z',
             service: 'foundation',
-            brand: 'postdigital',
-            img: 'https://boon.com/boon.jpg',
-            closedOn: '2020-10-31T19:00:00.000Z',
-            status: 'close'
+            brand: 'Neue Goods',
+            status: 'Closed',
+            action: undefined,
+            img: 'https://images.ctfassets.net/9tp4nbs38ooy/4UmMq3wdsrhbRq8sK7YNbR/f0d1d4cf77dfe6ffdb1f1e63ef990360/Neuegoods_Box_006.jpg'
         }
     ]
 
-    const chatids = [93892, 1345241, 45252];
-
+    const chatids = [93892, 1345241, 45252]; 
 
     it('Check that all keys are present', function() {
         let alertMessage = [];
@@ -83,19 +85,19 @@ describe('Returns Alerts Message Object', function() {
     describe('If action is not present, but status is, treat as bid', function() {
         it('Open bid', function() {
             let alertMessage =  alerts.alertMessage(chatids, resourcePayload[3]);
-            expect(alertMessage).to.all.have.property('text', 'Unit—002 opened on October 31, 2020 at a price of $73.58.\nIt is currently trading at $73.58.\nBrand: postdigital\n\n_via: Foundation_');
+            expect(alertMessage).to.all.have.property('text', 'Mystery Box X opened on November 1, 2020 at a price of $80.53.\nIt is currently trading at $66.55.\nBrand: Neue Goods\n\n_via: Foundation_');
         });
 
         it('Closed bid, closedOn date is supplied', function() {
             let alertMessage =  alerts.alertMessage(chatids, resourcePayload[4]);
-            expect(alertMessage).to.all.have.property('text', 'Unit—002 closed on October 31, 2020 at a price of $73.58.\nBrand: postdigital\n\n_via: Foundation_');
+            expect(alertMessage).to.all.have.property('text', 'Mystery Box X closed on November 1, 2020 at a price of $80.53.\nBrand: Neue Goods\n\n_via: Foundation_');
         });
 
         it('Closed bid, closedOn date is not supplied', function() {
             let payload = clone(resourcePayload[4]);
             delete payload.closedOn;
             let alertMessage =  alerts.alertMessage(chatids, payload);
-            expect(alertMessage).to.all.have.property('text', 'Unit—002 closed on October 30, 2020 at a price of $73.58.\nBrand: postdigital\n\n_via: Foundation_');
+            expect(alertMessage).to.all.have.property('text', 'Mystery Box X closed on November 1, 2020 at a price of $80.53.\nBrand: Neue Goods\n\n_via: Foundation_');
         });
     });
 
