@@ -3,7 +3,7 @@ chai.use(require('chai-subset'));
 const expect = chai.expect;
 const foundation = require('../../components/resources/foundation');
 
-describe('#dev Fetch drops from foundation', function() {
+describe('Fetch drops from foundation', function() {
     it('Fetch drops from foundation', function() {
         const now = new Date();
         let startTime = new Date().setDate(now.getDate() - 1);

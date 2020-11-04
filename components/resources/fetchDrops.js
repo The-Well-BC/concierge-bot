@@ -9,12 +9,17 @@ module.exports = (frequency) => {
             : (frequency == '1 day') ? new Date().setHours(now.getHours() - 24)
             : new Date().setMinutes(now.getMinutes() - 10);
     
+
     return foundation.fetchDrops( parseInt(startTime / 1000) )
     .then(res => {
         drops = res;
-        return zora.fetchDrops(startTime);
-    }).then(res => {
-        drops.push(...res);
-        return drops
+        if(frequency == '1 day') {
+            return zora.fetchDrops(startTime)
+            .then(res => {
+                drops.push(...res);
+                return drops
+            });
+        } else
+            return drops;
     });
 }

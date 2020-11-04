@@ -77,7 +77,6 @@ module.exports = {
                     return;
 
                 let nft = nftMarketBids[counter].nft;
-                console.log('counter  for makert bids', nft);
                 return fetchNftDetails(nft)
                 .then(res => {
                     nft.name = res.name;

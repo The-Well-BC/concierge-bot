@@ -49,7 +49,16 @@ describe('Returns Alerts Message Object', function() {
             brand: 'Neue Goods',
             status: 'Closed',
             action: undefined,
-            img: 'https://images.ctfassets.net/9tp4nbs38ooy/4UmMq3wdsrhbRq8sK7YNbR/f0d1d4cf77dfe6ffdb1f1e63ef990360/Neuegoods_Box_006.jpg' }
+            img: 'https://images.ctfassets.net/9tp4nbs38ooy/4UmMq3wdsrhbRq8sK7YNbR/f0d1d4cf77dfe6ffdb1f1e63ef990360/Neuegoods_Box_006.jpg'
+        }, {
+            name: 'AESII - Technical Cargo Pants',
+            brand: 'AES-256',
+            img: null,
+            price: '$56.91',
+            service: 'zora',
+            releaseDate: '2020-07-31T16:00:00.000Z'
+
+        }
     ]
 
     const chatids = [93892, 1345241, 45252]; 
@@ -68,6 +77,12 @@ describe('Returns Alerts Message Object', function() {
         alertMessage.push( ...alerts.alertMessage(chatids, resourcePayload[1]));
 
         expect(alertMessage).to.all.have.property('parse_mode', 'Markdown');
+    });
+
+    it('Test Zora output', function() {
+        let alertMessage =  alerts.alertMessage(chatids, resourcePayload[5]);
+        expect(alertMessage).to.all.have.property('text', 'AESII - Technical Cargo Pants was last seen trading at $56.91 on July 31, 2020 (4:00pm UTC).\nBrand: AES-256\n\n_via: Zora_');
+
     });
 
     it('Check that text output is correct', function() {

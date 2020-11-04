@@ -1,7 +1,10 @@
 const axios = require('axios');
+const fetchHistoricalTicks = require('./zora.fetchHistoricalTicks');
 
 module.exports = {
-    fetchDrops: function() {
+    fetchDrops: function(startTime) {
+        let products;
+
         const url = 'https://api.ourzora.com/graphql';
         const query = `{
             products {
@@ -13,6 +16,7 @@ module.exports = {
                     token {
                         name
                         latestPrice
+                        address
                     }
                 }
                 releaseDate
@@ -21,27 +25,51 @@ module.exports = {
 
         return axios.post(url, { query })
         .then( res => {
-            const products = res.data.data.products.map(p => {
+            products = res.data.data.products;
+
+            let counter = 0;
+
+            const fetchProductsLatestData = () => {
+                if(counter == products.length)
+                    return;
+
+                let p = products[counter];
+                let token = p.variants[0].token;
+
+                return fetchHistoricalTicks(token, startTime)
+                .then(tick => {
+                    if(tick == null) {
+                        products.splice(counter, 1);
+                    } else {
+                        p.date = tick.timestamp;
+                        p.latestPrice = tick.latest;
+                        counter++;
+                    }
+                    return fetchProductsLatestData();
+                });
+            }
+
+            return fetchProductsLatestData()
+        }).then(res => {
+            return products.map(p => {
                 const { name, title, featuredImage, organisation, releaseDate, variants } = p;
                 const img = (featuredImage) ? featuredImage.mediaURL : null;
-                const price = '$' + variants[0].token.latestPrice;
+                console.log('PRODUCT', p);
+                let price = p.latestPrice / 1000000;
+                price = '$' + parseFloat(price).toFixed(2);
+
                 return {
                     name: `${ name } - ${ title }`,
                     brand: organisation.name,
                     img,
                     price,
-                    action: 'release',
                     service: 'zora',
-                    date: releaseDate
+                    date: p.date,
+                    releaseDate
                 }
             });
-
-            return products;
         }).catch(e => {
             console.log('ERRRO');
-            console.log(e.response.data);
-            console.log(e.response.data.errors[0].locations);
-            console.log(e.response.data.errors[0].extensions);
             throw e;
         });
     }

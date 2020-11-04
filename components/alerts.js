@@ -1,6 +1,7 @@
 module.exports = {
     alertMessage(chatIDs, payload) {
-        let date = new Date(payload.date);
+        let date = payload.date || payload.releaseDate;
+        date = new Date(date);
         let months = 'January February March April May June July August September October November December';
         let platform = payload.service.charAt(0).toUpperCase() + payload.service.substring(1);
 
@@ -13,6 +14,8 @@ module.exports = {
         min = (min.length < 2) ? min + '0' : min;
         let timeString = (hr < 12) ? `${hr}:${min}am` : `${hr - 12}:${min}pm`;
         timeString += ' UTC';
+
+        let fullTimeString = `${ dateStr } (${ timeString })`;
 
         let text = payload.name;
 
@@ -33,7 +36,10 @@ module.exports = {
             } else {
                 text += ` opened on ${ dateStr } (${ timeString }) at a price of ${ payload.price }.\nIt is currently trading at ${ payload.minBid || payload.price }.`;
             }
+        } else {
+            text += ` was last seen trading at ${ payload.price } on ${ fullTimeString }.`;
         }
+
 
         text += `\nBrand: ${ payload.brand }\n\n_via: ${ platform }_`;
         let photo = (payload.img != null || undefined) ?
