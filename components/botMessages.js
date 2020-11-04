@@ -47,7 +47,6 @@ module.exports = {
         let chatID = payload.message.chat.id;
         let text = payload.message.text;
         if(text.indexOf('/start') === 0 || 
-            text.indexOf('/help') === 0 ||
             text.match(/Start/i) || 
             text.match(/Hello/i)
         ) {
