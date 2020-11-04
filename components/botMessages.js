@@ -19,7 +19,8 @@ const start = function(payload) {
     text += '\nChoose \'Subscribe\' to learn more about the different services you could subscribe to.';
     return {
         text,
-        reply_markup: replyMarkup
+        reply_markup: replyMarkup,
+        parse_mode: 'Markdown'
     };
 }
 
@@ -37,7 +38,7 @@ const subscribeText = function(payload) {
             answer = 'You will receive alerts whenever releases are made on Zora and Foundation';
     }
 
-    return { text: answer, ...(replyMarkup != null) && {reply_markup: replyMarkup} };
+    return { text: answer, parse_mode: 'Markdown', ...(replyMarkup != null) && {reply_markup: replyMarkup} };
 }
 
 module.exports = {
