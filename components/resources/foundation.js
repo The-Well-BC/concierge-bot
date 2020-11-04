@@ -67,34 +67,56 @@ module.exports = {
 
         return axios.post(url, { query })
         .then(res => {
-
             marketAction = res.data.data.marketActions;
             nftMarketBids = res.data.data.nftmarketBids;
 
             let counter = 0;
 
-            const fetchNftDetails = function() {
+            const fetchNftsForMarketBids = function() {
                 if(counter == nftMarketBids.length) 
                     return;
 
                 let nft = nftMarketBids[counter].nft;
-                url = `https://api.foundation.app/nft/${ nft.tokenId }`;
-                return axios.get(url)
+                console.log('counter  for makert bids', nft);
+                return fetchNftDetails(nft)
                 .then(res => {
+                    nft.name = res.name;
+                    nft.image = res.image;
                     counter++;
-                    nft.name = res.data.name;
-                    nft.image = res.data.image;
-                    return fetchNftDetails();
+                    return fetchNftsForMarketBids();
                 });
             }
 
-            return fetchNftDetails();
+            return fetchNftsForMarketBids();
+        }).then(res => {
+            let counter = 0;
+
+            const fetchNftsForMarketActions = function() {
+                if(counter == marketAction.length) 
+                    return;
+
+                let nft = marketAction[counter].nft;
+                console.log('counter  for market action', nft);
+
+                if(!nft || nft == null) {
+                    counter++;
+                    return fetchNftsForMarketActions();
+                }
+
+                return fetchNftDetails(nft)
+                .then(res => {
+                    nft.name = res.name;
+                    nft.image = res.image;
+                    counter++;
+                    return fetchNftsForMarketActions();
+                });
+            }
+
+            return fetchNftsForMarketActions();
         }).then(res => {
 
             let drops = marketAction.map( item => {
                 let type = (item.nft) ? 'nft' : 'xyk';
-                if(item.nft)
-                    throw new Error('NFT EXISTS. Sorry. NOt an error');
 
                 const showcase = item.nft || item.market;
                 if(item.market) {
