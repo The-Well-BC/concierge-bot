@@ -5,6 +5,14 @@ module.exports = {
         let platform = payload.service.charAt(0).toUpperCase() + payload.service.substring(1);
 
         let dateStr = (months.split(' '))[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+        let hr = date.getUTCHours();
+        let min = date.getMinutes();
+        console.log('DATE', date, '\nMIN', min);
+        min = min.toString();;
+        console.log('MIN STRING: ', min, ' LNGTH', min.length);
+        min = (min.length < 2) ? min + '0' : min;
+        let timeString = (hr < 12) ? `${hr}:${min}am` : `${hr - 12}:${min}pm`;
+        timeString += ' UTC';
 
         let text = payload.name;
 
@@ -14,16 +22,16 @@ module.exports = {
                 (payload.action.match(/buy/i)) ? 'bought' :
                 'redeemed';
 
-            text += ` was ${ action } on ${ dateStr }.\nIt is currently trading at ${ payload.price }`;
+            text += ` was ${ action } on ${ dateStr } (${ timeString }).\nIt is currently trading at ${ payload.price }`;
         } else if(payload.status) {
             if(payload.status.match(/close/i)) {
                 if(payload.closedOn) {
                     date = new Date(payload.closedOn);
                     dateStr = (months.split(' '))[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
                 }
-                text += ` closed on ${ dateStr } at a price of ${ payload.price }.`;
+                text += ` closed on ${ dateStr } (${ timeString }) at a price of ${ payload.price }.`;
             } else {
-                text += ` opened on ${ dateStr } at a price of ${ payload.price }.\nIt is currently trading at ${ payload.minBid || payload.price }.`;
+                text += ` opened on ${ dateStr } (${ timeString }) at a price of ${ payload.price }.\nIt is currently trading at ${ payload.minBid || payload.price }.`;
             }
         }
 

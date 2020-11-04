@@ -25,7 +25,7 @@ describe('Returns Alerts Message Object', function() {
         }, {
             price: '$73.58',
             name: 'Unit—002',
-            date: '2020-08-31T19:00:00.000Z',
+            date: '2020-08-31T09:00:00.000Z',
             service: 'foundation',
             brand: 'postdigital',
             img: 'https://boon.com/boon.jpg',
@@ -49,8 +49,7 @@ describe('Returns Alerts Message Object', function() {
             brand: 'Neue Goods',
             status: 'Closed',
             action: undefined,
-            img: 'https://images.ctfassets.net/9tp4nbs38ooy/4UmMq3wdsrhbRq8sK7YNbR/f0d1d4cf77dfe6ffdb1f1e63ef990360/Neuegoods_Box_006.jpg'
-        }
+            img: 'https://images.ctfassets.net/9tp4nbs38ooy/4UmMq3wdsrhbRq8sK7YNbR/f0d1d4cf77dfe6ffdb1f1e63ef990360/Neuegoods_Box_006.jpg' }
     ]
 
     const chatids = [93892, 1345241, 45252]; 
@@ -77,27 +76,27 @@ describe('Returns Alerts Message Object', function() {
         alertMessage.push( alerts.alertMessage(chatids, resourcePayload[1]));
         alertMessage.push( alerts.alertMessage(chatids, resourcePayload[2]));
 
-        expect(alertMessage[0]).to.all.have.property('text', 'Unit—002 was bought on August 31, 2020.\nIt is currently trading at $73.58\nBrand: postdigital\n\n_via: Foundation_');
-        expect(alertMessage[1]).to.all.have.property('text', 'Unit—002 was sold on August 31, 2020.\nIt is currently trading at $73.58\nBrand: postdigital\n\n_via: Foundation_');
-        expect(alertMessage[2]).to.all.have.property('text', 'Unit—002 was redeemed on August 31, 2020.\nIt is currently trading at $73.58\nBrand: postdigital\n\n_via: Foundation_');
+        expect(alertMessage[0]).to.all.have.property('text', 'Unit—002 was bought on August 31, 2020 (7:00pm UTC).\nIt is currently trading at $73.58\nBrand: postdigital\n\n_via: Foundation_');
+        expect(alertMessage[1]).to.all.have.property('text', 'Unit—002 was sold on August 31, 2020 (7:00pm UTC).\nIt is currently trading at $73.58\nBrand: postdigital\n\n_via: Foundation_');
+        expect(alertMessage[2]).to.all.have.property('text', 'Unit—002 was redeemed on August 31, 2020 (9:00am UTC).\nIt is currently trading at $73.58\nBrand: postdigital\n\n_via: Foundation_');
     });
 
     describe('If action is not present, but status is, treat as bid', function() {
         it('Open bid', function() {
             let alertMessage =  alerts.alertMessage(chatids, resourcePayload[3]);
-            expect(alertMessage).to.all.have.property('text', 'Mystery Box X opened on November 1, 2020 at a price of $80.53.\nIt is currently trading at $66.55.\nBrand: Neue Goods\n\n_via: Foundation_');
+            expect(alertMessage).to.all.have.property('text', 'Mystery Box X opened on November 1, 2020 (7:42pm UTC) at a price of $80.53.\nIt is currently trading at $66.55.\nBrand: Neue Goods\n\n_via: Foundation_');
         });
 
         it('Closed bid, closedOn date is supplied', function() {
             let alertMessage =  alerts.alertMessage(chatids, resourcePayload[4]);
-            expect(alertMessage).to.all.have.property('text', 'Mystery Box X closed on November 1, 2020 at a price of $80.53.\nBrand: Neue Goods\n\n_via: Foundation_');
+            expect(alertMessage).to.all.have.property('text', 'Mystery Box X closed on November 1, 2020 (7:37pm UTC) at a price of $80.53.\nBrand: Neue Goods\n\n_via: Foundation_');
         });
 
         it('Closed bid, closedOn date is not supplied', function() {
             let payload = clone(resourcePayload[4]);
             delete payload.closedOn;
             let alertMessage =  alerts.alertMessage(chatids, payload);
-            expect(alertMessage).to.all.have.property('text', 'Mystery Box X closed on November 1, 2020 at a price of $80.53.\nBrand: Neue Goods\n\n_via: Foundation_');
+            expect(alertMessage).to.all.have.property('text', 'Mystery Box X closed on November 1, 2020 (7:37pm UTC) at a price of $80.53.\nBrand: Neue Goods\n\n_via: Foundation_');
         });
     });
 
