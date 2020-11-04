@@ -7,7 +7,7 @@ module.exports = (frequency) => {
     let startTime = (frequency == '10 min') ?  new Date().setMinutes(now.getMinutes() - 10)
             : (frequency == '1 hour') ?  new Date().setHours(now.getHours() - 1)
             : (frequency == '1 day') ? new Date().setHours(now.getHours() - 24)
-            : new Date().setHours(now.getHours() - 24);
+            : new Date().setMinutes(now.getMinutes() - 10);
     
     return foundation.fetchDrops( parseInt(startTime / 1000) )
     .then(res => {
