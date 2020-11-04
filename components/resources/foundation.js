@@ -1,11 +1,10 @@
 const axios = require('axios');
+const fetchNftDetails = require('./foundation.fetchNftDetails');
+
 
 module.exports = {
-    fetchDrops: function() {
+    fetchDrops: function(startTime) {
         let url = 'https://api.thegraph.com/subgraphs/name/f8n/f8n-xdai';
-        const now = new Date();
-        let startTime = new Date().setHours(now.getHours() - 24);
-        startTime = parseInt(startTime/1000);
 
         let marketAction;
         let nftMarketBids;

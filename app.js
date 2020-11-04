@@ -10,12 +10,7 @@ const database = require('postgresorm');
 const config = require('./config');
 database.initializeDatabase(config.database.connection)
 
-const cron = require('node-cron')
-const alertsModel = require('./components/alerts.model');
-cron.schedule('0 */3 * * *', function() {
-    console.log('SENDING ALERTS');
-    return alertsModel.sendAlerts()
-});
+require('./components/alertsCronJob')();
 
 const links = require('./config/links');
 

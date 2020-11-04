@@ -5,7 +5,9 @@ const foundation = require('../../components/resources/foundation');
 
 describe('#dev Fetch drops from foundation', function() {
     it('Fetch drops from foundation', function() {
-        return foundation.fetchDrops()
+        const now = new Date();
+        let startTime = new Date().setDate(now.getDate() - 1);
+        return foundation.fetchDrops( parseInt(startTime/1000) )
         .then(res => {
             console.log('DROPS', res);
             let price0 = res[0].price;

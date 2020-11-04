@@ -5,8 +5,9 @@ const sendMessage = require('./sendMessage');
 const sendPhoto = require('./sendPhoto');
 
 module.exports = {
-    sendAlerts: function(messages) {
-        return fetchDrops()
+    //sendAlerts: function(messages, interval) {
+    sendAlerts: function(interval) {
+        return fetchDrops(interval)
         .then(tradingDrops => {
             let counter = 0;
             const fetchSubscriptions = function(max) {
