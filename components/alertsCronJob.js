@@ -11,6 +11,6 @@ module.exports = () => {
     // Daily
     cron.schedule('0 0 * * *', function() {
         console.log('SENDING ALERTS');
-        return alertsModel.sendAlerts()
+        return alertsModel.sendAlerts(null, '1 day')
     });
 }
