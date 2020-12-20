@@ -1,46 +1,61 @@
-const dao = require('../../components/subscription.dao');
+const dao = require('../../components/daos/subscription.dao');
 
 const chai = require('chai');
 chai.use( require('chai-as-promised') );
 const expect = chai.expect;
 
 describe('Saving Subscriptions', function() {
-    it('Save service subscriptions', function() {
+    it('Save subscription to all nft platforms', function() {
         const chatid = 123456;
-        const service = 'foundation';
+        const messenger = 'twitter';
 
-        return dao.addServiceSubscription(chatid, service)
+        return dao.addServiceSubscription(chatid, null, messenger, true)
+        .then(res => {
+            return dao.fetchServiceSubscription(chatid);
+        }).then(res => {
+            expect(res).to.eql({ chat_id: chatid, service: [], messenger, all: true });
+        });
+    });
+
+    it('Save subscription to single nft platform', function() {
+        const chatid = 123486;
+        const service = 'foundation';
+        const messenger = 'twitter';
+
+        return dao.addServiceSubscription(chatid, service, messenger, false)
         .then(res => {
             return dao.fetchServiceSubscription(chatid, service);
         }).then(res => {
-            expect(res).to.eql({ chat_id: chatid, service });
+            expect(res).to.eql({ chat_id: chatid, service: [ service ], messenger, all: false });
         });
     });
 
     it('Test conflict service subscriptions', function() {
-        const chatid = 123456;
+        const chatid = 103456;
         const service = 'foundation';
+        const messenger = 'discord';
 
-        return dao.addServiceSubscription(chatid, service)
+        return dao.addServiceSubscription(chatid, service, messenger, false)
         .then(res => {
-            return expect( dao.addServiceSubscription(chatid, service) ).to.not.be.rejected;
+            return expect( dao.addServiceSubscription(chatid, service, messenger, false) ).to.not.be.rejected;
         })
         .then(res => {
             return dao.fetchServiceSubscription(chatid, service);
         }).then(res => {
-            expect(res).to.eql({ chat_id: chatid, service });
+            expect(res).to.eql({ chat_id: chatid, service: [service], messenger, all: false });
         });
     });
 
     it('Save item subscriptions', function() {
         const chatid = 123456;
         const item = 'moan';
+        const messenger = 'facebook';
 
-        return dao.addItemSubscription(chatid, item)
+        return dao.addItemSubscription(chatid, item, messenger)
         .then(res => {
             return dao.fetchItemSubscription(chatid, item);
         }).then(res => {
-            expect(res).to.eql({ chat_id: chatid, item });
+            expect(res).to.eql({ chat_id: chatid, item, messenger });
         });
     });
 });
