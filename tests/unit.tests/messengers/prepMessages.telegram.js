@@ -36,7 +36,9 @@ describe('Telegram functions: Prepary payload for telegram', function() {
         let payload = [{
             text: 'This is sample text',
             replies: [
-                {text: '123'}
+                {text: '123'},
+                {text: '456'},
+                {text: '789'}
             ]
         }]
 
@@ -45,9 +47,12 @@ describe('Telegram functions: Prepary payload for telegram', function() {
         expect(response).to.have.keys('chat_id', 'text', 'reply_markup', 'parse_mode', 'method');
 
         expect(response.reply_markup).to.deep.eql({
-            keyboard: [ [
-                {text: '123' }
-            ]]
+            one_time_keyboard: true,
+            keyboard: [
+                [ {text: '123' } ],
+                [ {text: '456' } ],
+                [ {text: '789' } ]
+            ]
         });
     });
 

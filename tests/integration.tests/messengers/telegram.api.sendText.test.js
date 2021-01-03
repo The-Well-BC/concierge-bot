@@ -3,11 +3,17 @@ const expect = chai.expect;
 
 const sendMessage = require('../../../components/messenger/telegram/api/sendText');
 
-describe('Telegram API: Send Message', function() {
+describe.only('Telegram API: Send Message', function() {
     it('Send text message', function() {
         const message = {
             text: 'Testing... testing...', 
-            chat_id: 641574672
+            chat_id: 641574672,
+            reply_markup: {
+                keyboard: [
+                    [ { text: 'TExt one' }],
+                    [ 'onethree']
+                ]
+            }
         }
 
         return sendMessage(message)

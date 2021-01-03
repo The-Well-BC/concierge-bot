@@ -18,7 +18,15 @@ module.exports = function(payloadArr, chatIDs) {
 
         return chatIDs.map(o => {
             let method = (photo) ? 'sendPhoto': 'sendMessage';
-            let reply_markup = (payload.replies) ? { keyboard: [ payload.replies ] } : null;
+            let reply_markup
+            if(payload.replies) {
+                let replies = payload.replies.map(item => [item]);
+                console.log('REPLEIS', replies);
+                reply_markup = {
+                    keyboard: replies,
+                    one_time_keyboard: true
+                };
+            }
 
             return {
                 chat_id: o,
