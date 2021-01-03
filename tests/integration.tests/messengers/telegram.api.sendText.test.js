@@ -10,7 +10,7 @@ describe.only('Telegram API: Send Message', function() {
             chat_id: 641574672,
             reply_markup: {
                 keyboard: [
-                    [ { text: 'TExt one' }],
+                    [ { text: 'Text one' }],
                     [ 'onethree']
                 ]
             }

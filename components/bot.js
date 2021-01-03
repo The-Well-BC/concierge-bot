@@ -30,14 +30,14 @@ module.exports = {
             }
         })
         .catch(err => {
-            console.log('CHAT ID', chatID);
+            console.log('CHAT ID', parsedMessage.chatID);
             let mess =  "";
             if(err.message == 'invalid_platform') {
                 if(err.messenger == 'telegram') {
                     mess =  errMessages(err).invalid_platform[messenger];
                 }
 
-                return telegram.prepareMessage({ text: mess }, [chatID] );
+                return telegram.prepareMessage({ text: mess }, [parsedMessage.chatID])[0][0];
             }
         });
     }
