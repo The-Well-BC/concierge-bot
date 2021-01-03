@@ -1,7 +1,6 @@
 const axios = require('axios');
 const fetchNftDetails = require('./fetchNftDetails');
 
-
 module.exports = function(startTime, limit) {
     let url = 'https://api.thegraph.com/subgraphs/name/f8n/f8n-xdai';
 
@@ -24,6 +23,7 @@ module.exports = function(startTime, limit) {
                 tokenURI
                 tokenId
                 goLiveDate
+                minBidPrice
                 marketListing {
                     listedOn
                 }
@@ -40,6 +40,7 @@ module.exports = function(startTime, limit) {
                 name
                 symbol
                 totalSupply
+                totalBuyPrice
             }
         }
     }`
@@ -47,7 +48,6 @@ module.exports = function(startTime, limit) {
     return axios.post(url, { query })
     .then(res => {
 
-        console.log('RESS', res.data);
         marketAction = res.data.data.marketActions;
 
         let counter = 0;
@@ -84,11 +84,12 @@ module.exports = function(startTime, limit) {
             let tokensLeft = null;
 
             const showcase = item.nft || item.market;
+            console.log('SHOW CASE', showcase);
             if(item.market) {
                 showcase.price = showcase.totalBuyPrice
                 tokensLeft = item.market.totalSupply;
             } else if(item.nft) {
-                showcase.price = showcase.minBidNow
+                showcase.price = showcase.minBidPrice
             }
 
             const brand = item.brand;
@@ -99,18 +100,28 @@ module.exports = function(startTime, limit) {
             if(tokenAmount >= 1000000000000000000)
                 tokenAmount = tokenAmount / 1000000000000000000;
 
+            console.log('ITEM', item);
             return {
-                price: '$' + (showcase.price / 1000000000000000000).toFixed(2),
-                name: showcase.name,
                 date: new Date(item.date * 1000),
-                service: 'foundation',
-                brand: brand.name,
-                action: item.actionType,
-                tokenAmount: tokenAmount,
-                tokensLeft,
-                buyerWalletUri: `https://blockscout.com/poa/xdai/address/${ item.gateway }/transactions`,
-                transactionUri: `https://blockscout.com/poa/xdai/tx/${ item.transactionHash }/token-transfers`,
-                img: null
+                name: showcase.name,
+                price: '$' + (showcase.price / 1000000000000000000).toFixed(2),
+                buyer: {
+                    walletUri: `https://blockscout.com/poa/xdai/address/${ item.gateway }/transactions`,
+                },
+                seller: {
+                },
+                creator: {
+                    name: `${brand.name} (${brand.symbol})`
+                },
+                platform: 'Foundation',
+                ...tokensLeft && { tokensLeft },
+                transaction: {
+                    url: `https://blockscout.com/poa/xdai/tx/${ item.transactionHash }/token-transfers`,
+                    tokens: tokenAmount
+                },
+                img: null,
+                type: 'sale',
+                url: `https://foundation.app/${ brand.symbol.toLowerCase() }`
             }
         });
     });

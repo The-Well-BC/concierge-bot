@@ -9,9 +9,10 @@ describe('Test commands: Markdown edition', function() {
             user: { name: 'Adesuwa' }
         }
 
-        let message = commands(payload, 'telegram', markdown);
-
-        expect(message.text).to.have.string('Hello Adesuwa');
+        return commands(payload, 'telegram', markdown)
+        .then(message => {
+            expect(message.text).to.have.string('Hello Adesuwa');
+        });
     });
 
     it('Reply to start command when first name is not present but username is', function() {
@@ -20,11 +21,12 @@ describe('Test commands: Markdown edition', function() {
             user: { username: 'littlezigy' }
         }
 
-        let message = commands(payload, 'telegram', markdown);
-
-        expect(message).to.be.an('object');
-        expect(message).to.have.keys('text');
-        expect(message.text).to.have.string('Hello littlezigy');
+        return commands(payload, 'telegram', markdown)
+        .then(message => {
+            expect(message).to.be.an('object');
+            expect(message).to.include.keys('text');
+            expect(message.text).to.have.string('Hello littlezigy');
+        });
     });
 
     it('Introductory message to the start command', function() {
@@ -33,10 +35,13 @@ describe('Test commands: Markdown edition', function() {
             user: { username: 'Adesuwa' }
         }
 
-        let message = commands(payload, 'telegram', markdown);
-        expect(message).to.be.an('object');
-        expect(message.text).to.equal('Hello Adesuwa\nI\'m here to alert you on products, artwork released by varying artists.\nRight now, you can choose to subscribe to all new releases, or drops. Eventually, you will have artists you look forward to and then you can subscribe to those artists.\nChoose \'Subscribe\' to learn more about the different services you could subscribe to.')
+        return commands(payload, 'telegram', markdown)
+        .then(message => {
+            expect(message).to.be.an('object');
+            expect(message.text).to.equal('Hello Adesuwa\nI\'m here to alert you on products, artwork released by varying artists.\nRight now, you can choose to subscribe to all new releases, or drops. Eventually, you will have artists you look forward to and then you can subscribe to those artists.\nChoose \'Subscribe\' to learn more about the different services you could subscribe to.')
+        });
     });
+
     it('Help command: subscribe', function() {
         let payload = {
             command: {
@@ -46,15 +51,17 @@ describe('Test commands: Markdown edition', function() {
             user: { username: 'Adesuwa' }
         }
 
-        let message = commands(payload, 'twitter', markdown);
-        expect(message).to.be.an('object');
-        expect(message.text).to.equal('You can subscribe to alerts from only certain platforms. \nTo subscribe to all platforms, simply type */subscribe*. To subscribe to alerts from a particular platform, just type */subscribe <platform>*.\n If you would like to receive updates from Zora instead, type */subscribe zora*.');
-        expect(message.predefinedResponses).to.have.deep.members([
+        return commands(payload, 'twitter', markdown)
+        .then(message => {
+            expect(message).to.be.an('object');
+            expect(message.text).to.equal('You can subscribe to alerts from only certain platforms. \nTo subscribe to all platforms, simply type */subscribe*. To subscribe to alerts from a particular platform, just type */subscribe <platform>*.\n If you would like to receive updates from Zora instead, type */subscribe zora*.');
+            expect(message.replies).to.have.deep.members([
                 {text: '/subscribe'},
                 {text: '/subscribe zora'},
                 {text: '/subscribe nifty'},
                 {text: '/subscribe superrare'},
                 {text: '/subscribe foundation'}
-        ]);
+            ]);
+        });
     });
 });

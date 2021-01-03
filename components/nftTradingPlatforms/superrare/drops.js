@@ -1,11 +1,30 @@
 const axios = require('axios');
 const fetchNftDetails = require('./fetchnftDetails');
 
-module.exports = function() {
+module.exports = function(startTime, limit) {
     const url = 'https://superrare.co/api/v2/nft/get-by-market-details';
 
+    /*
     return axios.post(url, {
-        first: 5,
+        qty: limit,
+        contractAddresses: [
+            "0x41a322b28d0ff354040e2cbc676f0320d8c8850d",
+            "0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0"
+        ],
+        nftEventTypes: [
+            "CREATION", "SALE", "AUCTION_BID", "AUCTION_ENDED"
+        ],
+        minBidFilter: true,
+        filteredCreatorAddresses: [],
+    })
+    .then(res => {
+        return res.data.result.eventsWithUsers.filter(item => {
+            console.log('ITEM', item);
+            return item.hasSalePrice;
+        })
+    */
+    return axios.post(url, {
+        first: limit,
         hasSalePriceWithMarketAddresses: null,
         includeBurned: false,
         orderBy: "TOKEN_ID_DESC",
@@ -30,6 +49,9 @@ module.exports = function() {
         return fetchNftDetails(res.data.result.collectibles)
     }).then(res => {
         */
+        if(limit && typeof limit === 'number' && !isNaN(limit) && limit != 0)
+            res = res.slice(0, limit - 1);
+
         return res.map(item => {
             let url = `https://superrare.co/artwork-v2/${ item.name.replace(' ', '-') }-${ item.tokenId }`;
 
@@ -44,6 +66,8 @@ module.exports = function() {
                 url,
                 name: item.name
             }
+        }).filter(item => {
+            return new Date(item.date) >= startTime;
         });
     });
 }

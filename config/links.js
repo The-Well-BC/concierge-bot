@@ -1,3 +1,3 @@
 module.exports = {
-    webhook: `/${ process.env.BOT_TOKEN }`
+    telegramWebhook: `/${ process.env.TELEGRAM_BOT_TOKEN }`,
 }

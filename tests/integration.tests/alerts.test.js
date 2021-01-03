@@ -1,4 +1,5 @@
 const chai = require('chai');
+const nftFn = require('../../components/nftTradingPlatforms');
 
 const bot = require('../../components/bot');
 
@@ -9,15 +10,14 @@ const samplePayloads = require('../samplePayload.json');
 
 describe('Sending alerts', function() {
     before(() => {
-        console.log('ALERTS BEFOERLL');
-        return bot.receiveMessage(samplePayloads.commands.subscribe);
+        return bot.receiveMessage(samplePayloads.commands.subscribe, 'telegram');
     });
 
-    it('Send alerts', function() {
-        return alertsModel.sendAlerts()
+    it('Send alerts model', function() {
+        return alertsModel.sendAlerts('1 day', 3)
         .then(res => {
             console.log('RSSS', res);
-            return expect(res).to.be.an('object');
+            return expect(res).to.all.have.property('ok', true);
         });
     });
 });

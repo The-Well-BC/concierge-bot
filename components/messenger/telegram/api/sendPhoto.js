@@ -12,7 +12,7 @@ module.exports = (message) => {
 
     message.photo = (message.photo) ? message.photo : message.url;
 
-    const url = `https://api.telegram.org/bot${ process.env.BOT_TOKEN }/sendPhoto`;
+    const url = `https://api.telegram.org/bot${ process.env.TELEGRAM_BOT_TOKEN }/sendPhoto`;
     const body = { ...message }
     return axios.post(url, body)
     .then(res => {

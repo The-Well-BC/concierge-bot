@@ -1,52 +1,28 @@
-const fetchDrops = require('./resources/fetchDrops');
-const subdao = require('./subscription.dao');
-const alertHelper = require('./alerts');
-const sendMessage = require('./sendMessage');
-const sendPhoto = require('./sendPhoto');
+const nftFn = require('./nftTradingPlatforms');
+const subdao = require('./daos/subscription.dao');
+const telegram = require('./messenger/telegram');
 
 module.exports = {
     //sendAlerts: function(messages, interval) {
-    sendAlerts: function(interval) {
-        return fetchDrops(interval)
+    sendAlerts: function(interval, limit) {
+        let payload = [];
+        const nfts = nftFn(interval);
+        return nfts.fetchDrops(limit)
         .then(tradingDrops => {
-            let counter = 0;
-            const fetchSubscriptions = function(max) {
-                if(counter == tradingDrops.length)
-                    return
-                return subdao.fetchServiceItemSubs({ service: tradingDrops[counter].service, item: tradingDrops[counter].name })
-                .then(res => {
-                    let messages = alertHelper.alertMessage(res, tradingDrops[counter]);
+            payload = tradingDrops;
+            return nfts.fetchPurchases(limit)
+        }).then(res => {
+            payload.push(...res);
 
-                    let alertsSent = 0;
-                    let sendEachAlert = function() {
-                        if( alertsSent === messages.length)
-                            return new Promise(resolve => resolve(true));
-                        else {
-                            if(messages[alertsSent].photo) {
-                                return sendPhoto(messages[alertsSent])
-                                .then(res => {
-                                    alertsSent++;
-                                    return sendEachAlert();
-                                });
-                            }
-                            else {
-                                return sendMessage(messages[alertsSent])
-                                .then(res => {
-                                    alertsSent++;
-                                    return sendEachAlert();
-                                });
-                            }
-                        }
-                    }
-
-                    counter++;
-                    return sendEachAlert()
-                    .then(() => fetchSubscriptions(tradingDrops.length));
-                });
-            }
-
-            return fetchSubscriptions(tradingDrops.length)
-                
+            return subdao.fetchServiceSubscription()
+        })
+        .then(res => {
+            console.log('PAYLODA', payload);
+            let chatIDs = res.map(item => item.chat_id);
+            let textPayload = payload.map(p => telegram.formatter.alertMessage(p));
+            console.log('TEXT PAYLO9AD', textPayload);
+            let messages = textPayload.map(p => telegram.sendMessage(p, chatIDs));
+            return Promise.all(messages);
         });
     }
 }

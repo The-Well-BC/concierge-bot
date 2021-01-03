@@ -6,19 +6,18 @@ const nifty = require('./nifty');
 module.exports = (startTime, limit) => {
     let drops;
 
-    return foundation.fetchDrops( parseInt(startTime / 1000), limit )
+    return foundation.fetchPurchases( parseInt(startTime / 1000), limit )
     .then(res => {
         drops = res;
-        return nifty.fetchDrops( startTime, limit )
-    }).then(res => {
+        return nifty.fetchPurchases( startTime, limit )
     /*
+    }).then(res => {
         drops.push(...res);
-        return zora.fetchDrops(startTime, limit)
-    })
-    .then(res => {
+        return zora.fetchPurchases(startTime, limit)
     */
+    }).then(res => {
         drops.push(...res);
-        return superrare.fetchDrops( startTime, limit );
+        return superrare.fetchPurchases( startTime, limit );
     }).then(res => {
         drops.push(...res);
         return drops;

@@ -26,7 +26,7 @@ describe('Test sale alert texts', function() {
         }
 
         let alertMessage =  alerts.alertMessage(payload);
-        expect(alertMessage).to.have.property('text', '[John Sommet](https://moon.jpeg.com/u/john-sommet) just bought Mystery Box X for $80.53 on November 1, 2020 (7:42pm UTC).\nMystery Box X is currently trading at $89.33\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: Foundation_');
+        expect(alertMessage).to.have.property('text', '[John Sommet](https://moon.jpeg.com/u/john-sommet) just bought Mystery Box X for $80.53 on November 1, 2020 (7:42pm UTC)\nMystery Box X is currently trading at $89.33\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: Foundation_');
     });
 });
 

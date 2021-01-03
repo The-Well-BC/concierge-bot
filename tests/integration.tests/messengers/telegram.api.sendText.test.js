@@ -1,18 +1,16 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const sendPhoto = require('../../components/sendPhoto');
+const sendMessage = require('../../../components/messenger/telegram/api/sendText');
 
-describe('Send Photo', function() {
-    it('Send photo with caption', function() {
+describe('Telegram API: Send Message', function() {
+    it('Send text message', function() {
         const message = {
-            url: 'https://picsum.photos/200',
-            text: `Testing... testing...\nMultiline string\nHowwill bot handle this??
-            `, 
+            text: 'Testing... testing...', 
             chat_id: 641574672
         }
 
-        return sendPhoto(message)
+        return sendMessage(message)
         .then(res => {
             expect(res).to.not.have.property('error');
             expect(res).to.have.property('ok', true);

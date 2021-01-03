@@ -6,20 +6,28 @@ module.exports = {
     addServiceSubscription: function(chat_id, service, messenger, all) {
         let values = [chat_id, messenger, all];
         let querytext = `INSERT INTO ${ tables.serviceSub } `;
+        let updatetext = 'ON CONFLICT (chat_id, messenger) DO UPDATE SET ';
 
         if(service) {
             querytext += `(chat_id, messenger, all_, service)
                 VALUES ($1, $2, $3, $4)
             `;
 
-            values.push( [ service ] );
+            updatetext += ' service = array(select distinct unnest(service_subscriptions.service || EXCLUDED.service)), ';
+
+            if( Array.isArray(service) )
+                values.push(service);
+            else
+                values.push( [ service ] );
+
         } else {
             querytext += `(chat_id, messenger, all_)
                 VALUES ($1, $2, $3)
             `;
         }
 
-        querytext += `ON CONFLICT DO NOTHING`;
+        updatetext += ' all_ = EXCLUDED.all_';
+        querytext += updatetext;
 
         return db.customquery(querytext, values)
         .then(res => {
@@ -34,36 +42,33 @@ module.exports = {
     },
 
     fetchServiceSubscription: function(chat_id, service) {
-        let values = [chat_id];
-        let querytext = `SELECT * FROM ${ tables.serviceSub }
-            WHERE chat_id = $1
+        let values = [];
+        let querytext = `SELECT messenger, chat_id, all_, service FROM ${ tables.serviceSub }
         `;
 
+        if(chat_id || service)
+            querytext += ' WHERE ';
+
+        if(chat_id) {
+            values.push(chat_id);
+            querytext += ` chat_id = $${ values.length } `;
+        }
+
+        if(chat_id && service)
+            querytext += ' AND ';
+
         if(service) {
-            querytext += `  AND $2 = any(service)`;
             values.push(service);
+            querytext += ` $${ values.length } = any(service)`;
         }
 
         return db.customquery(querytext, values)
-        // return db.findone(tables.serviceSub, {chat_id, [service]})
-        .then(res => {
-            let item = res.rows[0];
-            return {
-                messenger: item.messenger,
-                chat_id: item.chat_id,
-                service: item.service,
-                all: item.all_
-            }
-        });
-    },
-
-    fetchServiceSubscriptions: function(service) {
-        return db.list(tables.serviceSub, {service})
         .then(res => {
             return res.rows.map(item => {
                 return {
                     messenger: item.messenger,
                     chat_id: item.chat_id,
+                    service: item.service,
                     all: item.all_
                 }
             });

@@ -8,7 +8,10 @@
     "stop": "pm2 stop tradedrop_bot && pm2 delete tradedrop_bot",
     "dev": ". ./.env && NODE_ENV=development nodemon index.js",
     "test": ". ./.env && NODE_ENV=test mocha --timeout 10000 --recursive tests/ --require tests/hooks.js",
-    "test:dev": ". ./.env && NODE_ENV=test mocha --timeout 10000 --recursive tests/ --grep='#dev' --require tests/hooks.js --watch",
+    "test:dev": ". ./.env && NODE_ENV=test mocha --timeout 30000 --recursive tests/ --require tests/hooks.js --watch",
+    "test:resources": ". ./.env && NODE_ENV=test mocha --timeout 20000 --recursive tests/integration.tests/resources/ --watch",
+    "test:messengers": ". ./.env && NODE_ENV=test mocha --timeout 20000 --recursive tests/integration.tests/messengers/ --watch",
+    "test:messages": ". ./.env && NODE_ENV=test mocha --timeout 20000 --recursive tests/unit.tests/messagingFormats/ --watch",
     "test:unit": "mocha --recursive tests/unit.tests --watch",
     "dev:exportSchema": ". ./SQL/scripts/exportDevSchema.sh"
   },

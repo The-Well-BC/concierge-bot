@@ -1,19 +1,43 @@
 const commands = require('./commands');
 const botMessages = require('./botMessages');
+const errMessages = require('./errorMessages');
+
+// Messager Platforms, eg twitter, telegram, discord...
+const telegram = require('./messenger/telegram');
+const twitter = require('./messenger/twitter');
 
 module.exports = {
-    receiveMessage(payload) {
-        return commands.runCommand(payload)
+    receiveMessage(payload, messenger) {
+        if(!messenger)
+            throw new Error('No messenger specified');
+
+        let messengerFn;
+
+        if(messenger === 'telegram')
+            messengerFn = telegram;
+        else if (messenger == 'twitter')
+            messengerFn = twitter;
+
+        let parsedMessage = messengerFn.parseMessage(payload);
+
+        return commands(parsedMessage, messenger, parsedMessage.formatter)
         .then(res => {
-            if( res === false )
-                return botMessages.prepareFailMessage(payload);
-            else {
-                let additionalMessage;
-                if(res !== true)
-                    additionalMessage = res;
-                let message = botMessages.prepareResponse(payload, additionalMessage)
-                message.method = 'sendMessage';
-                return message;
+            if(res === true)
+                return new Promise.resolve(true);
+            else if(res) {
+                let message = messengerFn.prepareMessage(res, [ parsedMessage.chatID ])
+                return message[0][0];
+            }
+        })
+        .catch(err => {
+            console.log('CHAT ID', chatID);
+            let mess =  "";
+            if(err.message == 'invalid_platform') {
+                if(err.messenger == 'telegram') {
+                    mess =  errMessages(err).invalid_platform[messenger];
+                }
+
+                return telegram.prepareMessage({ text: mess }, [chatID] );
             }
         });
     }
