@@ -2,17 +2,14 @@ const saleText = require('./sales');
 const bidText = require('./bids');
 const dropText = require('./drops');
 
+const start = require('./message.start');
 const help = require('./messages.help');
-const start = require('./messages.start');
-const subscribe = require('./messages.subscribe');
 
 module.exports = {
-    subscribe,
     start,
     help,
 
     alertMessage(payload) {
-        console.log('PAYLOAD', payload);
         let platform = payload.platform.charAt(0).toUpperCase() + payload.platform.substring(1);
 
         let text = '';
@@ -21,7 +18,7 @@ module.exports = {
             text += dropText(payload)
         else if(payload.type === 'listing') 
             text += bidText(payload)
-        else if(payload.type == 'sale') {
+        else if(payload.action) {
             text += saleText(payload);
 
         } else if(payload.status) {
