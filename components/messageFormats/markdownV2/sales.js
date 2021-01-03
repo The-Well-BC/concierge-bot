@@ -5,18 +5,26 @@ module.exports = function(payload) {
     let action = 'bought';
     let text = '';
 
-    if(payload.buyer.name) {
-        let nameStr;
+    let nameStr;
+    if(payload.buyer && payload.buyer.name) {
         if(payload.buyer.url) 
             nameStr = `[${ payload.buyer.name }](${ payload.buyer.url })`;
         else
             nameStr = payload.buyer.name;
 
-        text += `${ nameStr } just ${ action } ${ payload.name } for ${ payload.price } on ${ date } (${ time })`;
-    }
+    } else 
+        nameStr = 'An anonymous user';
 
-    if(payload.currentPrice)
-        text += `\n${ payload.name } is currently trading at ${ payload.currentPrice }`;
+    let nftName = (payload.url) ? `[${ payload.name }](${ payload.url })` : payload.name;
+    text += `${ nameStr } ${ action }`;
+
+    if(payload.transaction && payload.transaction.price)
+        text += ` ${ nftName } for ${ payload.transaction.price } on ${ date } (${ time })`;
+    else
+        text += ` a ${ nftName } token on ${ date } (${ time })`;
+
+    if(payload.price)
+        text += `\n${ payload.name } is currently trading at ${ payload.price }`;
 
     if(payload.creator.url) {
         if(payload.creator.name.slice(-1) == 's')

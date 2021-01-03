@@ -9,7 +9,7 @@ describe('Test drops text', function() {
         {
             name: 'AESII - Technical Cargo Pants',
             url: 'https://zora.com/drops/aes-1337',
-            type: 'drop',
+            event: 'drop',
             img: null,
             price: '$56.91',
             creator: {

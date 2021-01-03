@@ -3,7 +3,7 @@ const expect = chai.expect;
 
 const sendMessage = require('../../../components/messenger/telegram/api/sendText');
 
-describe.only('Telegram API: Send Message', function() {
+describe('Telegram API: Send Message', function() {
     it('Send text message', function() {
         const message = {
             text: 'Testing... testing...', 

@@ -22,10 +22,11 @@ describe('Fetch new transactions', function() {
         return foundation.fetchSales(parseInt(startTime/1000), 3)
         .then(res => {
             expect(res).to.not.be.empty;
+            console.log('RES', res);
             expect(res, 'No undefined properties').to.all.have.noUndefinedKeys(['img']);
 
             expect(res, 'Nft Transaction test').to.all.be.nftTransaction(startTime);
-            expect(res).to.all.have.property('platform', 'Foundation');
+            expect(res).to.all.have.property('platform', 'foundation');
         });
     });
 
@@ -36,7 +37,7 @@ describe('Fetch new transactions', function() {
             expect(res, 'No undefined properties').to.all.have.noUndefinedKeys();
 
             expect(res, 'Nft Transaction test').to.all.be.nftTransaction(startTime);
-            expect(res).to.all.have.property('platform', 'Nifty Gateway');
+            expect(res).to.all.have.property('platform', 'nifty');
         });
     });
 
@@ -47,7 +48,7 @@ describe('Fetch new transactions', function() {
             expect(res, 'No undefined properties').to.all.have.noUndefinedKeys();
 
             expect(res, 'Nft Transaction test').to.all.be.nftTransaction(startTime);
-            expect(res).to.all.have.property('platform', 'SuperRare');
+            expect(res).to.all.have.property('platform', 'superrare');
         });
     });
 });

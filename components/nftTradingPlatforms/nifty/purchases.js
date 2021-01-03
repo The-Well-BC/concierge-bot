@@ -19,8 +19,8 @@ module.exports = function(startTime, limit) {
                 url: `https://niftygateway.com/itemdetail/secondary/${ item.NiftyObject.contractAddress }`,
                 img: item.NiftyObject.image_url,
                 date: item.Timestamp,
-                type: 'sale',
-                platform: 'Nifty Gateway',
+                event: 'sale',
+                platform: 'nifty',
                 transaction: {
                     price: item.SaleAmountInCents/100
                 },

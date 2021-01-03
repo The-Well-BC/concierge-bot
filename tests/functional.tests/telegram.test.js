@@ -18,6 +18,8 @@ describe('Telegram', function() {
 
     it('Send start command', function() {
         const payload = clone(samplePayloads.commands.start);
+        console.log('PAYLOAD', payload);
+
         return request(app).post(links.telegramWebhook).send(payload)
         .then(res => {
             expect(res.body).to.have.keys('chat_id', 'text', 'reply_markup', 'method', 'parse_mode');

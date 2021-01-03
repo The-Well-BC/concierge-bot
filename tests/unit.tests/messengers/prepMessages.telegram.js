@@ -4,7 +4,7 @@ const chai = require('chai');
 const expect = chai.expect;
 
 describe('Telegram functions: Prepary payload for telegram', function() {
-    let chatIDs = [{ chat_id: 1234 }];
+    let chatIDs = [ 1234 ];
 
     it('Check all properties', function() {
         let payload = [{

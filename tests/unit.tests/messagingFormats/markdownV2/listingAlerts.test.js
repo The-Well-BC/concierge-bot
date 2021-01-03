@@ -7,7 +7,7 @@ describe('Test listing texts', function() {
         let data = {
             name: 'Unit-002',
             url: 'http://boon.com',
-            type: 'listing',
+            event: 'listing',
             creator: {
                 name: 'Neue Goods',
                 url: 'https://seller.js'
@@ -31,7 +31,7 @@ describe('Test listing texts', function() {
         let data = {
             name: 'Unit-002',
             url: 'http://boon.com',
-            type: 'listing',
+            event: 'listing',
             creator: {
                 name: 'Neue Goods',
             },

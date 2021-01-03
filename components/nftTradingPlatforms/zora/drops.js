@@ -62,6 +62,7 @@ module.exports = function(startTime) {
                 brand: organisation.name,
                 img,
                 price,
+                event: 'drop',
                 service: 'zora',
                 date: p.date,
                 releaseDate

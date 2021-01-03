@@ -113,14 +113,14 @@ module.exports = function(startTime, limit) {
                 creator: {
                     name: `${brand.name} (${brand.symbol})`
                 },
-                platform: 'Foundation',
+                platform: 'foundation',
                 ...tokensLeft && { tokensLeft },
                 transaction: {
                     url: `https://blockscout.com/poa/xdai/tx/${ item.transactionHash }/token-transfers`,
                     tokens: tokenAmount
                 },
                 img: null,
-                type: 'sale',
+                event: 'sale',
                 url: `https://foundation.app/${ brand.symbol.toLowerCase() }`
             }
         });

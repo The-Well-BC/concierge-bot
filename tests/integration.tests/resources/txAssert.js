@@ -1,6 +1,5 @@
 // const keys = [ 'url', 'date', 'name', 'type', 'price', 'buyer', 'seller', 'platform', 'creator', 'img', 'tokensLeft', 'transaction' ];
-const keys = [ 'url', 'date', 'name', 'type', 'price', 'buyer', 'seller', 'platform', 'creator', 'img' ];
-
+const keys = [ 'url', 'date', 'name', 'platform', 'event', 'seller', 'creator', 'img' ];
 
 module.exports = function(chai, utils) {
     let Assertion = chai.Assertion;
@@ -16,7 +15,7 @@ module.exports = function(chai, utils) {
 
         let assert = this.assert;
 
-        expect(obj).to.all.have.keys(...keys);
+        expect(obj).to.all.include.keys(...keys);
 
         return obj.forEach(item => {
             assert( (new Date(item.date) >= startTime),
@@ -25,26 +24,22 @@ module.exports = function(chai, utils) {
                 new Date(startTime),
                 new Date(item.date)
             );
-            assert( typeof item.buyer === 'object' && item.buyer != null,
-                'Property "buyer" should be an object #{exp}, #{act}',
-                '',
-                {},
-                item.buyer
-            );
 
-            assert( item.buyer.name && typeof item.buyer.name === 'string',
-                'Property "buyer" should have property "name" of type #{exp}. Got #{act} instead',
-                '',
-                'String',
-                item.buyer.name
-            );
+            if(item.buyer && item.buyer.name) {
+                assert( item.buyer.name && typeof item.buyer.name === 'string',
+                    `Property "buyer" should have property "name" of type #{exp}. Got ${ item.buyer.name} instead\n #{act}`,
+                    '',
+                    'String',
+                    item.buyer
+                );
+            }
 
             assert( 
                 typeof item.creator === 'object' && item.creator != null,
-                'Property "buyer" should be an #{exp}, not #{act}',
+                'Property "creator" should be an #{exp}, not #{act}',
                 '',
                 'Object',
-                item.creator
+                item
             );
 
             assert(
@@ -82,11 +77,11 @@ module.exports = function(chai, utils) {
             )
             */
 
-            assert(item.type === 'sale',
-                'Expected item to have property \'type\' that is #{exp}. Got #{act}',
+            assert(item.event === 'sale',
+                'Expected item to have property \'event\' that is #{exp}. Got #{act}',
                 '',
                 'sale',
-                item.type
+                item.event
             );
         });
     });

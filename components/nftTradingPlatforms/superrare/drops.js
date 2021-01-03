@@ -59,10 +59,10 @@ module.exports = function(startTime, limit) {
                 creator: {
                     name: item.creator.username
                 },
-                type: 'drop',
+                event: 'drop',
                 date: item.activityTimestamp,
                 img: item.image,
-                platform: 'SuperRare',
+                platform: 'superrare',
                 url,
                 name: item.name
             }

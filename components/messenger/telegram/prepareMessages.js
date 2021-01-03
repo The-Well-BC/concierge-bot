@@ -21,7 +21,6 @@ module.exports = function(payloadArr, chatIDs) {
             let reply_markup
             if(payload.replies) {
                 let replies = payload.replies.map(item => [item]);
-                console.log('REPLEIS', replies);
                 reply_markup = {
                     keyboard: replies,
                     one_time_keyboard: true

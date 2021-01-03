@@ -78,8 +78,8 @@ module.exports = function(startTime, limit) {
                 name: item.name,
                 url: 'https://foundation.app/explore',
                 date: new Date(item.date * 1000),
-                platform: 'Foundation',
-                type: 'drop',
+                platform: 'foundation',
+                event: 'drop',
                 creator,
                 img: null
             }

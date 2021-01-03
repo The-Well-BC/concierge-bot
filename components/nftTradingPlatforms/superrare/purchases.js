@@ -19,9 +19,9 @@ module.exports = function(startTime, limit) {
         return res.data.result.eventsWithUsers
         .map(item => {
             console.log('RARE ITEM', item);
-            let url = `https://superrare.co/artwork-v2/${ item.nonFungibleToken.name.replace(' ', '-') }-${ item.nonFungibleToken.tokenId }`;
+            let url = `https://superrare.co/artwork-v2/${ item.nonFungibleToken.name.replace(/\s/g, '-') }-${ item.nonFungibleToken.tokenId }`;
             // let creatorUrl = `https://superrare.co/${ item.creator.username }`
-            let buyer, seller, price;
+            let buyer, seller, price, transaction = {};
 
             if(item.nftEventType === 'SALE') {
                 buyer = {
@@ -29,14 +29,15 @@ module.exports = function(startTime, limit) {
                     url: `https://superrare.co/${ item.sale.buyer.username }`,
                 }
 
-                price = item.sale.amount;
+                transaction.price = item.sale.amount;
 
                 seller = {
                     name: item.sale.seller.username,
                     url: `https://superrare.co/${ item.sale.seller.username }`
                 }
             } else if(item.nftEventType === 'ACCEPT_BID') {
-                price = item.acceptBid.amount;
+                transaction.price = item.acceptBid.amount;
+
                 if(item.acceptBid.bidder) {
                     buyer = {
                         name: item.acceptBid.bidder.username,
@@ -50,16 +51,21 @@ module.exports = function(startTime, limit) {
                 }
             }
 
+            if(transaction.price) {
+                transaction.price = parseInt(transaction.price) / (10**18);
+                transaction.price = transaction.price + ' ETH';
+            }
+
             return {
                 name: item.nonFungibleToken.name,
                 img: item.nonFungibleToken.image,
-                price,
+                transaction,
                 creator: {
                     name: item.nonFungibleToken.metadata.createdBy,
                 },
                 date: item.timestamp,
-                type: 'sale',
-                platform: 'SuperRare',
+                event: 'sale',
+                platform: 'superrare',
                 url,
                 /*
                 tokensLeft,

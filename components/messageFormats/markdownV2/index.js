@@ -12,20 +12,20 @@ module.exports = {
     help,
 
     alertMessage(payload) {
-        console.log('PAYLOAD', payload);
         let platform = payload.platform.charAt(0).toUpperCase() + payload.platform.substring(1);
 
         let text = '';
 
-        if(payload.type === 'drop') 
-            text += dropText(payload)
-        else if(payload.type === 'listing') 
-            text += bidText(payload)
-        else if(payload.type == 'sale') {
-            text += saleText(payload);
-
-        } else if(payload.status) {
-            text += bidText(payload);
+        switch(payload.event) {
+            case 'drop':
+                text += dropText(payload)
+                break;
+            case 'listing':
+                text += bidText(payload)
+                break;
+            case 'sale':
+                text += saleText(payload);
+                break;
         }
 
         text += `\n_via: ${ platform }_`;

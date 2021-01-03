@@ -12,7 +12,7 @@ describe('Fetch drops', function() {
     const now = new Date();
     let startTime = new Date().setDate(now.getDate() - 220);
 
-    let dropKeys = [ 'name', 'url', 'type', 'img', 'creator', 'platform', 'date' ];
+    let dropKeys = [ 'name', 'url', 'event', 'img', 'creator', 'platform', 'date' ];
 
     const checkKeys = function(item) {
         let conditions = typeof item.creator === 'object' && item.creator != null;
@@ -45,13 +45,13 @@ describe('Fetch drops', function() {
             expect(res).to.not.be.empty;
             expect(res).to.all.include.keys(...dropKeys);
             expect(res).to.not.have.lengthOf.above(4);
-            expect(res).to.all.have.property('type', 'drop');
+            expect(res).to.all.have.property('event', 'drop');
             expect(res, 'No Duplicate Drops').to.satisfy(noDuplicates);
 
             expect(res).to.all.satisfy( drops => noUndefinedKeys(drops, ['img']), 'No undefined proeprties');
             expect(res).to.all.satisfy(checkKeys, 'Check keys are defined properly');
             expect(res).to.all.satisfy(item => checkDates(item, startTime), 'All item dates should be newer than start time');
-            expect(res).to.all.have.property('platform', 'Foundation');
+            expect(res).to.all.have.property('platform', 'foundation');
         });
     });
 
@@ -69,15 +69,15 @@ describe('Fetch drops', function() {
 
             expect(res).to.all.satisfy(noUndefinedKeys, 'No undefined properties');
             expect(res).to.all.satisfy(checkKeys, 'Check keys are defined properly');
-            expect(res).to.all.have.property('type', 'drop');
-            expect(res).to.all.have.property('platform', 'Nifty Gateway');
+            expect(res).to.all.have.property('event', 'drop');
+            expect(res).to.all.have.property('platform', 'nifty');
         });
     })
 
     it('Fetch drops from SuperRare', function() {
         const limit = 3;
 
-        startTime = new Date().setDate(now.getDate() - 7);
+        startTime = new Date().setDate(now.getDate() - 9);
 
         return superrare.fetchDrops( startTime, limit )
         .then(res => {
@@ -89,8 +89,8 @@ describe('Fetch drops', function() {
 
             expect(res).to.all.satisfy( drops => noUndefinedKeys(drops, ['img']), 'No undefined proeprties');
             expect(res).to.all.satisfy(checkKeys, 'Check keys are defined properly');
-            expect(res).to.all.have.property('type', 'drop');
-            expect(res).to.all.have.property('platform', 'SuperRare');
+            expect(res).to.all.have.property('event', 'drop');
+            expect(res).to.all.have.property('platform', 'superrare');
         });
     });
 
@@ -103,12 +103,12 @@ describe('Fetch drops', function() {
             expect(res).to.all.include.keys(...dropKeys);
             expect(res).to.all.satisfy(item => checkDates(item, startTime), 'All item dates should be newer than start time');
             expect(res).to.not.have.lengthOf.above(limit);
-            expect(res).to.all.have.property('type', 'drop');
+            expect(res).to.all.have.property('event', 'drop');
             expect(res, 'No Duplicate Drops').to.satisfy(noDuplicates);
 
             expect(res).to.all.satisfy( drops => noUndefinedKeys(drops, ['img']), 'No undefined proeprties');
             expect(res).to.all.satisfy(checkKeys, 'Check keys are defined properly');
-            expect(res).to.all.have.property('platform', 'Zora');
+            expect(res).to.all.have.property('platform', 'zora');
         });
     });
 });

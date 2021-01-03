@@ -13,7 +13,7 @@ module.exports = function(payload) {
     let seller = payload.seller;
     let product = payload.name;
 
-    if(payload.type === 'listing') {
+    if(payload.event === 'listing') {
         text = `${product} was put up for sale at a price of *${ payload.price }*.\n`;
     }
 

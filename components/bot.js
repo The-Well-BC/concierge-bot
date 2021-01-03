@@ -1,5 +1,4 @@
 const commands = require('./commands');
-const botMessages = require('./botMessages');
 const errMessages = require('./errorMessages');
 
 // Messager Platforms, eg twitter, telegram, discord...

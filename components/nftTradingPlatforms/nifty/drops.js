@@ -27,9 +27,9 @@ module.exports = function(startTime, limit) {
                     name: item.userProfile.name,
                     url: `https://niftygateway.com/profile/${ item.userProfile.profile_url }`
                 },
-                platform: 'Nifty Gateway',
+                platform: 'nifty',
                 date: item.Timestamp,
-                type: 'drop',
+                event: 'drop',
                 url,
                 img: item.project_cover_photo_url
             }
