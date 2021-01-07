@@ -14,5 +14,7 @@ require('./components/alertsCronJob')();
 const links = require('./config/links');
 
 app.post(links.telegramWebhook, ctrl.receiveBotMessage);
+app.post(links.twitterWebhook, ctrl.receiveBotMessage);
+app.get(links.twitterWebhook, ctrl.twitterCRCchallenge);
 
 module.exports = app;

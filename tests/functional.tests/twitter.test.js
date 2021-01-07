@@ -8,24 +8,34 @@ const subdao = require('../../components/daos/subscription.dao');
 
 const links = require('../../config/links');
 
-const samplePayloads = require('../samplePayload.json');
+const samplePayloads = require('../twitterSamplePayload.js');
 
-describe.skip('Twitter #todo', function() {
+describe.only('Twitter: Test routes', function() {
     before(() => {
         const teardown = require('../teardown');
         return teardown();
     });
 
-    it('Send start command', function() {
-        const payload = clone(samplePayloads.commands.start);
-        return request(app).post(links.telegramWebhook).send(payload)
-        .then(res => {
-            expect(res.body).to.have.keys('chat_id', 'text', 'reply_markup', 'method');
+    it.only('Twitter CRC validation', function() {
+        this.timeout(3000);
 
-            expect(res.body).to.have.property('method', 'sendMessage');
+        return request(app).get(links.twitterWebhook + '?crc_token=123456')
+        .then(res => {
+            expect(res.body).to.have.property('response_token').that.contains.string('sha256=');
+        });
+    });
+
+    it.only('Send start command', function() {
+        const payload = clone(samplePayloads.commands.start);
+        return request(app).post(links.twitterWebhook).send(payload)
+        .then(res => {
+            expect(res.body).to.have.property('status', true);
+
+            /*
             expect(res.body.chat_id).to.equal(payload.message.chat.id);
             expect(res.body.text).to.have.string("Hello " + payload.message.chat.first_name);
             expect(res.body.reply_markup.keyboard[0].length).to.be.greaterThan(1);
+            */
         });
     });
 
@@ -34,7 +44,7 @@ describe.skip('Twitter #todo', function() {
 
         const chat_id = payload.message.chat.id;
 
-        return request(app).post(links.telegramWebhook).send(payload)
+        return request(app).post(links.twitterWebhook).send(payload)
         .then(res => {
             expect(res.body).to.have.keys('chat_id', 'text', 'method');
             expect(res.body).to.have.property('method', 'sendMessage');
@@ -57,7 +67,7 @@ describe.skip('Twitter #todo', function() {
         const chat_id = payload.message.chat.id;
         payload.message.text = '/subscribe zora';
 
-        return request(app).post(links.telegramWebhook).send(payload)
+        return request(app).post(links.twitterWebhook).send(payload)
         .then(res => {
             expect(res.body).to.have.keys('chat_id', 'text', 'method');
 
@@ -78,7 +88,7 @@ describe.skip('Twitter #todo', function() {
         const chat_id = payload.message.chat.id;
         payload.message.text = '/subscribe xora';
 
-        return request(app).post(links.telegramWebhook).send(payload)
+        return request(app).post(links.twitterWebhook).send(payload)
         .then(res => {
             expect(res.body).to.have.keys('chat_id', 'text');
 
