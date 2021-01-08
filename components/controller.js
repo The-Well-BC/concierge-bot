@@ -21,7 +21,7 @@ module.exports = {
     twitterCRCchallenge: (req, res) => {
         const crc_token = req.query.crc_token;
 
-        const consumerSecret = process.env.TWITTER_API_KEY;
+        const consumerSecret = process.env.TWITTER_SECRET_KEY;
         const hmac = crypto.createHmac('sha256', consumerSecret).update(crc_token).digest('base64');
 
         const response_token = 'sha256='+ hmac;
