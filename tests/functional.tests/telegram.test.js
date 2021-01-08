@@ -34,7 +34,7 @@ describe('Telegram', function() {
     it('Subscribe user to all services', function() {
         const payload = clone(samplePayloads.commands.subscribe);
 
-        const chat_id = payload.message.chat.id;
+        const chatID = "641574672";
 
         return request(app).post(links.telegramWebhook).send(payload)
         .then(res => {
@@ -43,35 +43,34 @@ describe('Telegram', function() {
 
             expect(res.body.chat_id).to.equal(payload.message.chat.id);
             // expect(res.body.text).to.have.string("subscribed to", "You");
-            return subdao.fetchUserSubscriptions(chat_id)
+            return subdao.fetchSubscription(chatID)
             .then(res => {
                 expect(res).to.have.lengthOf(1);
                 expect(res[0]).to.containSubset({
-                    chat_id, service: [], all_: true, messenger: 'telegram'
+                    chatID, filters: [], messenger: 'telegram'
                 });
             });
         });
     });
 
-    it('Subscribe user to one service', function() {
+    it('Subscribe user to one platform', function() {
         const payload = clone(samplePayloads.commands.subscribe);
 
-        const chat_id = payload.message.chat.id;
+        const chatID = 641574672;
         payload.message.text = '/subscribe zora';
 
         return request(app).post(links.telegramWebhook).send(payload)
         .then(res => {
             expect(res.body).to.have.keys('chat_id', 'text', 'method', 'parse_mode');
 
-            expect(res.body.chat_id).to.equal(payload.message.chat.id);
+            expect(res.body.chat_id).to.equal(chatID);
             expect(res.body.text).to.have.string("subscribed to", "You");
-            return subdao.fetchUserSubscriptions(chat_id)
+            return subdao.fetchSubscription(chatID)
             .then(res => {
                 expect(res).to.have.lengthOf(1);
                 expect(res[0]).to.containSubset({
-                    chat_id, service: [ 'zora' ],
+                    chatID: "641574672", filters: [ {platforms: [ 'zora']} ],
                     messenger: 'telegram',
-                    all_: false
                 });
             });
         });
@@ -89,7 +88,7 @@ describe('Telegram', function() {
 
             expect(res.body.chat_id).to.equal(payload.message.chat.id);
             expect(res.body.text).to.equal('The NFT platform "xora" is currently not available. Try /browse to see what platforms you can subscribe to');
-            return subdao.fetchUserSubscriptions(chat_id)
+            return subdao.fetchSubscription(chat_id)
             .then(res => {
                 expect(res).to.eql([]);
             });

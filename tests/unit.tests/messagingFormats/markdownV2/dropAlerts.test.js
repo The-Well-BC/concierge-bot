@@ -1,4 +1,4 @@
-const alerts = require('../../../../components/messageFormats/markdownV2');
+const markdown = require('../../../../components/messageFormats/markdownV2');
 const chai = require('chai');
 chai.use( require('chai-things') );
 const expect = chai.expect;
@@ -22,7 +22,7 @@ describe('Test drops text', function() {
     ]
 
     it('Check drops', function() {
-        let alertMessage =  alerts.alertMessage(resourcePayload[0]);
+        let alertMessage =  markdown.alertMessage(resourcePayload[0]);
         expect(alertMessage).to.have.property('text', '[Robots X](https://zora.com/u/robots-x) released [AESII - Technical Cargo Pants](https://zora.com/drops/aes-1337) on July 31, 2020 (4:00pm UTC).\nStarting price is $56.91\n_via: Zora_');
 
     });

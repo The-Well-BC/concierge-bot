@@ -1,7 +1,10 @@
 const axios = require('axios');
 
-module.exports = function(startTime, limit) {
-    const url = 'https://api.niftygateway.com//drops/open/?size=3&current=1';
+module.exports = function(startTime, limit = 3) {
+    if(typeof limit !== 'number')
+        limit = 3;
+
+    const url = `https://api.niftygateway.com//drops/open/?size=${ limit }&current=1`;
 
     return axios.get(url)
     .then(res => {

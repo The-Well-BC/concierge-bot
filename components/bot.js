@@ -17,6 +17,8 @@ module.exports = {
         else if (messenger == 'twitter')
             messengerFn = twitter;
 
+        console.log('MESSENGERMF', messengerFn);
+
         let parsedMessage = messengerFn.parseMessage(payload);
 
         return commands(parsedMessage, messenger, parsedMessage.formatter)
@@ -25,6 +27,8 @@ module.exports = {
                 return new Promise.resolve(true);
             else if(res) {
                 let message = messengerFn.prepareMessage(res, [ parsedMessage.chatID ])
+                if(messenger == 'twitter')
+                    return messengerFn.sendMessage({ text: message }, [parsedMessage.chatID]);
                 return message[0][0];
             }
         })
@@ -36,7 +40,7 @@ module.exports = {
                     mess =  errMessages(err).invalid_platform[messenger];
                 }
 
-                return telegram.prepareMessage({ text: mess }, [parsedMessage.chatID])[0][0];
+                return messengerFn.prepareMessage({ text: mess }, [parsedMessage.chatID])[0][0];
             }
         });
     }

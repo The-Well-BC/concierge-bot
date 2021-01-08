@@ -17,7 +17,6 @@ module.exports = function(startTime, limit) {
         nft721S ( ${ filterQuery }) {
             id
             tokenId
-            createdBy
             goLiveDate
             brand {
                 name
@@ -73,15 +72,17 @@ module.exports = function(startTime, limit) {
         let drops = payload.map( item => {
             const creator = item.brand;
             item.date = item.goLiveDate;
+            const url = (item.symbol) ?  `https://foundation.app/${ item.brand.symbol }/$${ item.symbol }`
+                : `https://foundation.app/${ item.brand.symbol }/${ item.name.replace(/\s/g, '-') }-${ item.tokenId }`;
 
             return {
                 name: item.name,
-                url: 'https://foundation.app/explore',
+                url,
                 date: new Date(item.date * 1000),
                 platform: 'foundation',
                 event: 'drop',
                 creator,
-                img: null
+                ...(item.image) && {img: item.image}
             }
         });
 

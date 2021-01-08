@@ -20,6 +20,7 @@ describe('Telegram API: Send Message', function() {
         .then(res => {
             expect(res).to.not.have.property('error');
             expect(res).to.have.property('ok', true);
+            expect(res.result).to.have.property('text', 'Testing... testing...');
             expect(res.result.from).to.have.property('is_bot', true);
         });
     });

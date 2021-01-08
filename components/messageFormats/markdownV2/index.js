@@ -4,10 +4,14 @@ const dropText = require('./drops');
 
 const help = require('./messages.help');
 const start = require('./messages.start');
+const browse = require('./messages.browse');
 const subscribe = require('./messages.subscribe');
+const creatorSummary = require('./text.creatorSummary.js');
 
 module.exports = {
+    creatorSummary,
     subscribe,
+    browse,
     start,
     help,
 

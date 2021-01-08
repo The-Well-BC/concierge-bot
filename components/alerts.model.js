@@ -1,6 +1,7 @@
 const nftFn = require('./nftTradingPlatforms');
 const subdao = require('./daos/subscription.dao');
 const telegram = require('./messenger/telegram');
+const subscriptionFilter = require('./subscriptionFilter');
 
 module.exports = {
     //sendAlerts: function(messages, interval) {
@@ -14,14 +15,16 @@ module.exports = {
         }).then(res => {
             payload.push(...res);
 
-            return subdao.fetchServiceSubscription()
+            return subdao.fetchSubscription()
         })
-        .then(res => {
-            console.log('PAYLODA', payload);
-            let chatIDs = res.map(item => item.chat_id);
-            let textPayload = payload.map(p => telegram.formatter.alertMessage(p));
-            console.log('TEXT PAYLO9AD', textPayload);
-            let messages = textPayload.map(p => telegram.sendMessage(p, chatIDs));
+        .then(subscriptions => {
+            // Telegram messages
+            let sortedMessages = subscriptionFilter(payload, subscriptions);
+            let textPayload = sortedMessages.map(p =>  {
+                return { message: telegram.formatter.alertMessage(p.payload), chatIDs: p.chatIDs }
+            });
+
+            let messages = textPayload.map(p => telegram.sendMessage(p.message, p.chatIDs));
             return Promise.all(messages);
         });
     }

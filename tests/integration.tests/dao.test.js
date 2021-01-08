@@ -4,136 +4,146 @@ const chai = require('chai');
 chai.use( require('chai-as-promised') );
 const expect = chai.expect;
 
+const teardown = require('../teardown');
+
 describe('Saving Subscriptions', function() {
-    beforeEach(() => {
-        const teardown = require('../teardown');
-        return teardown();
-    });
+    beforeEach(() => teardown());
 
-    it('Save subscription to all nft platforms', function() {
-        const chatid = 123456;
+    it('Add subscription', function() {
+        const chatid = "123456";
         const messenger = 'twitter';
+        const filter = { platforms: ['zora', 'nifty'] };
 
-        return dao.addServiceSubscription(chatid, null, messenger, true)
+        return dao.addSubscription(chatid, messenger, filter)
         .then(res => {
-            return dao.fetchServiceSubscription(chatid);
+            return dao.fetchSubscription(chatid);
         }).then(res => {
-            expect(res).to.have.lengthOf(1);
-            expect(res[0]).to.eql({ chat_id: chatid, service: [], messenger, all: true });
+            expect(res).to.have.deep.eql([
+                { chatID: chatid, filters: [filter], messenger}
+            ]);
         });
     });
 
-    it('Save subscription to single nft platform', function() {
-        const chatid = 123486;
-        const service = 'foundation';
+    it('Delete subscription', function() {
+        const chatid = "123456";
         const messenger = 'twitter';
+        const filter = { platforms: ['zora', 'nifty'] };
 
-        return dao.addServiceSubscription(chatid, service, messenger, false)
+        return dao.addSubscription(chatid, messenger, filter)
+        .then(res => dao.deleteSubscription(chatid, messenger))
+        .then(() => dao.fetchSubscription(chatid, messenger))
         .then(res => {
-            return dao.fetchServiceSubscription(chatid, service);
-        }).then(res => {
-            expect(res).to.have.lengthOf(1);
-            expect(res[0]).to.eql({ chat_id: chatid, service: [ service ], messenger, all: false });
+            expect(res).to.be.empty;
         });
     });
 
-    it('Add nft platform subscription', function() {
-        const chatid = 123486;
+    it('Add additional filter to existing subscription', function() {
+        const chatid = "123456";
         const messenger = 'twitter';
+        const filter1 = { platforms: ['zora', 'nifty'] };
+        const filter2 = { creators: ['Tuna Thurpe', 'Munachi'] };
 
-        return dao.addServiceSubscription(chatid, 'superrare', messenger, false)
+        return dao.addSubscription(chatid, messenger, filter1)
         .then(res => {
-            return dao.addServiceSubscription(chatid, 'xoa', messenger, false)
+            return dao.addSubscription(chatid, messenger, filter2)
+        }) .then(res => {
+            return dao.fetchSubscription(chatid);
         }).then(res => {
-            return dao.fetchServiceSubscription(chatid, 'superrare');
-        }).then(res => {
-            expect(res).to.have.lengthOf(1);
-            expect(res[0]).to.deep.eql({ chat_id: chatid, service: [ 'xoa', 'superrare' ], messenger, all: false });
+            expect(res).to.have.deep.members([
+                {chatID: chatid, filters: [filter1,filter2], messenger}
+            ]);
         });
     });
 
-    it('Save subscription to multiple nft platform', function() {
-        const chatid = 123486;
-        const service = ['fondation', 'zora', 'nifty'];
+    it('Update Filter', function() {
+        const chatid = "123456";
         const messenger = 'twitter';
+        const filter1 = { platforms: ['zora', 'nifty'] };
+        const filter2 = { creators: ['Tuna Thurpe', 'Munachi'] };
+        const filter2a = { creators: ['Tuna Thurp', 'Munachi', 'Osina']};
+        const filter3 = { txPriceGt: '$500' };
+        const filter4 = { priceGt: '$500' };
 
-        return dao.addServiceSubscription(chatid, service, messenger, false)
+        return dao.addSubscription(chatid, messenger, filter1)
+        .then(res => dao.addSubscription(chatid, messenger, filter2))
+        .then(res => dao.addSubscription(chatid, messenger, filter3))
+        .then(res => dao.addSubscription(chatid, messenger, filter4))
+        .then(res => dao.updateFilter(chatid, messenger, 2, filter2a))
         .then(res => {
-            return dao.fetchServiceSubscription(chatid);
+            return dao.fetchSubscription(chatid);
         }).then(res => {
             expect(res).to.have.lengthOf(1);
-            expect(res[0]).to.eql({ chat_id: chatid, service, messenger, all: false });
+            expect(res[0]).to.deep.eql({ chatID: chatid, filters: [ filter1,filter2a,filter3,filter4 ], messenger});
         });
     });
 
-    it('Test conflict service subscriptions', function() {
-        const chatid = 103456;
-        const service = 'fondue_mountain';
-        const messenger = 'discord';
+    it('Delete Filter', function() {
+        const chatid = "123456";
+        const messenger = 'twitter';
+        const filter1 = { platforms: ['zora', 'nifty'] };
+        const filter2 = { creators: ['Tuna Thurpe', 'Munachi'] };
+        const filter3 = { creators: ['Tuna Thurpe', 'Munachi', 'Osina']};
+        const filter4 = { priceGT: '$123.45'};
 
-        return dao.addServiceSubscription(chatid, service, messenger, false)
+        return dao.addSubscription(chatid, messenger, filter1)
+        .then(res => dao.addSubscription(chatid, messenger, filter2))
+        .then(res => dao.addSubscription(chatid, messenger, filter3))
+        .then(res => dao.addSubscription(chatid, messenger, filter4))
         .then(res => {
-            return expect( dao.addServiceSubscription(chatid, service, messenger, false) ).to.not.be.rejected;
-        })
-        .then(res => {
-            return dao.fetchServiceSubscription(chatid, service);
+            return dao.deleteFilter(chatid, messenger, 2);
+        }).then(res => {
+            return dao.fetchSubscription(chatid);
         }).then(res => {
             expect(res).to.have.lengthOf(1);
-            expect(res[0]).to.eql({ chat_id: chatid, service: [service], messenger, all: false });
+            expect(res[0]).to.deep.eql({ chatID: chatid, filters: [filter1, filter3, filter4], messenger});
         });
     });
 
-    it('Save item subscriptions', function() {
-        const chatid = 123456;
-        const item = 'moan';
-        const messenger = 'facebook';
+    it('Delete all filters', function() {
+        const chatid = "123456";
+        const messenger = 'twitter';
+        const filter1 = { platforms: ['zora', 'nifty'] };
+        const filter2 = { creators: ['Tuna Thurpe', 'Munachi'] };
+        const filter3 = { creators: ['Tuna Thurpe', 'Munachi', 'Osina']};
+        const filter4 = { priceGT: '$123.45'};
 
-        return dao.addItemSubscription(chatid, item, messenger)
+        return dao.addSubscription(chatid, messenger, filter1)
+        .then(res => dao.addSubscription(chatid, messenger, filter2))
+        .then(res => dao.addSubscription(chatid, messenger, filter3))
+        .then(res => dao.addSubscription(chatid, messenger, filter4))
         .then(res => {
-            return dao.fetchItemSubscription(chatid, item);
+            return dao.deleteAllFilters(chatid, messenger);
         }).then(res => {
-            expect(res).to.eql({ chat_id: chatid, item, messenger });
+            return dao.fetchSubscription(chatid);
+        }).then(res => {
+            expect(res).to.have.lengthOf(1);
+            expect(res[0]).to.deep.eql({ chatID: chatid, filters: [], messenger});
         });
     });
 });
 
 describe('Fetching subscriptions', function() {
-    let chatids = [325233, 897289, 690324123, 129292, 3898419, 700123];
+    let chatids = ["325233", "897289", "690324123", "129292", "3898419", "700123"];
     let item = 'fudo';
     let service = 'zora';
 
     before(() => {
-        return dao.addServiceSubscription(chatids[0], service, 'twitter', false)
-        .then(() => dao.addServiceSubscription(chatids[1], service, 'telegram', false))
-        .then(() => dao.addServiceSubscription(chatids[2], service, 'discord', false))
-        .then(() => dao.addItemSubscription(chatids[0], item, 'telegram'))
-        .then(() => dao.addItemSubscription(chatids[1], item, 'telegram'))
-        .then(() => dao.addItemSubscription(chatids[4], 'taekwondo', 'discord'))
-        .then(() => dao.addItemSubscription(chatids[3], 'moon', 'twitter'))
-        .then(() => dao.addServiceSubscription(1234, ['zora', 'xoa'], 'discord', false))
-        .then(() => dao.addServiceSubscription(5678, 'xoa', 'twitter', false))
-        .then(() => dao.addServiceSubscription(789, ['foundation', 'xoa', 'nifty'], 'discord', false));
+        return teardown()
+        .then(() => dao.addSubscription(chatids[0],  'twitter', { platforms: ['zora']}))
+        .then(() => dao.addSubscription(chatids[1], 'telegram', {platforms:['foundation']}))
+        .then(() => dao.addSubscription(chatids[2],  'discord', {platforms: ['superrare']}))
+        .then(() => dao.addSubscription(1234, 'discord', {platforms: ['zora', 'xoa']}))
+        .then(() => dao.addSubscription(789, 'discord', {platforms: ['foundation', 'xoa', 'nifty']}));
     });
 
-    it('Fetch ALL subscriptions to a particular service', function() {
-        return dao.fetchServiceSubscription(null, 'xoa')
+    it('Fetch ALL subscriptions for a messenger', function() {
+        return dao.fetchSubscription(null, 'discord')
         .then(res => {
             expect(res).to.have.lengthOf(3);
             expect(res).to.have.deep.members([
-                { all: false, chat_id: 1234, service: ['zora', 'xoa'], messenger: 'discord' },
-                { all: false, chat_id: 5678, service: ['xoa'], messenger: 'twitter' },
-                { all: false, chat_id: 789, service: ['foundation', 'xoa', 'nifty'], messenger: 'discord' }
-
-            ]);
-        });
-    });
-
-    it('Fetch all subscriptions to an item',function() {
-        return dao.fetchItemSubscriptions(item)
-        .then(res => {
-            expect(res).to.have.deep.members([
-                { chat_id: chatids[0], item, messenger: 'telegram' },
-                { chat_id: chatids[1], item, messenger: 'telegram'}
+                { chatID: chatids[2], filters: [{platforms: ['superrare']}], messenger: 'discord' },
+                { chatID: "1234", filters: [{platforms: ['zora','xoa']}], messenger: 'discord' },
+                { chatID: "789", filters: [{platforms:['foundation', 'xoa', 'nifty']}], messenger: 'discord' }
             ]);
         });
     });

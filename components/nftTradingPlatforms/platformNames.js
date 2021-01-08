@@ -1,6 +1,18 @@
 module.exports = {
-    nifty: 'Nifty Gateway',
-    superrare: 'Super Rare', 
-    foundation: 'Foundation',
-    zora: 'Zora'
+    nifty: {
+        name: 'Nifty Gateway',
+        url: 'https://niftygateway.com'
+    },
+    superrare: {
+        name: 'Super Rare', 
+        url: 'https://superrare.co'
+    },
+    foundation: {
+        name: 'Foundation',
+        url: 'https://foundation.app'
+    },
+    zora: {
+        name: 'Zora',
+        url: 'https://ourzora.com'
+    }
 }

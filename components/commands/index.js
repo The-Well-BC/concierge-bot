@@ -1,9 +1,17 @@
 const subscribeCommand = require('./command.subscribe');
 let nftPlatforms = require('../nftTradingPlatforms/platformNames');
+const browse = require('./command.browse');
+
+const commands = require('./text');
 
 module.exports = (payload, messenger, formatter) => {
     let response;
     switch(payload.command.name) {
+        case 'browse':
+            return browse(payload, messenger, formatter, commands)
+            .then(res => {
+                return res;
+            });
         case 'subscribe':
             return subscribe(payload.command.params, messenger, payload.chatID)
             .then(res => {

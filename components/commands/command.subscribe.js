@@ -4,7 +4,7 @@ const botMessages = require('../botMessages');
 
 subscribe = function(services, messenger, chat_id) {
     if(services == 'all')
-        return subscribedao.addServiceSubscription(chat_id, null, messenger, true)
+        return subscribedao.addSubscription(chat_id, messenger)
     else if ( Array.isArray(services) ) {
         let offItem;
         let goodToGo = services.every(item => {
@@ -24,7 +24,7 @@ subscribe = function(services, messenger, chat_id) {
             return Promise.reject(err);
         }
         else
-            return subscribedao.addServiceSubscription(chat_id, services, messenger, false)
+            return subscribedao.addSubscription(chat_id, messenger)
     }
 }
 

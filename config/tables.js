@@ -1,14 +1,14 @@
 const serviceSubscriptions = 'service_subscriptions';
-const itemSubscriptions = 'item_subscriptions';
+const filters = 'subscription_filters';
 
 module.exports = {
     serviceSubscriptions,
-    serviceSubscription: serviceSubscriptions,
-    serviceSubs: serviceSubscriptions,
-    serviceSub: serviceSubscriptions,
+    subscriptions: serviceSubscriptions,
+    subs: serviceSubscriptions,
+    subscription: serviceSubscriptions,
 
-    itemSubscriptions,
-    itemSub: itemSubscriptions,
-    item: itemSubscriptions,
-    items: itemSubscriptions
+    filters,
+    subscriptionFilters: filters,
+    subFilters: filters,
+    filter: filters
 }
