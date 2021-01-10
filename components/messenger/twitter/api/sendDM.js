@@ -1,9 +1,6 @@
 const Twitter = require('twit');
 
 module.exports = (payload) => {
-
-    console.log('SENDING DM', payload);
-
     const client = new Twitter({
         consumer_key: process.env.TWITTER_API_KEY,
         consumer_secret: process.env.TWITTER_SECRET_KEY,

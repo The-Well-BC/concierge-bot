@@ -18,8 +18,9 @@ module.exports = (creators, messenger) => {
         if(creator.moniker)
             t += ` (${ creator.moniker })`;
 
-        if(creator.url)
+        if(creator.url) {
             t = `[${ t }](${ creator.url })`;
+        }
 
         if(creator.stats) {
             let stat = creator.stats;

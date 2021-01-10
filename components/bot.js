@@ -26,6 +26,8 @@ module.exports = {
             else if(res) {
                 let message = messengerFn.prepareMessage(res, [ parsedMessage.chatID ])
 
+                console.log('MESSAGE', message);
+
                 if(messenger == 'twitter') {
                     return messengerFn.sendMessage(message[0][0], [parsedMessage.chatID])
                     .then(res => {

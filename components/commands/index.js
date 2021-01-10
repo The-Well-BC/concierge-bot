@@ -13,14 +13,20 @@ module.exports = (payload, messenger, formatter) => {
                 return res;
             });
         case 'subscribe':
-            return subscribe(payload.command.params, messenger, payload.chatID)
+            const subscribe = subscribeCommand.subscribe;
+            let params;
+            if(!payload.command.params)
+                params = 'all';
+            else
+                params = payload.command.params;
+
+            return subscribe(params, messenger, payload.chatID)
             .then(res => {
                 let names;
-                if(payload.command.params == 'all')
+                if(params == 'all')
                     names = 'all'
                 else
                     names = payload.command.params.map( item => nftPlatforms[item] );
-
 
                 response = formatter.subscribe(names, messengerCommands);
                 return response;

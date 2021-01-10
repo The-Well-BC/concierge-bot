@@ -4,7 +4,7 @@ module.exports = {
         url: 'https://niftygateway.com'
     },
     superrare: {
-        name: 'Super Rare', 
+        name: 'SuperRare', 
         url: 'https://superrare.co'
     },
     foundation: {
