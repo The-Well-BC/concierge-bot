@@ -8,16 +8,16 @@ module.exports = {
     addSubscription: function(chat_id, messenger, filter) {
         let values = [chat_id, messenger];
 
-        let subsQuery = `INSERT INTO ${ tables.subs } (chat_id, messenger) values($1, $2) ON CONFLICT DO NOTHING`;
+        let subsQuery = `INSERT INTO ${ tables.subs } (chat_id, messenger) values($1, $2) ON CONFLICT DO NOTHING RETURNING *`;
         let subsParams = [chat_id, messenger];
 
         return db.customquery(subsQuery, subsParams)
-        .then(() => {
+        .then(res => {
             if(filter) {
                 if( Array.isArray(filter) ) 
                     throw new Error('Filter should be an object, not array');
 
-                let filterQuery = `INSERT INTO ${ tables.filters } (chat_id, messenger, data) values($1, $2, $3)`;
+                let filterQuery = `INSERT INTO ${ tables.filters } (chat_id, messenger, data) values($1, $2, $3) RETURNING *`;
                 let filterParams = [chat_id, messenger, filter];
 
                 return db.customquery(filterQuery, filterParams)
@@ -25,11 +25,13 @@ module.exports = {
                     return res.rows.map(item => {
                         return {
                             chatID: item.chatID,
-                            messenger: item.messenger
+                            messenger: item.messenger,
+                            filters: item.data
                         }
                     });
                 });
-            }
+            } else 
+                return res.rows;
         });
     },
 
