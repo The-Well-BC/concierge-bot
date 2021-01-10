@@ -36,7 +36,7 @@ module.exports = function(payloadArr, chatIDs) {
             let text = payload.text;
 
             if(quick_reply)
-                text += '\nIf you don\'t see the predefined responses, click the hamburger menu beside the text input field (three horizontal bars to see them';
+                text += '\n\nHint: If you don\'t see the predefined responses, click the hamburger menu beside the text input field (three horizontal bars to see them';
 
 
             return {
@@ -45,6 +45,6 @@ module.exports = function(payloadArr, chatIDs) {
                 ...quick_reply && { quick_reply },
                 ...(photo != null) && { photo }
             }
-        });
+        })
     });
 }
