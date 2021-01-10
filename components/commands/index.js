@@ -21,6 +21,7 @@ module.exports = (payload, messenger, formatter) => {
                 else
                     names = payload.command.params.map( item => nftPlatforms[item] );
 
+
                 response = formatter.subscribe(names, messengerCommands);
                 return response;
             })

@@ -46,6 +46,7 @@ describe('Twitter functions: Prepary payload for twitter', function() {
         let response =  prepMessage(payload, chatIDs)[0][0];
 
         expect(response).to.have.property('text', 'This is sample text');
+        expect(response.text).to.not.have.string('\nIf you don\'t see the predefined responses, click the hamburger menu beside the text input field (three horizontal bars to bring them up');
     });
 
     it('Checks keys: replies', function() {
@@ -61,6 +62,8 @@ describe('Twitter functions: Prepary payload for twitter', function() {
         let response =  prepMessage(payload, chatIDs)[0][0];
 
         expect(response).to.have.keys('chatID', 'text', 'quick_reply');
+
+        expect(response.text).to.have.string('\nIf you don\'t see the predefined responses, click the hamburger menu beside the text input field (three horizontal bars to see them');
 
         expect(response.quick_reply).to.deep.eql({
             type: 'options',
