@@ -10,7 +10,6 @@ module.exports = function(startTime, limit) {
     })
     .then(res => {
         let transactions = res.data.data.results.filter(item => item.Type === "sale");
-        console.log('RES', res.data.data);
 
         return transactions.map(item => {
             // console.log('NIFTY ITEM', item);

@@ -22,7 +22,6 @@ module.exports = {
 
     alertMessage(payload) {
         let platform = nftPlatforms[payload.platform].name;
-        console.log('TIME TO ALSERT MESSAGE', payload);
 
         let text = '';
 
@@ -41,8 +40,6 @@ module.exports = {
                 text += saleText(payload);
                 break;
         }
-
-        console.log('TEXT', text);
 
         text += `\n\nvia: ${ platform }`;
 

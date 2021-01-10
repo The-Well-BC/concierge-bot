@@ -1,4 +1,5 @@
 const extractPriceFromCurrencyString = function(priceString) {
+    console.log('PRICE STRING', priceString);
     let number = null;
     // Remove commas
     priceString = priceString.replace(/,/g, '');

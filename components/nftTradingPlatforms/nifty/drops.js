@@ -22,8 +22,6 @@ module.exports = function(startTime, limit = 3) {
         return drops.map(item => {
             let url = `https://niftygateway.com/collections/${ item.storeURL}`;
 
-            console.log('NIFTY ITEM', item.Timestamp);
-
             return {
                 name: item.storeName,
                 creator: {
