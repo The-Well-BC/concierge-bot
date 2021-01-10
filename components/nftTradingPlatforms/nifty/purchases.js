@@ -22,7 +22,7 @@ module.exports = function(startTime, limit) {
                 event: 'sale',
                 platform: 'nifty',
                 transaction: {
-                    price: item.SaleAmountInCents/100
+                    price: '$' + item.SaleAmountInCents/100
                 },
                 seller: {
                     name: item.SellingUserProfile.name,
