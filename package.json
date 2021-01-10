@@ -4,7 +4,7 @@
   "description": "A telegram bot that broadcasts trading drops on Foundation and Zora",
   "main": "index.js",
   "scripts": {
-    "start": ". ./.env && NODE_ENV=test pm2 start ./index.js --name tradedrop_bot --time && pm2 save",
+    "start": ". ./.env && NODE_ENV=production pm2 start ./index.js --name tradedrop_bot --time && pm2 save",
     "stop": "pm2 stop tradedrop_bot && pm2 delete tradedrop_bot",
     "dev": ". ./.env && NODE_ENV=development nodemon index.js",
     "test": ". ./.env && NODE_ENV=test mocha --timeout 10000 --recursive tests/ --require tests/hooks.js",
