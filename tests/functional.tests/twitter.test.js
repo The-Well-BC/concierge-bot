@@ -10,7 +10,7 @@ const links = require('../../config/links');
 
 const samplePayloads = require('../twitterSamplePayload.js');
 
-describe('Twitter routes', function() {
+describe.only('Twitter routes', function() {
     before(() => {
         const teardown = require('../teardown');
         return teardown();
@@ -26,7 +26,6 @@ describe('Twitter routes', function() {
     });
 
     it('Send start command', function() {
-    // it.only('Send start command', function() {
         const payload = clone(samplePayloads.commands.start);
         return request(app).post(links.twitterWebhook).send(payload)
         .then(res => {

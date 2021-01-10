@@ -30,6 +30,7 @@ module.exports = function(payloadArr, chatIDs) {
                     type: 'options',
                     options
                 };
+
             }
 
             return {

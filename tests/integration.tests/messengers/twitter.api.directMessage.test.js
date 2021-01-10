@@ -3,8 +3,7 @@ const expect = chai.expect;
 
 const sendDM = require('../../../components/messenger/twitter/api/sendDM');
 
-describe.only('Twitter API: Direct Message', function() {
-// describe('Twitter API: Direct Message', function() {
+describe('Twitter API: Direct Message', function() {
     it('#once Send direct message', function() {
         const message = {
             text: 'Create tweet ' + new Date(),
@@ -27,7 +26,7 @@ describe.only('Twitter API: Direct Message', function() {
     });
 
     // it.only('#once Send direct message with quick replies', function() {
-    it.only('Send direct message with quick replies', function() {
+    it('Send direct message with quick replies', function() {
         const message = {
             text: 'Direct message with reply options ' + new Date(),
             chatID: '352654309',

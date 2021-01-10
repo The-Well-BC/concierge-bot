@@ -7,6 +7,9 @@ module.exports = (message, chatIDs) => {
         text: message.text,
     }
 
+    if(message.quick_reply)
+        messageObj.quick_reply = message.quick_reply;
+
     if(chatIDs) {
         messageObj.chatID = chatIDs[0]
         return sendDM(messageObj);
