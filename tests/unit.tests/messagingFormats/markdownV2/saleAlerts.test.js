@@ -24,7 +24,7 @@ describe('Test NFT event alerts: SALE', function() {
         }
 
         let alertMessage =  markdown.alertMessage(payload);
-        expect(alertMessage).to.have.property('text', 'An anonymous user bought [Mystery Box X](https://one.two.three) for $80.53 on November 1, 2020 (7:42pm UTC)\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: Foundation_');
+        expect(alertMessage).to.have.property('text', 'An anonymous user bought [Mystery Box X](https://one.two.three) for $80.53 on November 1, 2020 (7:42pm UTC)\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: [Foundation](https://foundation.app)_');
     });
 
     it('When NFT url is not available', function() {
@@ -36,7 +36,7 @@ describe('Test NFT event alerts: SALE', function() {
         }
 
         let alertMessage =  markdown.alertMessage(payload);
-        expect(alertMessage).to.have.property('text', 'An anonymous user bought Mystery Box X for $80.53 on November 1, 2020 (7:42pm UTC)\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: Foundation_');
+        expect(alertMessage).to.have.property('text', 'An anonymous user bought Mystery Box X for $80.53 on November 1, 2020 (7:42pm UTC)\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: [Foundation](https://foundation.app)_');
     });
 
     it('When buyer property is not available', function() {
@@ -48,7 +48,7 @@ describe('Test NFT event alerts: SALE', function() {
         }
 
         let alertMessage =  markdown.alertMessage(payload);
-        expect(alertMessage).to.have.property('text', 'An anonymous user bought Mystery Box X for $80.53 on November 1, 2020 (7:42pm UTC)\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: Foundation_');
+        expect(alertMessage).to.have.property('text', 'An anonymous user bought Mystery Box X for $80.53 on November 1, 2020 (7:42pm UTC)\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: [Foundation](https://foundation.app)_');
     });
 
     it('When buyer profile url is available', function() {
@@ -65,7 +65,7 @@ describe('Test NFT event alerts: SALE', function() {
         }
 
         let alertMessage =  markdown.alertMessage(payload);
-        expect(alertMessage).to.have.property('text', '[John Sommet](https://moon.jpeg.com/u/john-sommet) bought Mystery Box X for $80.53 on November 1, 2020 (7:42pm UTC)\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: Foundation_');
+        expect(alertMessage).to.have.property('text', '[John Sommet](https://moon.jpeg.com/u/john-sommet) bought Mystery Box X for $80.53 on November 1, 2020 (7:42pm UTC)\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: [Foundation](https://foundation.app)_');
     });
 
     it('When NFT price is stated ', function() {
@@ -82,7 +82,7 @@ describe('Test NFT event alerts: SALE', function() {
         }
 
         let alertMessage =  markdown.alertMessage(payload);
-        expect(alertMessage).to.have.property('text', 'John Sommet bought Mystery Box X for $80.53 on November 1, 2020 (7:42pm UTC)\nMystery Box X is currently trading at $89.33\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: Foundation_');
+        expect(alertMessage).to.have.property('text', 'John Sommet bought Mystery Box X for $80.53 on November 1, 2020 (7:42pm UTC)\nMystery Box X is currently trading at $89.33\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: [Foundation](https://foundation.app)_');
     });
 
     it('When transaction price is not present', function() {
@@ -97,7 +97,7 @@ describe('Test NFT event alerts: SALE', function() {
         }
 
         let alertMessage =  markdown.alertMessage(payload);
-        expect(alertMessage).to.have.property('text', 'John Sommet bought a Mystery Box X token on November 1, 2020 (7:42pm UTC)\nMystery Box X is currently trading at $89.33\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: Foundation_');
+        expect(alertMessage).to.have.property('text', 'John Sommet bought a Mystery Box X token on November 1, 2020 (7:42pm UTC)\nMystery Box X is currently trading at $89.33\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\n_via: [Foundation](https://foundation.app)_');
     });
 });
 

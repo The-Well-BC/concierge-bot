@@ -1,7 +1,9 @@
 const nftFn = require('./nftTradingPlatforms');
 const subdao = require('./daos/subscription.dao');
-const telegram = require('./messenger/telegram');
 const subscriptionFilter = require('./subscriptionFilter');
+
+const telegram = require('./messenger/telegram');
+const twitter = require('./messenger/twitter');
 
 module.exports = {
     //sendAlerts: function(messages, interval) {
@@ -19,12 +21,24 @@ module.exports = {
         })
         .then(subscriptions => {
             // Telegram messages
-            let sortedMessages = subscriptionFilter(payload, subscriptions);
-            let textPayload = sortedMessages.map(p =>  {
+            let sortedMessages = {};
+
+            sortedMessages.telegram = subscriptionFilter(payload, subscriptions.filter(i => i.messenger === 'telegram'));
+            sortedMessages.twitter = subscriptionFilter(payload, subscriptions.filter(i => i.messenger === 'twitter'));
+
+            let telegramTextPayload = sortedMessages.telegram.map(p =>  {
                 return { message: telegram.formatter.alertMessage(p.payload), chatIDs: p.chatIDs }
             });
 
-            let messages = textPayload.map(p => telegram.sendMessage(p.message, p.chatIDs));
+            let twitterTextPayload = sortedMessages.twitter.map(p =>  {
+                return { message: twitter.formatter.alertMessage(p.payload), chatIDs: p.chatIDs }
+            });
+
+            let messages = telegramTextPayload.map(p => telegram.sendMessage(p.message, p.chatIDs));
+            messages.push(
+                ...twitterTextPayload.map(p => twitter.sendMessage(p.message, p.chatIDs))
+            );
+
             return Promise.all(messages);
         });
     }

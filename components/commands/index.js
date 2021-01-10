@@ -9,9 +9,6 @@ module.exports = (payload, messenger, formatter) => {
     switch(payload.command.name) {
         case 'browse':
             return browse(payload, messenger, formatter, messengerCommands)
-            .then(res => {
-                return res;
-            });
         case 'subscribe':
             const subscribe = subscribeCommand.subscribe;
             let params;
@@ -54,8 +51,6 @@ module.exports = (payload, messenger, formatter) => {
             console.log('Commandn ot recoginzed', response);
             break;
     }
-
-    console.log('EESPONSE', response);
 
     return Promise.resolve(response);
 }

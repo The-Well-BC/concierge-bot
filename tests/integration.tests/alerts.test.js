@@ -1,16 +1,20 @@
 const chai = require('chai');
-const nftFn = require('../../components/nftTradingPlatforms');
+const expect = chai.expect;
+const assert = chai.assert;
 
 const bot = require('../../components/bot');
-
-const expect = chai.expect;
 const alertsModel = require('../../components/alerts.model');
+const subdao = require('../../components/daos/subscription.dao');
 
-const samplePayloads = require('../samplePayload.json');
+const sampleTelegramPayloads = require('../samplePayload.json');
+const sampleTwitterPayloads = require('../twitterSamplePayload');
 
-describe('Sending alerts', function() {
+describe.only('Sending alerts', function() {
     before(() => {
-        return bot.receiveMessage(samplePayloads.commands.subscribe, 'telegram');
+        return subdao.addSubscription(sampleTelegramPayloads.chatID, 'telegram')
+        .then(() => {
+            subdao.addSubscription(sampleTwitterPayloads.chatID, 'twitter')
+        });
     });
 
     it('Send alerts model', function() {
@@ -18,11 +22,14 @@ describe('Sending alerts', function() {
         .then(res => {
             console.log('Sent Alerts', res);
             expect(res).to.all.have.property('ok', true);
-            expect(res).to.all.have.property('text');
-            expect(res).to.all.satisfy( item => {
-                return (/released\s.*on/.test(item.result.text))
-                            ||
-                (/placed a bid/.test(item.result.text))
+            expect(res).to.all.have.property('result');
+            expect(res).to.satisfy( arr => {
+                assert.includeMembers(arr, [{ event:{type: 'message_create', message_create: {}} }]);
+                return arr.every(item => {
+                    assert.match(item.result.text, /(released\s.*on)|(bought\s.*on)/);
+
+                    return true;
+                });
             });
         });
     });

@@ -18,7 +18,6 @@ describe('Telegram routes', function() {
 
     it('Send start command', function() {
         const payload = clone(samplePayloads.commands.start);
-        console.log('PAYLOAD', payload);
 
         return request(app).post(links.telegramWebhook).send(payload)
         .then(res => {
@@ -28,6 +27,22 @@ describe('Telegram routes', function() {
             expect(res.body.text).to.have.string("Hello " + payload.message.chat.first_name);
             expect(res.body.reply_markup).to.have.property('keyboard').that.is.an('array');
             // expect(res.body.reply_markup.keyboard[0].length).to.be.greaterThan(1);
+        });
+    });
+
+    it('Browse creators', function() {
+        const payload = clone(samplePayloads.commands.subscribe);
+        payload.message.text = '/browse creators';
+
+        const chatID = "641574672";
+
+        return request(app).post(links.telegramWebhook).send(payload)
+        .then(res => {
+            expect(res.body).to.have.keys('chat_id', 'text', 'method', 'parse_mode', 'reply_markup');
+            expect(res.body).to.have.property('method', 'sendMessage');
+
+            expect(res.body.chat_id).to.equal(payload.message.chat.id);
+            expect(res.body.text).to.have.string("NFTs released", 'Total Revenue');
         });
     });
 

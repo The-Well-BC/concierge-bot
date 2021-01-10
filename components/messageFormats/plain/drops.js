@@ -8,10 +8,10 @@ module.exports = function(payload) {
         creator = `${ payload.creator.name }`;
 
         if(payload.creator.url)
-            creator = `[${ payload.creator.name }](${ payload.creator.url })`;
+            creator = `${ payload.creator.name }(${ payload.creator.url })`;
     }
 
-    let product = `[${ payload.name }](${ payload.url })`;
+    let product = `${ payload.name }(${ payload.url })`;
 
 
     let text = `${ creator } released ${ product } on ${ date } (${ time }).`;

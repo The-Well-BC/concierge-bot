@@ -1,5 +1,6 @@
 const saleText = require('./sales');
 const bidText = require('./bids');
+const listingText = require('./listings');
 const dropText = require('./drops');
 
 const help = require('./messages.help');
@@ -8,6 +9,8 @@ const start = require('./messages.start');
 const browse = require('./messages.browse');
 const subscribe = require('./messages.subscribe');
 const creatorSummary = require('./text.creatorSummary.js');
+
+const nftPlatforms = require('../../nftTradingPlatforms/platformNames');
 
 module.exports = {
     creatorSummary,
@@ -18,7 +21,7 @@ module.exports = {
     help,
 
     alertMessage(payload) {
-        let platform = payload.platform.charAt(0).toUpperCase() + payload.platform.substring(1);
+        let platform = `[${nftPlatforms[payload.platform].name}](${nftPlatforms[payload.platform].url})`;
 
         let text = '';
 
@@ -27,6 +30,10 @@ module.exports = {
                 text += dropText(payload)
                 break;
             case 'listing':
+                text += listingText(payload)
+                break;
+            case 'bid':
+            case 'offer':
                 text += bidText(payload)
                 break;
             case 'sale':
@@ -34,7 +41,7 @@ module.exports = {
                 break;
         }
 
-        text += `\n_via: ${ platform }_`;
+        text += `\n\n_via: ${ platform }_`;
 
         let photo = (payload.img != null || undefined) ?
             payload.img : null;

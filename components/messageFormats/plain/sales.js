@@ -2,26 +2,38 @@ const dateFormatter = require('../../utils/dateFormatter');
 
 module.exports = function(payload) {
     let { date, time } = dateFormatter(payload.date);
-    let action = ( payload.action.match(/sale/i) ) ?  'bought' : 
-        'redeemed';
+    let action = 'bought';
     let text = '';
 
-    if(payload.buyer.name) {
-        let nameStr;
-        if(payload.buyer.url) 
-            nameStr = `[${ payload.buyer.name }](${ payload.buyer.url })`;
-        else
-            nameStr = payload.buyer.name;
+    let nameStr;
 
-        text += `${ nameStr } just ${ action } ${ payload.name } for ${ payload.price } on ${ date } (${ time })`;
-    }
+    if(payload.buyer && payload.buyer.name) {
+        nameStr = payload.buyer.name;
+    } else
+        nameStr = 'An anonymous user';
 
-    text += `\n${ payload.name } is currently trading at ${ payload.currentPrice }`;
+    text += `${ nameStr } ${ action }`;
 
-    if(payload.creator.name.slice(-1) == 's')
-        text += `\n[View ${ payload.creator.name }' other creations](${ payload.creator.url })\n`;
+    if(payload.transaction && payload.transaction.price)
+        text += ` ${ payload.name } for ${ payload.transaction.price } on ${ date } (${ time })`;
     else
-        text += `\n[View ${ payload.creator.name }'s other creations](${ payload.creator.url })\n`;
+        text += ` a ${ payload.name } token on ${ date } (${ time })`;
+
+    if(payload.price)
+        text += `\n${ payload.name } is currently trading at ${ payload.price }`;
+
+    if(payload.url)
+        text += `\nView ${ payload.name } - ${ payload.url }`;
+
+    if(payload.buyer && payload.buyer.name && payload.buyer.url)
+        text += `\nView ${ payload.buyer.name }'s profile - ${ payload.buyer.url }`;
+
+    if(payload.creator.url) {
+        if(payload.creator.name.slice(-1) == 's')
+            text += `\nView ${ payload.creator.name }' other creations - ${ payload.creator.url }`;
+        else
+            text += `\nView ${ payload.creator.name }'s other creations - ${ payload.creator.url }`;
+    }
 
     return text;
 }

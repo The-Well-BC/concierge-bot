@@ -1,3 +1,4 @@
+const listingText = require('./listings');
 const saleText = require('./sales');
 const bidText = require('./bids');
 const dropText = require('./drops');
@@ -9,6 +10,8 @@ const subscribe = require('./messages.subscribe');
 const creatorSummary = require('./text.creatorSummary.js');
 const error = require('./errorMessages');
 
+const nftPlatforms = require('../../nftTradingPlatforms/platformNames');
+
 module.exports = {
     creatorSummary,
     subscribe,
@@ -18,22 +21,30 @@ module.exports = {
     help,
 
     alertMessage(payload) {
-        let platform = payload.platform.charAt(0).toUpperCase() + payload.platform.substring(1);
+        let platform = nftPlatforms[payload.platform].name;
+        console.log('TIME TO ALSERT MESSAGE', payload);
 
         let text = '';
 
-        if(payload.type === 'drop') 
-            text += dropText(payload)
-        else if(payload.type === 'listing') 
-            text += bidText(payload)
-        else if(payload.action) {
-            text += saleText(payload);
-
-        } else if(payload.status) {
-            text += bidText(payload);
+        switch(payload.event) {
+            case 'drop':
+                text += dropText(payload)
+                break;
+            case 'listing':
+                text += listingText(payload)
+                break;
+            case 'bid':
+            case 'offer':
+                text += bidText(payload)
+                break;
+            case 'sale':
+                text += saleText(payload);
+                break;
         }
 
-        text += `\n_via: ${ platform }_`;
+        console.log('TEXT', text);
+
+        text += `\n\nvia: ${ platform }`;
 
         let photo = (payload.img != null || undefined) ?
             payload.img : null;

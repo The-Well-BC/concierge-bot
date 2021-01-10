@@ -1,4 +1,7 @@
-const expect = require('chai').expect;
+const chai = require('chai');
+const expect = chai.expect;
+const assert = chai.assert;
+
 const clone = require('rfdc')();
 const commands = require('../../components/commands');
 const samplePayload = require('../samplePayload');
@@ -34,10 +37,27 @@ describe('The Browse Command', function() {
             chatID: 1234
         }
 
-        return commands(payload, 'telegram', markdown)
-        .then(message => {
-            expect(message).to.be.an('object');
-            expect(message.text).to.equal('You have subscribed to updates from Zora. Whenever releases are made on Zora, you will receive a notification.');
+        let promises = [
+            commands(payload, 'telegram', markdown),
+            commands(payload, 'twitter', markdown)
+        ]
+
+        return Promise.all(promises)
+        .then(messages => {
+            expect(messages).to.all.have.keys('text', 'replies');
+            expect(messages[0].text).to.contain('NFTs released');
+            expect(messages[1].text).to.contain('NFTs released');
+
+            expect(messages[0].replies).to.all.satisfy(r => {
+                assert.match(r.text, /\/subscribe creator/);
+                assert.notMatch(r.text, /undefined creator/);
+                return true;
+            });
+            expect(messages[1].replies).to.all.satisfy(r => {
+                assert.match(r.text, /!subscribe creator/);
+                assert.notMatch(r.text, /undefined creator/);
+                return true;
+            });
         });
     });
 });

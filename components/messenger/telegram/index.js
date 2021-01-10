@@ -17,7 +17,6 @@ module.exports = {
             payload.img : null;
 
         let messages = prepareMessages(payload, chatIDs);
-//        console.log('MESSAGES', messages);
 
         if(photo) {
             return sendPhoto(messages[0][0]);

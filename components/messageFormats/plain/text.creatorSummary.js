@@ -18,10 +18,6 @@ module.exports = (creators, messenger) => {
         if(creator.moniker)
             t += ` (${ creator.moniker })`;
 
-        if(creator.url) {
-            t = `[${ t }](${ creator.url })`;
-        }
-
         if(creator.stats) {
             let stat = creator.stats;
 
@@ -33,6 +29,10 @@ module.exports = (creators, messenger) => {
 
         // t += `\nSubscribe to ${ creator.name }\n__(Bot will alert you when ${ creator.name } releases a drop)__`;
 
+
+        if(creator.url) { 
+            t += `\nView ${ creator.name }'s profile here - ${ creator.url }`;
+        }
 
         text += t;
     });

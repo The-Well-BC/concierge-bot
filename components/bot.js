@@ -28,7 +28,6 @@ module.exports = {
                 if(messenger == 'twitter') {
                     return messengerFn.sendMessage(message[0][0], [parsedMessage.chatID])
                     .then(res => {
-                        console.log('SENT DM', res.event.message_create.message_data);
                         return res;
                     });
                 } else

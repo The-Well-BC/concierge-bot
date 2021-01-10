@@ -1,4 +1,4 @@
-const markdown = require('../../../../components/messageFormats/markdownV2');
+const plain = require('../../../../components/messageFormats/plain');
 const chai = require('chai');
 chai.use( require('chai-things') );
 const expect = chai.expect;
@@ -22,8 +22,9 @@ describe('Test drops text', function() {
     ]
 
     it('Check drops', function() {
-        let alertMessage =  markdown.alertMessage(resourcePayload[0]);
-        expect(alertMessage).to.have.property('text', '[Robots X](https://zora.com/u/robots-x) released [AESII - Technical Cargo Pants](https://zora.com/drops/aes-1337) on July 31, 2020 (4:00pm UTC).\nStarting price is $56.91\n\n_via: [Nifty Gateway](https://niftygateway.com)_');
+        let alertMessage =  plain.alertMessage(resourcePayload[0]);
+        console.log('MESAGE', alertMessage.text);
+        expect(alertMessage).to.have.property('text', 'Robots X(https://zora.com/u/robots-x) released AESII - Technical Cargo Pants(https://zora.com/drops/aes-1337) on July 31, 2020 (4:00pm UTC).\nStarting price is $56.91\n\nvia: Nifty Gateway');
 
     });
 });

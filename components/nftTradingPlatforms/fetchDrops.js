@@ -3,24 +3,18 @@ const zora = require('./zora');
 const superrare = require('./superrare');
 const nifty = require('./nifty');
 
-module.exports = (startTime, limit) => {
+module.exports = (limit) => {
     let drops;
 
-    return foundation.fetchDrops( parseInt(startTime / 1000), limit )
+    return foundation.fetchDrops(limit)
     .then(res => {
         drops = res;
-        return nifty.fetchDrops( startTime, limit )
+        return superrare.fetchDrops(limit)
     }).then(res => {
-    /*
-        drops.push(...res);
-        return zora.fetchDrops(startTime, limit)
-    })
-    .then(res => {
-    */
-        drops.push(...res);
-        return superrare.fetchDrops( startTime, limit );
+        drops = res;
+        return nifty.fetchDrops(limit)
     }).then(res => {
-        drops.push(...res);
+        drops = res;
         return drops;
     });
 }

@@ -13,8 +13,9 @@ const properties = ['name', 'url', 'stats', 'platform'];
 describe('Fetch NFT creators', function() {
     describe('Sort by product count', function() {
         it('Foundation', function() {
-            return foundation.fetchCreators()
+            return foundation.fetchCreators(3)
             .then(res => {
+                expect(res).to.have.lengthOf(3);
                 expect(res).to.all.have.keys( properties );
             });
         });

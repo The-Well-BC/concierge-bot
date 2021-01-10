@@ -1,13 +1,13 @@
-const nftFn = require('../nftTradingPlatforms');
+const fetchCreators = require('../nftTradingPlatforms/fetchCreators');
 
 module.exports = (payload, messenger, formatter, commands) => {
 
     if(!payload.command.params)
         return Promise.resolve(formatter.browse(messenger, commands));
     else {
-        return nftFn.fetchCreators()
+        return fetchCreators(3)
         .then(res => {
-            console.log('RES', res);
+            return formatter.creatorSummary(res, messenger);
         });
     }
 }

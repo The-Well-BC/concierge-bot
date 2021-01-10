@@ -28,9 +28,9 @@ module.exports = function(payload) {
 
     if(payload.creator.url) {
         if(payload.creator.name.slice(-1) == 's')
-            text += `\n[View ${ payload.creator.name }' other creations](${ payload.creator.url })\n`;
+            text += `\n[View ${ payload.creator.name }' other creations](${ payload.creator.url })`;
         else
-            text += `\n[View ${ payload.creator.name }'s other creations](${ payload.creator.url })\n`;
+            text += `\n[View ${ payload.creator.name }'s other creations](${ payload.creator.url })`;
     }
 
     return text;

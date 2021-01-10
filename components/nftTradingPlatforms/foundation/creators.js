@@ -10,13 +10,14 @@ module.exports = function(limit) {
 
     let orderBy = 'productCount';
 
-    let filterQuery;
+    let filterQuery = `orderBy: ${ orderBy }, `;
 
-    if(limit && typeof limit === 'number')
-        filterQuery = `first: ${ parseInt(limit/2) }`;
+    if(limit && typeof limit === 'number') {
+        filterQuery += `first: ${ parseInt(limit)}`;
+    }
 
     const query = `{
-        brands(orderDirection: desc, orderBy: ${ orderBy }) {
+        brands(orderDirection: desc, ${ filterQuery }) {
             name
             symbol
             productCount
