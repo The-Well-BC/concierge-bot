@@ -7,9 +7,17 @@ module.exports = (startTime, limit) => {
     let drops;
 
     return foundation.fetchPurchases( parseInt(startTime / 1000), limit )
+    .catch(e => {
+        console.error(e);
+        return [];
+    })
     .then(res => {
         drops = res;
         return nifty.fetchPurchases( startTime, limit )
+        .catch(e => {
+            console.error(e);
+            return [];
+        })
     /*
     }).then(res => {
         drops.push(...res);
@@ -17,7 +25,11 @@ module.exports = (startTime, limit) => {
     */
     }).then(res => {
         drops.push(...res);
-        return superrare.fetchPurchases( startTime, limit );
+        return superrare.fetchPurchases( startTime, limit )
+        .catch(e => {
+            console.error(e);
+            return [];
+        })
     }).then(res => {
         drops.push(...res);
         return drops;
