@@ -17,20 +17,25 @@ module.exports = function(payloadArr, chatIDs) {
             payload.img : null;
 
         return chatIDs.map(o => {
-            let reply_markup
+            let quick_reply;
             if(payload.replies) {
-                let replies = payload.replies.map(item => [item]);
-                reply_markup = {
-                    keyboard: replies,
-                    one_time_keyboard: true
+                let replies = payload.replies;
+                let options = replies.map(item => {
+                    return {
+                        label: item.text
+                    }
+                });
+
+                quick_reply = {
+                    type: 'options',
+                    options
                 };
             }
 
             return {
-                chat_id: o,
+                chatID: o,
                 text: payload.text,
-                ...reply_markup && { reply_markup },
-                parse_mode: 'Markdown',
+                ...quick_reply && { quick_reply },
                 ...(photo != null) && { photo }
             }
         });

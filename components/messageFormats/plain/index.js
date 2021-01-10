@@ -32,7 +32,6 @@ module.exports = {
 
         return {
             text,
-            parse_mode: 'MarkdownV2',
             ...(photo != null) && { photo }
         }
     }

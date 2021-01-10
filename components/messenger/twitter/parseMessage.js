@@ -1,8 +1,6 @@
 const format = require('../../messageFormats/plain');
 
 module.exports = (payload) => {
-    console.log('PAYLOAD TWITEER', payload);
-
     let command, text, params;
     let data, message;
 
@@ -12,7 +10,6 @@ module.exports = (payload) => {
     message = data.message_create.message_data;
 
     let text_ = message.text;
-    console.log('MESSAGE', message);
 
     if(text_.indexOf('!') == 0) {
         command = text_.match(/(?<=\!)\w+/)[0];

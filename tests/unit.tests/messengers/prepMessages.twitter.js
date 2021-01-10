@@ -1,22 +1,40 @@
-const prepMessage = require('../../../components/messenger/telegram/prepareMessages');
+const prepMessage = require('../../../components/messenger/twitter/prepareMessage');
 const chai = require('chai');
 
 const expect = chai.expect;
 
-describe('Telegram functions: Prepary payload for telegram', function() {
+describe('Twitter functions: Prepary payload for twitter', function() {
     let chatIDs = [ 1234 ];
 
-    it('Check all properties', function() {
-        let payload = [{
-            text: 'This is sample text'
-        }]
+    describe('Prepare for tweet', function() {
+        it('Check all properties', function() {
+            let payload = [{
+                text: 'This is sample text',
+                private: true
+            }]
 
-        let response =  prepMessage(payload, chatIDs)[0][0];
+            let response =  prepMessage(payload, chatIDs)[0][0];
 
-        expect(response).to.containSubset({
-            chat_id: 1234,
-            parse_mode: 'Markdown',
-            method: 'sendMessage'
+            expect(response).to.eql({
+                chatID: 1234,
+                text: 'This is sample text'
+            });
+        });
+    });
+
+    describe('Prepare for private message', function() {
+        it('Check all properties', function() {
+            let payload = [{
+                text: 'This is sample text',
+                private: true
+            }]
+
+            let response =  prepMessage(payload, chatIDs)[0][0];
+
+            expect(response).to.eql({
+                chatID: 1234,
+                text: 'This is sample text'
+            });
         });
     });
 
@@ -26,8 +44,6 @@ describe('Telegram functions: Prepary payload for telegram', function() {
         }]
 
         let response =  prepMessage(payload, chatIDs)[0][0];
-
-        expect(response).to.have.keys('chat_id', 'text', 'parse_mode', 'method');
 
         expect(response).to.have.property('text', 'This is sample text');
     });
@@ -44,15 +60,17 @@ describe('Telegram functions: Prepary payload for telegram', function() {
 
         let response =  prepMessage(payload, chatIDs)[0][0];
 
-        expect(response).to.have.keys('chat_id', 'text', 'reply_markup', 'parse_mode', 'method');
+        expect(response).to.have.keys('chatID', 'text', 'quick_reply');
 
-        expect(response.reply_markup).to.deep.eql({
-            one_time_keyboard: true,
-            keyboard: [
-                [ {text: '123' } ],
-                [ {text: '456' } ],
-                [ {text: '789' } ]
-            ]
+        expect(response.quick_reply).to.deep.eql({
+            type: 'options',
+            options: [{
+                    label: '123'
+                }, {
+                    label: '456'
+                }, {
+                    label: '789'
+            }]
         });
     });
 

@@ -2,13 +2,13 @@ const subscribeCommand = require('./command.subscribe');
 let nftPlatforms = require('../nftTradingPlatforms/platformNames');
 const browse = require('./command.browse');
 
-const commands = require('./text');
+const messengerCommands = require('./text');
 
 module.exports = (payload, messenger, formatter) => {
     let response;
     switch(payload.command.name) {
         case 'browse':
-            return browse(payload, messenger, formatter, commands)
+            return browse(payload, messenger, formatter, messengerCommands)
             .then(res => {
                 return res;
             });
@@ -21,7 +21,7 @@ module.exports = (payload, messenger, formatter) => {
                 else
                     names = payload.command.params.map( item => nftPlatforms[item] );
 
-                response = formatter.subscribe(names);
+                response = formatter.subscribe(names, messengerCommands);
                 return response;
             })
             .catch(e => {
@@ -31,16 +31,16 @@ module.exports = (payload, messenger, formatter) => {
         case 'start':
             let name = (payload.user) ? payload.user.name || payload.user.username : null;
 
-            response = formatter.start(name);
+            response = formatter.start(name, messenger);
             break;
 
         case 'help':
             if(!payload.command.params)
-                response = formatter.help.main;
-            else if(!formatter.help[payload.command.params[0]])
-                response = formatter.help.default;
+                response = formatter.help(messenger).main;
+            else if(!formatter.help(messenger)[payload.command.params[0]])
+                response = formatter.help(messenger).default;
             else
-                response = formatter.help[payload.command.params[0]];
+                response = formatter.help(messenger)[payload.command.params[0]];
             break;
         default:
             break;

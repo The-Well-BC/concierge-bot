@@ -1,14 +1,22 @@
 module.exports = {
     browse: {
         telegram: '/browse',
-        twitter: 'browse'
+        twitter: '!browse'
     },
     browseCreators: {
         telegram: '/browse creators',
-        twitter: 'browse creators'
+        twitter: '!browse creators'
     },
     subscribe: {
         telegram: '/subscribe',
-        twitter: '/subscribe'
+        twitter: '!subscribe'
+    },
+    unsubscribe: {
+        telegram: '/unsubscribe',
+        twitter: '!unsubscribe'
+    },
+    help: {
+        telegram: '/help',
+        twitter: '!help'
     }
 }

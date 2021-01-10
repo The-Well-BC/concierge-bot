@@ -1,5 +1,5 @@
 const expect = require('chai').use(require('chai-as-promised')).expect;
-const botMessages = require('../../components/commands');
+const commands = require('../../components/commands');
 const plain = require('../../components/messageFormats/plain');
 
 describe('Test commands: Plain Format Edition', function() {
@@ -9,9 +9,9 @@ describe('Test commands: Plain Format Edition', function() {
             user: { name: 'Adesuwa' }
         }
 
-        return botMessages(payload, 'telegram', plain)
+        return commands(payload, 'telegram', plain)
         .then(message => {
-            expect(message).to.have.property('text');
+            expect(message).to.be.an('object').and.have.keys('text', 'replies');
             expect(message.text).to.have.string('Hello Adesuwa');
         });
     });
@@ -22,11 +22,16 @@ describe('Test commands: Plain Format Edition', function() {
             user: { username: 'littlezigy' }
         }
 
-        return botMessages(payload, 'telegram', plain)
-        .then(message => {
-            expect(message).to.be.an('object');
-            expect(message).to.have.keys('text');
-            expect(message.text).to.have.string('Hello littlezigy');
+        let messageFns = [
+            commands(payload, 'telegram', plain),
+            commands(payload, 'twitter', plain)
+        ]
+
+        console.log('PROMISED MESAGE', messageFns[0]);
+        return Promise.all(messageFns)
+        .then(messages => {
+            expect(messages).to.all.have.keys('text', 'replies');
+            expect(messages[0].text).to.have.string('Hello littlezigy');
         });
     });
 
@@ -36,9 +41,10 @@ describe('Test commands: Plain Format Edition', function() {
             user: { username: 'Adesuwa' }
         }
 
-        return botMessages(payload, 'telegram', plain)
+        return commands(payload, 'twitter', plain)
         .then(message => {
-            expect(message).to.be.an('object');
+            expect(message).to.be.an('object').and.have.keys('text', 'replies');
+            expect(message.replies).to.have.deep.members([ {text: '!help subscribe' } ]);
             expect(message.text).to.equal('Hello Adesuwa\nI\'m here to alert you on products, artwork released by varying artists.\nRight now, you can choose to subscribe to all new releases, or drops. Eventually, you will have artists you look forward to and then you can subscribe to those artists.\nChoose \'Subscribe\' to learn more about the different services you could subscribe to.')
         });
     });
@@ -52,17 +58,16 @@ describe('Test commands: Plain Format Edition', function() {
             user: { username: 'Adesuwa' }
         }
 
-        return botMessages(payload, 'twitter', plain)
+        return commands(payload, 'twitter', plain)
         .then(message => {
-            expect(message).to.be.an('object');
-            expect(message.text).to.equal('You can subscribe to alerts from only certain platforms. \nTo subscribe to all platforms, simply type /subscribe. To subscribe to alerts from a particular platform, just type /subscribe <platform>.\n If you would like to receive updates from Zora instead, type /subscribe zora.');
-            expect(message).to.have.property('replies');
+            expect(message).to.be.an('object').and.have.keys('text', 'replies');
+            expect(message.text).to.equal('You can subscribe to alerts from only certain platforms. \nTo subscribe to all platforms, simply type !subscribe. To subscribe to alerts from a particular platform, just type !subscribe <platform>.\n If you would like to receive updates from Zora instead, type !subscribe zora.');
             expect(message.replies).to.have.deep.members([
-                    {text: '/subscribe'},
-                    {text: '/subscribe zora'},
-                    {text: '/subscribe nifty'},
-                    {text: '/subscribe superrare'},
-                    {text: '/subscribe foundation'}
+                    {text: '!subscribe'},
+                    {text: '!subscribe zora'},
+                    {text: '!subscribe nifty'},
+                    {text: '!subscribe superrare'},
+                    {text: '!subscribe foundation'}
             ]);
         });
     });

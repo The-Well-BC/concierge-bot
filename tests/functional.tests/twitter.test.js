@@ -10,13 +10,13 @@ const links = require('../../config/links');
 
 const samplePayloads = require('../twitterSamplePayload.js');
 
-describe.only('Twitter: Test routes', function() {
+describe('Twitter routes', function() {
     before(() => {
         const teardown = require('../teardown');
         return teardown();
     });
 
-    it.only('Twitter CRC validation', function() {
+    it('Twitter CRC validation #once', function() {
         this.timeout(3000);
 
         return request(app).get(links.twitterWebhook + '?crc_token=123456')
@@ -25,29 +25,35 @@ describe.only('Twitter: Test routes', function() {
         });
     });
 
-    it.only('Send start command', function() {
+    it('Send start command', function() {
+    // it.only('Send start command', function() {
         const payload = clone(samplePayloads.commands.start);
         return request(app).post(links.twitterWebhook).send(payload)
         .then(res => {
-            expect(res.body).to.have.property('status', true);
+            expect(res.body).to.have.key('event');
+            expect(res.body.event).to.have.property('type', 'message_create');
+            expect(res.body.event).to.have.keys('type', 'id', 'created_timestamp', 'message_create');
 
-            /*
-            expect(res.body.chat_id).to.equal(payload.message.chat.id);
-            expect(res.body.text).to.have.string("Hello " + payload.message.chat.first_name);
-            expect(res.body.reply_markup.keyboard[0].length).to.be.greaterThan(1);
-            */
+            expect(res.body.event.message_create.target.recipient_id).to.equal(payload.direct_message_events[0].message_create.sender_id);
+
+            // Text
+            expect(res.body.event.message_create.message_data).to.have.keys('text', 'quick_reply');
+            expect(res.body.event.message_create.message_data.text).to.have.string('subscribe to all');
+            expect(res.body.event.message_create.message_data.quick_reply.options).to.not.be.empty;
         });
     });
 
     it('Subscribe user to all services', function() {
         const payload = clone(samplePayloads.commands.subscribe);
 
-        const chat_id = payload.message.chat.id;
+        console.log('PAYLOAD DIRECT MESSAGE',payload.direct_message_events[0].message_create);
+        const chat_id = payload.direct_message_events[0].message_create.sender_id
 
         return request(app).post(links.twitterWebhook).send(payload)
         .then(res => {
-            expect(res.body).to.have.keys('chat_id', 'text', 'method');
-            expect(res.body).to.have.property('method', 'sendMessage');
+            expect(res.body).to.have.key('event');
+            expect(res.body.event).to.have.keys('chat_id', 'text', 'method');
+            expect(res.body.event).to.have.property('method', 'sendMessage');
 
             expect(res.body.chat_id).to.equal(payload.message.chat.id);
             expect(res.body.text).to.have.string("subscribed to", "You");
@@ -64,12 +70,13 @@ describe.only('Twitter: Test routes', function() {
     it('Subscribe user to one service', function() {
         const payload = clone(samplePayloads.commands.subscribe);
 
-        const chat_id = payload.message.chat.id;
-        payload.message.text = '/subscribe zora';
+        const chat_id = payload.direct_message_events[0].message_create.sender_id
+        payload.direct_message_events[0].message_create.message_data.text = '/subscribe zora';
 
         return request(app).post(links.twitterWebhook).send(payload)
         .then(res => {
-            expect(res.body).to.have.keys('chat_id', 'text', 'method');
+            expect(res.body).to.have.key('event');
+            expect(res.body.event).to.have.keys('chat_id', 'text', 'method');
 
             expect(res.body.chat_id).to.equal(payload.message.chat.id);
             expect(res.body.text).to.have.string("subscribed to", "You");
@@ -85,12 +92,13 @@ describe.only('Twitter: Test routes', function() {
     it('Subscribe user to illegal service', function() {
         const payload = clone(samplePayloads.commands.subscribe);
 
-        const chat_id = payload.message.chat.id;
-        payload.message.text = '/subscribe xora';
+        const chat_id = payload.direct_message_events[0].message_create.sender_id
+        payload.direct_message_events[0].message_create.message_data.text = '/subscribe zora';
 
         return request(app).post(links.twitterWebhook).send(payload)
         .then(res => {
-            expect(res.body).to.have.keys('chat_id', 'text');
+            expect(res.body).to.have.key('event');
+            expect(res.body.event).to.have.keys('chat_id', 'text');
 
             expect(res.body.chat_id).to.equal(payload.message.chat.id);
             expect(res.body.text).to.have.string("fail");
