@@ -18,7 +18,6 @@ module.exports = function(startTime, limit) {
     .then(res => {
         return res.data.result.eventsWithUsers
         .map(item => {
-            console.log('RARE ITEM', item);
             let url = `https://superrare.co/artwork-v2/${ item.nonFungibleToken.name.replace(/\s/g, '-') }-${ item.nonFungibleToken.tokenId }`;
             // let creatorUrl = `https://superrare.co/${ item.creator.username }`
             let buyer, seller, price, transaction = {};

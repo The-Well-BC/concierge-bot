@@ -38,8 +38,8 @@ module.exports = function(startTime, limit) {
     }, {
         contentType: 'application/json'
     }).catch(e => {
-        console.log('ERRRO FETCHING from SuperRare api');
-        console.log(e);
+        console.error('ERRRO FETCHING from SuperRare api');
+        console.error(e);
         throw e;
     })
     .then(res => {
