@@ -63,7 +63,7 @@ describe('Twitter functions: Prepary payload for twitter', function() {
 
         expect(response).to.have.keys('chatID', 'text', 'quick_reply');
 
-        expect(response.text).to.have.string('\nIf you don\'t see the predefined responses, click the hamburger menu beside the text input field (three horizontal bars to see them');
+        expect(response.text).to.have.string('If you don\'t see the predefined responses, click the hamburger menu beside the text input field (the three horizontal bars) to see them');
 
         expect(response.quick_reply).to.deep.eql({
             type: 'options',
