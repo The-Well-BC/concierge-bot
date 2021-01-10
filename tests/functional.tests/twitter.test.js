@@ -11,8 +11,8 @@ const links = require('../../config/links');
 const samplePayloads = require('../twitterSamplePayload.js');
 
 // describe.only('Twitter routes', function() {
-describe.only('Twitter routes', function() {
-    before(() => {
+describe('Twitter routes', function() {
+    beforeEach(() => {
         const teardown = require('../teardown');
         return teardown();
     });
@@ -26,7 +26,7 @@ describe.only('Twitter routes', function() {
         });
     });
 
-    it.skip('Send start command', function() {
+    it('Send start command', function() {
         const payload = clone(samplePayloads.commands.start);
         return request(app).post(links.twitterWebhook).send(payload)
         .then(res => {
@@ -46,7 +46,6 @@ describe.only('Twitter routes', function() {
     it('Subscribe user to all services', function() {
         const payload = clone(samplePayloads.commands.subscribe);
 
-        console.log('PAYLOAD DIRECT MESSAGE',payload.direct_message_events[0].message_create);
         const chatID = payload.direct_message_events[0].message_create.sender_id
 
         return request(app).post(links.twitterWebhook).send(payload)
@@ -56,7 +55,7 @@ describe.only('Twitter routes', function() {
             expect(res.body.event).to.have.keys('type', 'id', 'created_timestamp', 'message_create');
 
             expect(res.body.event.message_create.target.recipient_id).to.equal(payload.direct_message_events[0].message_create.sender_id);
-            expect(res.body.event.message_create.message_data.text).to.have.string("subscribed to", "You");
+            expect(res.body.event.message_create.message_data.text).to.have.string("NFTs");
             return subdao.fetchSubscription(chatID)
             .then(res => {
                 expect(res).to.have.lengthOf(1);
@@ -105,9 +104,32 @@ describe.only('Twitter routes', function() {
 
             expect(res.body.event.message_create.target.recipient_id).to.equal(payload.direct_message_events[0].message_create.sender_id);
 
-            expect(res.body.event.message_create.message_data.text).to.have.string("'xora'", 'fail');
+            expect(res.body.event.message_create.message_data.text).to.have.string('"xora"', 'fail');
 
-            return subdao.fetchSubscription(chat_id)
+            return subdao.fetchSubscription(chatID)
+            .then(res => {
+                expect(res).to.eql([]);
+            });
+        });
+    });
+
+    it('Unknown command', function() {
+        const payload = clone(samplePayloads.commands.subscribe);
+
+        const chatID = payload.direct_message_events[0].message_create.sender_id
+        payload.direct_message_events[0].message_create.message_data.text = '!xenomorph ascidius';
+
+        return request(app).post(links.twitterWebhook).send(payload)
+        .then(res => {
+            expect(res.body).to.have.key('event');
+            expect(res.body.event).to.have.property('type', 'message_create');
+            expect(res.body.event).to.have.keys('type', 'id', 'created_timestamp', 'message_create');
+
+            expect(res.body.event.message_create.target.recipient_id).to.equal(payload.direct_message_events[0].message_create.sender_id);
+
+            expect(res.body.event.message_create.message_data.text).to.equal('Command not recognized. Type in help to see what commands are available');
+
+            return subdao.fetchSubscription(chatID)
             .then(res => {
                 expect(res).to.eql([]);
             });

@@ -7,12 +7,14 @@ const start = require('./messages.start');
 const browse = require('./messages.browse');
 const subscribe = require('./messages.subscribe');
 const creatorSummary = require('./text.creatorSummary.js');
+const error = require('./errorMessages');
 
 module.exports = {
     creatorSummary,
     subscribe,
     browse,
     start,
+    error,
     help,
 
     alertMessage(payload) {

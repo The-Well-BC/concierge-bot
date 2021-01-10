@@ -1,5 +1,4 @@
 const commands = require('./commands');
-const errMessages = require('./errorMessages');
 
 // Messager Platforms, eg twitter, telegram, discord...
 const telegram = require('./messenger/telegram');
@@ -26,8 +25,6 @@ module.exports = {
             else if(res) {
                 let message = messengerFn.prepareMessage(res, [ parsedMessage.chatID ])
 
-                console.log('MESSAGE', message);
-
                 if(messenger == 'twitter') {
                     return messengerFn.sendMessage(message[0][0], [parsedMessage.chatID])
                     .then(res => {
@@ -41,11 +38,15 @@ module.exports = {
         .catch(err => {
             let mess =  "";
             if(err.message == 'invalid_platform') {
-                if(err.messenger == 'telegram') {
-                    mess =  errMessages(err).invalid_platform[messenger];
-                }
+                mess =  parsedMessage.formatter.error(err).invalid_platform;
 
-                return messengerFn.prepareMessage({ text: mess }, [parsedMessage.chatID])[0][0];
+                let errorMessage =  messengerFn.prepareMessage(mess, [parsedMessage.chatID])[0][0];
+
+                if(messenger == 'telegram')
+                    return errorMessage;
+                else {
+                    return messengerFn.sendMessage(errorMessage, [parsedMessage.chatID])
+                }
             }
         });
     }

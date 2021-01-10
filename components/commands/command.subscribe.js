@@ -1,6 +1,5 @@
 const subscribedao = require('../daos/subscription.dao');
 const platformNames = require('../nftTradingPlatforms/platformNames');
-const botMessages = require('../botMessages');
 
 const subscribe = function(services, messenger, chat_id) {
     if(!services) services = 'all';

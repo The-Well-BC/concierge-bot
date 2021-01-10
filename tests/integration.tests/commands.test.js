@@ -1,35 +1,28 @@
 const expect = require('chai').expect;
 const clone = require('rfdc')();
-const botMessages = require('../../components/commands');
-const samplePayload = require('../samplePayload');
 
+const command = require('../../components/commands');
+
+const plain = require('../../components/messageFormats/plain');
 const markdown = require('../../components/messageFormats/markdownV2');
 
-describe('The Subscribe Command', function() {
-    it('/subscribe', function() {
+describe('Other Commands', function() {
+    it('Unrecoginzed command', function() {
         const payload = {
-            command: { name: 'subscribe', },
+            command: { name: 'pafloopa', },
             user: { username: 'Adesuwa' },
             chatID: 1234
         }
 
-        let message = botMessages(payload, 'telegram', markdown);
-        expect(message).to.be.an('object');
-        expect(message.text).to.equal('You will receive alerts whenever releases are made on Zora and Foundation');
-    });
-    it('/subscribe service', function() {
-        const payload = {
-            command: {
-                name: 'subscribe',
-                params: [ 'zora' ]
-            },
-            user: { username: 'Adesuwa' },
-            chatID: 1234
-        }
+        let promises = [
+            command(payload, 'telegram', markdown),
+            command(payload, 'twitter', plain)
+        ]
 
-        let message = botMessages(payload, 'telegram', markdown);
-        expect(message).to.be.an('object');
-        expect(message.text).to.equal('You have subscribed to updates from Zora. Whenever releases are made on Zora, you will receive a notification.');
+        return Promise.all(promises)
+        .then(messages => {
+            expect(messages).to.all.have.property('text', 'Command not recognized. Type in help to see what commands are available');
+        });
     });
 });
 

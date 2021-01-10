@@ -3,6 +3,7 @@ const bidText = require('./bids');
 const dropText = require('./drops');
 
 const help = require('./messages.help');
+const error = require('./errorMessages');
 const start = require('./messages.start');
 const browse = require('./messages.browse');
 const subscribe = require('./messages.subscribe');
@@ -13,6 +14,7 @@ module.exports = {
     subscribe,
     browse,
     start,
+    error,
     help,
 
     alertMessage(payload) {

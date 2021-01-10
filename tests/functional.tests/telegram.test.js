@@ -10,7 +10,7 @@ const links = require('../../config/links');
 
 const samplePayloads = require('../samplePayload.json');
 
-describe.only('Telegram routes', function() {
+describe('Telegram routes', function() {
     beforeEach(() => {
         const teardown = require('../teardown');
         return teardown();
@@ -88,6 +88,25 @@ describe.only('Telegram routes', function() {
 
             expect(res.body.chat_id).to.equal(payload.message.chat.id);
             expect(res.body.text).to.equal('The NFT platform "xora" is currently not available. Try /browse to see what platforms you can subscribe to');
+            return subdao.fetchSubscription(chat_id)
+            .then(res => {
+                expect(res).to.eql([]);
+            });
+        });
+    });
+
+    it('Unknown command', function() {
+        const payload = clone(samplePayloads.commands.subscribe);
+
+        const chat_id = payload.message.chat.id;
+        payload.message.text = '!subscribe xora';
+
+        return request(app).post(links.telegramWebhook).send(payload)
+        .then(res => {
+            expect(res.body).to.have.keys('chat_id', 'text', 'method', 'parse_mode');
+
+            expect(res.body.chat_id).to.equal(payload.message.chat.id);
+            expect(res.body.text).to.equal('Command not recognized. Type in help to see what commands are available');
             return subdao.fetchSubscription(chat_id)
             .then(res => {
                 expect(res).to.eql([]);

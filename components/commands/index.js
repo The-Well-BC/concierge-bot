@@ -50,8 +50,12 @@ module.exports = (payload, messenger, formatter) => {
                 response = formatter.help(messenger)[payload.command.params[0]];
             break;
         default:
+            response = formatter.error().badCommand;
+            console.log('Commandn ot recoginzed', response);
             break;
     }
+
+    console.log('EESPONSE', response);
 
     return Promise.resolve(response);
 }

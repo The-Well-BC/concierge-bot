@@ -7,7 +7,7 @@ const subdao = require('../../components/daos/subscription.dao');
 const markdown = require('../../components/messageFormats/markdownV2');
 const plain = require('../../components/messageFormats/plain');
 
-describe.only('The Subscribe Command', function() {
+describe('The Subscribe Command', function() {
     beforeEach(() => {
         const teardown = require('../teardown');
         return teardown();
@@ -63,9 +63,9 @@ describe.only('The Subscribe Command', function() {
         })
         .then(res => {
             expect(res).to.have.lengthOf(2);
-            expect(res).to.deep.eql([
-                { chatID, filters: [{ platforms: ['zora']}], messenger: 'telegram' },
+            expect(res).to.have.deep.members([
                 { chatID, filters: [{ platforms: ['zora']}], messenger: 'twitter' },
+                { chatID, filters: [{ platforms: ['zora']}], messenger: 'telegram' }
             ]);
         });
     });
@@ -85,13 +85,12 @@ describe.only('The Subscribe Command', function() {
 
         return Promise.all(promises)
         .then(res => {
-            expect(res).to.have.lengthOf(2);
             expect(res).to.all.have.property('text', 'You have opted to receive notifications whenever any NFTs are traded or released on the following platforms: Zora, Nifty Gateway, and SuperRare.');
 
             return subdao.fetchSubscription(chatID)
         })
         .then(res => {
-            expect(res).to.deep.eql([
+            expect(res).to.have.deep.members([
                 { chatID, filters: [{ platforms: ['zora', 'nifty', 'superrare']}], messenger: 'telegram' },
                 { chatID, filters: [{ platforms: ['zora', 'nifty', 'superrare']}], messenger: 'twitter' },
             ]);
