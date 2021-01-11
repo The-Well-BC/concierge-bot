@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-module.exports = function(startTime, limit) {
+module.exports = function(startTime, limit = 10) {
     const url = "https://superrare.co/api/v2/nft/get-events";
 
     return axios.post(url, {
