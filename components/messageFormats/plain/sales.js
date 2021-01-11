@@ -28,11 +28,13 @@ module.exports = function(payload) {
     if(payload.buyer && payload.buyer.name && payload.buyer.url)
         text += `\nView ${ payload.buyer.name }'s profile - ${ payload.buyer.url }`;
 
-    if(payload.creator.url) {
-        if(payload.creator.name.slice(-1) == 's')
-            text += `\nView ${ payload.creator.name }' other creations - ${ payload.creator.url }`;
-        else
-            text += `\nView ${ payload.creator.name }'s other creations - ${ payload.creator.url }`;
+    if(payload.creator) {
+        if(payload.creator.url && payload.creator.name) {
+            if(payload.creator.name.slice(-1) == 's')
+                text += `\nView ${ payload.creator.name }' other creations - ${ payload.creator.url }`;
+            else
+                text += `\nView ${ payload.creator.name }'s other creations - ${ payload.creator.url }`;
+        }
     }
 
     return text;
