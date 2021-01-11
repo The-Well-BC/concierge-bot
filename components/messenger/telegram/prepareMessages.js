@@ -2,7 +2,9 @@ module.exports = function(payloadArr, chatIDs) {
     if( !Array.isArray(payloadArr) )
         payloadArr = [ payloadArr ];
 
-    return payloadArr.map(payload => {
+    let messages = [];
+
+    payloadArr.forEach(payload => {
         if(!chatIDs)
             throw new Error('No chat IDs');
 
@@ -16,7 +18,7 @@ module.exports = function(payloadArr, chatIDs) {
         let photo = (payload.img != null || undefined) ?
             payload.img : null;
 
-        return chatIDs.map(o => {
+        return chatIDs.forEach(o => {
             let method = (photo) ? 'sendPhoto': 'sendMessage';
             let reply_markup
             if(payload.replies) {
@@ -27,14 +29,16 @@ module.exports = function(payloadArr, chatIDs) {
                 };
             }
 
-            return {
+            messages.push({
                 chat_id: o,
                 text: payload.text,
                 method,
                 ...reply_markup && { reply_markup },
                 parse_mode: 'Markdown',
                 ...(photo != null) && { photo }
-            }
+            });
         });
     });
+
+    return messages;
 }

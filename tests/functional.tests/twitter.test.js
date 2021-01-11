@@ -17,7 +17,7 @@ describe('Twitter routes', function() {
         return teardown();
     });
 
-    it('Twitter CRC validation #once', function() {
+    it('Twitter CRC validation', function() {
         this.timeout(3000);
 
         return request(app).get(links.twitterWebhook + '?crc_token=123456')
@@ -30,11 +30,12 @@ describe('Twitter routes', function() {
         const payload = clone(samplePayloads.commands.start);
         return request(app).post(links.twitterWebhook).send(payload)
         .then(res => {
+            console.log('RES BODY FROM TWITTER', res.body);
             expect(res.body).to.have.key('event');
             expect(res.body.event).to.have.property('type', 'message_create');
             expect(res.body.event).to.have.keys('type', 'id', 'created_timestamp', 'message_create');
 
-            expect(res.body.event.message_create.target.recipient_id).to.equal(payload.direct_message_events[0].message_create.sender_id);
+            expect(res.body.event.message_create.target.recipient_id).to.equal(samplePayloads.chatID);
 
             // Text
             expect(res.body.event.message_create.message_data).to.include.keys('text', 'quick_reply');
@@ -54,7 +55,7 @@ describe('Twitter routes', function() {
             expect(res.body.event).to.have.property('type', 'message_create');
             expect(res.body.event).to.have.keys('type', 'id', 'created_timestamp', 'message_create');
 
-            expect(res.body.event.message_create.target.recipient_id).to.equal(payload.direct_message_events[0].message_create.sender_id);
+            expect(res.body.event.message_create.target.recipient_id).to.equal(samplePayloads.chatID);
             expect(res.body.event.message_create.message_data.text).to.have.string("NFTs");
             return subdao.fetchSubscription(chatID)
             .then(res => {
@@ -78,7 +79,7 @@ describe('Twitter routes', function() {
             expect(res.body.event).to.have.property('type', 'message_create');
             expect(res.body.event).to.have.keys('type', 'id', 'created_timestamp', 'message_create');
 
-            expect(res.body.event.message_create.target.recipient_id).to.equal(payload.direct_message_events[0].message_create.sender_id);
+            expect(res.body.event.message_create.target.recipient_id).to.equal(samplePayloads.chatID);
 
             expect(res.body.event.message_create.message_data.text).to.have.string("Nifty Gateway", "You");
             return subdao.fetchSubscription(chatID)
@@ -102,7 +103,7 @@ describe('Twitter routes', function() {
             expect(res.body.event).to.have.property('type', 'message_create');
             expect(res.body.event).to.have.keys('type', 'id', 'created_timestamp', 'message_create');
 
-            expect(res.body.event.message_create.target.recipient_id).to.equal(payload.direct_message_events[0].message_create.sender_id);
+            expect(res.body.event.message_create.target.recipient_id).to.equal(samplePayloads.chatID);
 
             expect(res.body.event.message_create.message_data.text).to.have.string('"xora"', 'fail');
 
@@ -125,7 +126,7 @@ describe('Twitter routes', function() {
             expect(res.body.event).to.have.property('type', 'message_create');
             expect(res.body.event).to.have.keys('type', 'id', 'created_timestamp', 'message_create');
 
-            expect(res.body.event.message_create.target.recipient_id).to.equal(payload.direct_message_events[0].message_create.sender_id);
+            expect(res.body.event.message_create.target.recipient_id).to.equal(samplePayloads.chatID);
 
             expect(res.body.event.message_create.message_data.text).to.equal('Command not recognized. Type in help to see what commands are available');
 

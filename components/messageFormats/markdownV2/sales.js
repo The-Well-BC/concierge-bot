@@ -26,11 +26,13 @@ module.exports = function(payload) {
     if(payload.price)
         text += `\n${ payload.name } is currently trading at ${ payload.price }`;
 
-    if(payload.creator.url) {
-        if(payload.creator.name.slice(-1) == 's')
-            text += `\n[View ${ payload.creator.name }' other creations](${ payload.creator.url })`;
-        else
-            text += `\n[View ${ payload.creator.name }'s other creations](${ payload.creator.url })`;
+    if(payload.creator) {
+        if(payload.creator.url && payload.creator.name) {
+            if(payload.creator.name.slice(-1) == 's')
+                text += `\n[View ${ payload.creator.name }' other creations](${ payload.creator.url })`;
+            else
+                text += `\n[View ${ payload.creator.name }'s other creations](${ payload.creator.url })`;
+        }
     }
 
     return text;

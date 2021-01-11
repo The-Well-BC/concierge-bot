@@ -3,16 +3,27 @@ const tweet = require('./api/tweet');
 const prepareMessages = require('./prepareMessage');
 
 module.exports = (message, chatIDs) => {
+    if( !Array.isArray(chatIDs) )
+        chatIDs = [chatIDs];
+
     let messageObj = {
         text: message.text,
     }
 
-    if(message.quick_reply)
-        messageObj.quick_reply = message.quick_reply;
+    let promises = [];
 
-    if(chatIDs) {
-        messageObj.chatID = chatIDs[0]
-        return sendDM(messageObj);
-    } else
-        return tweet(messageObj);
+    chatIDs.forEach(item => {
+        console.log('CHAT ID', item);
+        if(message.quick_reply)
+            messageObj.quick_reply = message.quick_reply;
+
+        if(item == 'all') {
+            promises.push(tweet(messageObj));
+        } else {
+            messageObj.chatID = item;
+            promises.push(sendDM(messageObj));
+        }
+    });
+
+    return Promise.all(promises);
 }

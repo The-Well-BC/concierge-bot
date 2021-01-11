@@ -18,11 +18,18 @@ module.exports = {
 
         let messages = prepareMessages(payload, chatIDs);
 
-        if(photo) {
-            return sendPhoto(messages[0][0]);
-        }
-        else {
-            return sendText(messages[0][0]);
-        }
+        let promises = [];
+
+        messages.forEach(message => {
+
+            if(photo) {
+                promises.push( sendPhoto(message));
+            }
+            else {
+                return promises.push(sendText(message));
+            }
+        });
+
+        return Promise.all(promises);
     }
 }

@@ -63,7 +63,7 @@ describe('Fetch drops', function() {
         });
     });
 
-    it.skip('#dev Fetch drops from Zora', function() {
+    it.skip('Fetch drops from Zora', function() {
         const limit = 3;
 
         return zora.fetchDrops(startTime, limit)

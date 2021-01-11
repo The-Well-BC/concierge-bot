@@ -2,7 +2,9 @@ module.exports = function(payloadArr, chatIDs) {
     if( !Array.isArray(payloadArr) )
         payloadArr = [ payloadArr ];
 
-    return payloadArr.map(payload => {
+    let messages = [];
+
+    payloadArr.forEach(payload => {
         if(!chatIDs)
             throw new Error('No chat IDs');
 
@@ -17,6 +19,11 @@ module.exports = function(payloadArr, chatIDs) {
             payload.img : null;
 
         return chatIDs.map(o => {
+            let chatID = o;
+
+            if(!o)
+                throw new Error('Chat ID not specified');
+
             let quick_reply;
             if(payload.replies) {
                 let replies = payload.replies;
@@ -39,12 +46,14 @@ module.exports = function(payloadArr, chatIDs) {
                 text += '\n\nHint: If you don\'t see the predefined responses, click the hamburger menu beside the text input field (the three horizontal bars) to see them';
 
 
-            return {
-                chatID: o,
+            messages.push({
+                ...chatID && {chatID},
                 text,
                 ...quick_reply && { quick_reply },
                 ...(photo != null) && { photo }
-            }
+            });
         })
     });
+
+    return messages;
 }

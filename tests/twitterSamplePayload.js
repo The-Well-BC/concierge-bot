@@ -1,5 +1,6 @@
 module.exports = {
     chatID: '352654309',
+    chatID1: "1346809710993879047",
     commands: {
         'start': {
             "for_user_id": "4337869213",

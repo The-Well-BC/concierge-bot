@@ -23,20 +23,21 @@ module.exports = {
             // Telegram messages
             let sortedMessages = {};
 
+            subscriptions.push({ chatID: 'all', messenger: 'twitter' });
             sortedMessages.telegram = subscriptionFilter(payload, subscriptions.filter(i => i.messenger === 'telegram'));
             sortedMessages.twitter = subscriptionFilter(payload, subscriptions.filter(i => i.messenger === 'twitter'));
 
-            let telegramTextPayload = sortedMessages.telegram.map(p =>  {
+            let telegramAlerts = sortedMessages.telegram.map(p =>  {
                 return { message: telegram.formatter.alertMessage(p.payload), chatIDs: p.chatIDs }
             });
 
-            let twitterTextPayload = sortedMessages.twitter.map(p =>  {
+            let twitterAlerts = sortedMessages.twitter.map(p =>  {
                 return { message: twitter.formatter.alertMessage(p.payload), chatIDs: p.chatIDs }
             });
 
-            let messages = telegramTextPayload.map(p => telegram.sendMessage(p.message, p.chatIDs));
+            let messages = telegramAlerts.map(p => telegram.sendMessage(p.message, p.chatIDs));
             messages.push(
-                ...twitterTextPayload.map(p => twitter.sendMessage(p.message, p.chatIDs))
+                ...twitterAlerts.map(p => twitter.sendMessage(p.message, p.chatIDs))
             );
 
             return Promise.all(messages);

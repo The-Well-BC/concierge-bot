@@ -23,15 +23,15 @@ module.exports = {
             if(res === true)
                 return new Promise.resolve(true);
             else if(res) {
-                let message = messengerFn.prepareMessage(res, [ parsedMessage.chatID ])
+                let message = messengerFn.prepareMessage(res, [ parsedMessage.chatID ])[0]
 
                 if(messenger == 'twitter') {
-                    return messengerFn.sendMessage(message[0][0], [parsedMessage.chatID])
+                    return messengerFn.sendMessage(message, [parsedMessage.chatID])
                     .then(res => {
-                        return res;
+                        return res[0];
                     });
                 } else
-                    return message[0][0];
+                    return message;
             }
         })
         .catch(err => {
@@ -39,12 +39,15 @@ module.exports = {
             if(err.message == 'invalid_platform') {
                 mess =  parsedMessage.formatter.error(err).invalid_platform;
 
-                let errorMessage =  messengerFn.prepareMessage(mess, [parsedMessage.chatID])[0][0];
+                let errorMessage = messengerFn.prepareMessage(mess, [parsedMessage.chatID])[0];
 
                 if(messenger == 'telegram')
                     return errorMessage;
                 else {
                     return messengerFn.sendMessage(errorMessage, [parsedMessage.chatID])
+                    .then(res => {
+                        return res[0];
+                    });
                 }
             }
         });

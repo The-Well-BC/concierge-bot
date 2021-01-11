@@ -84,7 +84,6 @@ module.exports = function(startTime, limit) {
             let tokensLeft = null;
 
             const showcase = item.nft || item.market;
-            console.log('SHOW CASE', showcase);
             if(item.market) {
                 showcase.price = showcase.totalBuyPrice
                 tokensLeft = item.market.totalSupply;
@@ -100,7 +99,6 @@ module.exports = function(startTime, limit) {
             if(tokenAmount >= 1000000000000000000)
                 tokenAmount = tokenAmount / 1000000000000000000;
 
-            console.log('ITEM', item);
             return {
                 date: new Date(item.date * 1000),
                 name: showcase.name,

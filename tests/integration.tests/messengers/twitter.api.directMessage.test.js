@@ -4,7 +4,7 @@ const expect = chai.expect;
 const sendDM = require('../../../components/messenger/twitter/api/sendDM');
 
 describe('Twitter API: Direct Message', function() {
-    it('#once Send direct message', function() {
+    it('Send direct message', function() {
         const message = {
             text: 'Create tweet ' + new Date(),
             chatID: '352654309'
@@ -25,7 +25,6 @@ describe('Twitter API: Direct Message', function() {
         });
     });
 
-    // it.only('#once Send direct message with quick replies', function() {
     it('Send direct message with quick replies', function() {
         const message = {
             text: 'Direct message with reply options ' + new Date(),
@@ -73,23 +72,6 @@ describe('Twitter API: Direct Message', function() {
             expect(res).to.have.key('event');
             expect(res.event).to.have.property('type', 'message_create');
             expect(res.event).to.have.keys('type', 'id', 'created_timestamp', 'message_create');
-        });
-    });
-    it('Delete direct message', function() {
-        const message = {
-            text: 'Delete this tweet', 
-        }
-
-        let tweetid;
-
-        return tweet(message)
-        .then(res => {
-            let response = JSON.parse(res.response.body);
-            tweetid = response.id_str;
-
-            return deleteTweet(tweetid)
-        }).then(res => {
-            return expect(fetchTweet(tweetid)).to.eventually.be.rejected;
         });
     });
 });

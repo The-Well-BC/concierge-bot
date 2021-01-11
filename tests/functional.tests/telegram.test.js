@@ -23,7 +23,7 @@ describe('Telegram routes', function() {
         .then(res => {
             expect(res.body).to.have.keys('chat_id', 'text', 'reply_markup', 'method', 'parse_mode');
             expect(res.body).to.have.property('method', 'sendMessage');
-            expect(res.body.chat_id).to.equal(payload.message.chat.id);
+            expect(res.body.chat_id).to.equal(samplePayloads.chatID);
             expect(res.body.text).to.have.string("Hello " + payload.message.chat.first_name);
             expect(res.body.reply_markup).to.have.property('keyboard').that.is.an('array');
             // expect(res.body.reply_markup.keyboard[0].length).to.be.greaterThan(1);
@@ -41,7 +41,7 @@ describe('Telegram routes', function() {
             expect(res.body).to.have.keys('chat_id', 'text', 'method', 'parse_mode', 'reply_markup');
             expect(res.body).to.have.property('method', 'sendMessage');
 
-            expect(res.body.chat_id).to.equal(payload.message.chat.id);
+            expect(res.body.chat_id).to.equal(samplePayloads.chatID);
             expect(res.body.text).to.have.string("NFTs released", 'Total Revenue');
         });
     });
@@ -56,7 +56,7 @@ describe('Telegram routes', function() {
             expect(res.body).to.have.keys('chat_id', 'text', 'method', 'parse_mode');
             expect(res.body).to.have.property('method', 'sendMessage');
 
-            expect(res.body.chat_id).to.equal(payload.message.chat.id);
+            expect(res.body.chat_id).to.equal(samplePayloads.chatID);
             // expect(res.body.text).to.have.string("subscribed to", "You");
             return subdao.fetchSubscription(chatID)
             .then(res => {
@@ -94,11 +94,12 @@ describe('Telegram routes', function() {
     it('Subscribe user to illegal service', function() {
         const payload = clone(samplePayloads.commands.subscribe);
 
-        const chat_id = payload.message.chat.id;
+        const chat_id = samplePayloads.chatID;
         payload.message.text = '/subscribe xora';
 
         return request(app).post(links.telegramWebhook).send(payload)
         .then(res => {
+            console.log('RES BODY', res.body);
             expect(res.body).to.have.keys('chat_id', 'text', 'method', 'parse_mode');
 
             expect(res.body.chat_id).to.equal(payload.message.chat.id);
@@ -113,7 +114,7 @@ describe('Telegram routes', function() {
     it('Unknown command', function() {
         const payload = clone(samplePayloads.commands.subscribe);
 
-        const chat_id = payload.message.chat.id;
+        const chat_id = samplePayloads.chatID;
         payload.message.text = '!subscribe xora';
 
         return request(app).post(links.telegramWebhook).send(payload)

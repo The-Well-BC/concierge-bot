@@ -9,7 +9,8 @@ const subdao = require('../../components/daos/subscription.dao');
 const sampleTelegramPayloads = require('../samplePayload.json');
 const sampleTwitterPayloads = require('../twitterSamplePayload');
 
-describe.only('Sending alerts', function() {
+describe('#dev Sending alerts', function() {
+    this.timeout(30000);
     before(() => {
         return subdao.addSubscription(sampleTelegramPayloads.chatID, 'telegram')
         .then(() => {
@@ -17,16 +18,71 @@ describe.only('Sending alerts', function() {
         });
     });
 
-    it('Send alerts model', function() {
-        return alertsModel.sendAlerts('1 day', 3)
+    it('Send alerts for 1 day period', function() {
+        return alertsModel.sendAlerts('1 day')
         .then(res => {
             console.log('Sent Alerts', res);
-            expect(res).to.all.have.property('ok', true);
-            expect(res).to.all.have.property('result');
             expect(res).to.satisfy( arr => {
-                assert.includeMembers(arr, [{ event:{type: 'message_create', message_create: {}} }]);
+                let oneTwitter = arr.some(item => {
+                    return item.event && item.event.type === 'message_create';
+                });
+
+                if(oneTwitter !== true) { 
+                    assert.fail(
+                        arr,
+                        [{event: { type: 'message_create' }}],
+                        'Missing Expected there to be at least one telegram message object.with property "event"'
+                    );
+                }
+
+                let text;
                 return arr.every(item => {
-                    assert.match(item.result.text, /(released\s.*on)|(bought\s.*on)/);
+                    if(!item.event) {
+                        assert.propertyVal(item, 'ok', true);
+                        assert.property(item, 'result');
+                        text = item.result.text;
+                    } else {
+                        assert.property(item, 'event');
+                        text = item.event.message_create.message_data.text;
+                    }
+
+                    assert.match(text, /(released\s.*on)|(bought\s.*on)/);
+
+                    return true;
+                });
+            });
+        });
+    });
+
+    it('Send alerts for 5 minute period', function() {
+        console.log('BALSH');
+        return alertsModel.sendAlerts('5 min')
+        .then(res => {
+            console.log('fETCHED');
+            // console.log('Sent Alerts 5 mins', res);
+            expect(res).to.satisfy( arr => {
+                if(arr.length > 1) {
+                    let oneTwitter = arr.some(item => {
+                        return item.event && item.event.type === 'message_create';
+                    });
+
+                    assert(oneTwitter === true, 
+                        'Expected there to be at least one message object with property "event"'
+                    );
+                }
+
+                let text;
+                return arr.every(item => {
+                    if(!item.event) {
+                        assert.propertyVal(item, 'ok', true);
+                        assert.property(item, 'result');
+                        text = item.result.text;
+                    } else {
+                        assert.property(item, 'event');
+                        text = item.event.message_create.message_data.text;
+                    }
+
+                    assert.match(text, /(released\s.*on)|(bought\s.*on)/);
 
                     return true;
                 });

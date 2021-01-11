@@ -3,6 +3,7 @@ const format = require('../../messageFormats/plain');
 module.exports = (payload) => {
     let command, text, params;
     let data, message;
+    console.log('PAYLOAD', payload);
 
     if(payload.direct_message_events)
         data = payload.direct_message_events[0];

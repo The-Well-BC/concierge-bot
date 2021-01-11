@@ -12,8 +12,7 @@ module.exports = function(startTime, limit) {
         let transactions = res.data.data.results.filter(item => item.Type === "sale");
 
         return transactions.map(item => {
-            // console.log('NIFTY ITEM', item);
-            return {
+            let nft = {
                 name: item.NiftyObject.name,
                 url: `https://niftygateway.com/itemdetail/secondary/${ item.NiftyObject.contractAddress }`,
                 img: item.NiftyObject.image_url,
@@ -27,15 +26,13 @@ module.exports = function(startTime, limit) {
                     name: item.SellingUserProfile.name,
                     url: `https://niftygateway.com/profile/${ item.SellingUserProfile.profile_url }`
                 },
-                creator: {
-                    // name: item.metadata.createdBy,
-                    // url: `https://niftygateway.com/profile/steezdesign
-                },
                 buyer: {
                     name: item.PurchasingUserProfile.name,
                     url: `https://niftygateway.com/profile/${ item.PurchasingUserProfile.profile_url }`
                 }
             }
+
+            return nft;
         });
     });
 }
