@@ -8,7 +8,7 @@ module.exports = () => {
         // Ten Minutes
         cron.schedule('*/10 * * * *', function() {
             console.log('SENDING ALERTS');
-            return alertsModel.sendAlerts('10 min')
+            return alertsModel.sendAlerts('5 min')
         });
 
         // Daily
