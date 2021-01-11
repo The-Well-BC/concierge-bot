@@ -7,7 +7,7 @@ const twitter = require('./messenger/twitter');
 
 module.exports = {
     //sendAlerts: function(messages, interval) {
-    sendAlerts: function(interval, limit) {
+    sendAlerts: function(interval, limit = 10) {
         let payload = [];
         const nfts = nftFn(interval);
         return nfts.fetchDrops(limit)
