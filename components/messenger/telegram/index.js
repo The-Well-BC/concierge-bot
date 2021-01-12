@@ -1,6 +1,6 @@
 const sendText = require('./api/sendText');
 const sendPhoto = require('./api/sendPhoto');
-const markdown = require('../../messageFormats/markdownV2');
+const markdown = require('../../messageFormats/markdown');
 const prepareMessages = require('./prepareMessages');
 const parseMessage = require('./parseMessage');
 
@@ -21,7 +21,6 @@ module.exports = {
         let promises = [];
 
         messages.forEach(message => {
-
             if(photo) {
                 promises.push( sendPhoto(message));
             }
