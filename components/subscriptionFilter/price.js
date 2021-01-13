@@ -1,8 +1,20 @@
+const ethConverter = require('../ethPrice');
+
 const extractPriceFromCurrencyString = function(priceString) {
-    let number = null;
+    let number = null, currency;
     // Remove commas
     priceString = priceString.replace(/,/g, '');
-    // $123
+
+    if( /^\$/.test(priceString)) {
+        currency = 'USD'
+        number = priceString.replace('$', '');
+    } else if( /eth$/i.test(priceString)) {
+        currency = 'ETH';
+        number = priceString.replace(/eth/i, '');
+
+        number = number / ethConverter.getEth();
+    }
+
     if( priceString.match(/^\$\d+$/))
         number = priceString.match(/(?<=\$)\d+$/);
 
@@ -10,17 +22,13 @@ const extractPriceFromCurrencyString = function(priceString) {
     else if( priceString.match(/^\$\d+\.\d+$/) )
         number = priceString.match(/(?<=\$)\d+\.\d+$/);
 
-    // $123,456.23
-    else if( priceString.match(/^\$\d+(,\d{3})*(\.\d+)?$/))
-        number = priceString.match(/(?<=^\$)\d+(,\d{3})*(\.\d+)?$/);
-
     if(number && Array.isArray(number))
         number = number[0];
 
     if(number)
         number = parseFloat(number);
 
-    return { number };
+    return { number, currency };
 }
 
 module.exports = (item, filter) => {
