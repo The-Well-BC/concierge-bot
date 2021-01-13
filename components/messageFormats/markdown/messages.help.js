@@ -4,7 +4,9 @@ const nfts = require('../../nftTradingPlatforms/platformNames');
 module.exports = (messenger) => {
     let subC = commands.subscribe[messenger ];
 
+    let helpReplies = [{ text: commands.help[messenger] + ' subscribe' }];
     let subscribeReplies = [{ text: commands.subscribe[messenger ] }];
+
     for(key in nfts) {
         subscribeReplies.push({text: `${ commands.subscribe[messenger] } ${ key }`
              });
@@ -12,7 +14,8 @@ module.exports = (messenger) => {
 
     return {
         main:  {
-            text: 'Trade Drop Bot will alert you to transactions and new drops on NFT trading platforms. Currently, it supports Nifty Gateway, SuperRare, Foundation and Zora'
+            text: 'Trade Drop Bot will alert you to transactions and new drops on NFT trading platforms. Currently, it supports Nifty Gateway, SuperRare, Foundation and Zora',
+            replies: helpReplies
         },
         default:  {
             text: 'Don\'t have this help item'

@@ -16,6 +16,8 @@ module.exports = (payload) => {
 
         if(command === 'subscribe' && params == null)
             params = 'all';
+    } else if(/help/ig.test(text_)) {
+        command = 'help'
     } else {
         text = text_;
     }

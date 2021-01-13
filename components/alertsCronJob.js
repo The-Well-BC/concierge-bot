@@ -1,3 +1,5 @@
+const ethPrice = require("./ethPrice");
+
 module.exports = () => {
     const cron = require('node-cron')
     const alertsModel = require('./alerts.model');
@@ -11,8 +13,7 @@ module.exports = () => {
 
         // Daily
         cron.schedule('0 0 * * *', function() {
-            console.log('SENDING ALERTS');
-            return alertsModel.sendAlerts('1 day')
+            return ethPrice.updatePrice();
         });
     }
 }

@@ -30,7 +30,6 @@ describe('Twitter routes', function() {
         const payload = clone(samplePayloads.commands.start);
         return request(app).post(links.twitterWebhook).send(payload)
         .then(res => {
-            console.log('RES BODY FROM TWITTER', res.body);
             expect(res.body).to.have.key('event');
             expect(res.body.event).to.have.property('type', 'message_create');
             expect(res.body.event).to.have.keys('type', 'id', 'created_timestamp', 'message_create');

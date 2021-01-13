@@ -1,7 +1,12 @@
 const expect = require('chai').expect;
 const subscriptionFilter = require('../../components/subscriptionFilter');
+const ethPrice = require('../../components/ethPrice');
 
-describe('#dev Test Subscription filter: Transaction Price and NFT Price:', function() {
+describe('Test Subscription filter: Transaction Price and NFT Price:', function() {
+    before(() => {
+        ethPrice.reset();
+    });
+
     it('Filter by NFT price: USD', function() {
         let chats = [
             { chatID: 1234, filters: [ {priceGT: '$1000'} ] , messenger: 'telegram'},

@@ -15,5 +15,9 @@ const updateEth = function() {
 
 module.exports = {
     getEth: () => eth,
-    updateEth
+    updateEth,
+    // Only call this function when testing.
+    reset: () => {
+        eth = 5;
+    }
 }
