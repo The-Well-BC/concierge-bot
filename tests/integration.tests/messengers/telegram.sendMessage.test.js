@@ -24,7 +24,7 @@ describe('Send Telegram Messsage', function() {
         });
     });
 
-    it('Send text message', function() {
+    it('Send text message to multiple chat IDs', function() {
         const messages = [{
             text: `Test: Send message to two chats on telegram`
         }]

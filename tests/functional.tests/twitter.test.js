@@ -43,29 +43,6 @@ describe('Twitter routes', function() {
         });
     });
 
-    it('Subscribe user to all services', function() {
-        const payload = clone(samplePayloads.commands.subscribe);
-
-        const chatID = payload.direct_message_events[0].message_create.sender_id
-
-        return request(app).post(links.twitterWebhook).send(payload)
-        .then(res => {
-            expect(res.body).to.have.key('event');
-            expect(res.body.event).to.have.property('type', 'message_create');
-            expect(res.body.event).to.have.keys('type', 'id', 'created_timestamp', 'message_create');
-
-            expect(res.body.event.message_create.target.recipient_id).to.equal(samplePayloads.chatID);
-            expect(res.body.event.message_create.message_data.text).to.have.string("NFTs");
-            return subdao.fetchSubscription(chatID)
-            .then(res => {
-                expect(res).to.have.lengthOf(1);
-                expect(res[0]).to.containSubset({
-                    chatID, filters: [], messenger: 'twitter'
-                });
-            });
-        });
-    });
-
     it('Subscribe user to one service', function() {
         const payload = clone(samplePayloads.commands.subscribe);
 
@@ -86,29 +63,6 @@ describe('Twitter routes', function() {
                 expect(res).to.eql([
                     { chatID, filters: [ {platforms:['nifty']} ], messenger: 'twitter'}
                 ]);
-            });
-        });
-    });
-
-    it('Subscribe user to illegal service', function() {
-        const payload = clone(samplePayloads.commands.subscribe);
-
-        const chatID = payload.direct_message_events[0].message_create.sender_id
-        payload.direct_message_events[0].message_create.message_data.text = '!subscribe xora';
-
-        return request(app).post(links.twitterWebhook).send(payload)
-        .then(res => {
-            expect(res.body).to.have.key('event');
-            expect(res.body.event).to.have.property('type', 'message_create');
-            expect(res.body.event).to.have.keys('type', 'id', 'created_timestamp', 'message_create');
-
-            expect(res.body.event.message_create.target.recipient_id).to.equal(samplePayloads.chatID);
-
-            expect(res.body.event.message_create.message_data.text).to.have.string('"xora"', 'fail');
-
-            return subdao.fetchSubscription(chatID)
-            .then(res => {
-                expect(res).to.eql([]);
             });
         });
     });
