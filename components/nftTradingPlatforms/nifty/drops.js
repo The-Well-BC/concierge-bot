@@ -9,13 +9,12 @@ module.exports = function(startTime, limit = 3) {
     return axios.get(url)
     .then(res => {
         let drops = [];
-        res.data.listOfDrops.map(item => {
+        res.data.listOfDrops.forEach(item => {
             drops.push(...item.Exhibitions);
         });
 
-
         if(limit && typeof limit === 'number' && !isNaN(limit) && limit != 0) {
-            let index = limit - 1;
+            let index = limit;
             drops = drops.slice(0, index);
         }
 

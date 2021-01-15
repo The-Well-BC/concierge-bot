@@ -1,4 +1,7 @@
 const axios = require('axios');
+const dropFormatter = require('./format.drops');
+const saleFormatter = require('./format.sales');
+const bidFormatter = require('./format.bids');
 
 module.exports = function(startTime, limit = 10) {
     const url = "https://superrare.co/api/v2/nft/get-events";
@@ -10,7 +13,7 @@ module.exports = function(startTime, limit = 10) {
             "0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0"
         ],
         nftEventTypes: [
-            'SALE', 'ACCEPT_BID'
+            "CREATION", "SALE", "AUCTION_ENDED", "AUCTION_BID", 'BID', 'ACCEPT_BID'
         ],
         minBidFilter: true,
         filteredCreatorAddresses: [],
@@ -21,58 +24,26 @@ module.exports = function(startTime, limit = 10) {
             let url = `https://superrare.co/artwork-v2/${ item.nonFungibleToken.name.replace(/\s/g, '-') }-${ item.nonFungibleToken.tokenId }`;
             // let creatorUrl = `https://superrare.co/${ item.creator.username }`
             let buyer, seller, price, transaction = {};
+            let payload;
 
-            if(item.nftEventType === 'SALE') {
-                buyer = {
-                    name: item.sale.buyer.username,
-                    url: `https://superrare.co/${ item.sale.buyer.username }`,
-                }
-
-                transaction.price = item.sale.amount;
-
-                seller = {
-                    name: item.sale.seller.username,
-                    url: `https://superrare.co/${ item.sale.seller.username }`
-                }
-            } else if(item.nftEventType === 'ACCEPT_BID') {
-                transaction.price = item.acceptBid.amount;
-
-                if(item.acceptBid.bidder) {
-                    buyer = {
-                        name: item.acceptBid.bidder.username,
-                        url: `https://superrare.co/${ item.acceptBid.bidder.username }`,
-                    }
-                }
-
-                seller = {
-                    name: item.acceptBid.seller.username,
-                    url: `https://superrare.co/${ item.acceptBid.seller.username }`
-                }
+            switch(item.nftEventType) {
+                case 'CREATION':
+                    payload = dropFormatter(item);
+                    break;
+                case 'SALE':
+                    payload = saleFormatter(item);
+                    break;
+                case 'BID':
+                case 'ACCEPT_BID':
+                case 'AUCTION_BID':
+                    payload = bidFormatter(item);
+                    break;
+                default:
+                    payload = {}
+                    break;
             }
 
-            if(transaction.price) {
-                transaction.price = parseInt(transaction.price) / (10**18);
-                transaction.price = transaction.price + ' ETH';
-            }
-
-            return {
-                name: item.nonFungibleToken.name,
-                img: item.nonFungibleToken.image,
-                transaction,
-                creator: {
-                    name: item.nonFungibleToken.metadata.createdBy,
-                },
-                date: item.timestamp,
-                event: 'sale',
-                platform: 'superrare',
-                url,
-                /*
-                tokensLeft,
-                transaction,
-                */
-                ...buyer && {buyer},
-                seller
-            }
+            return payload;
         }).filter(item => {
             return ( new Date(item.date) > startTime );
         });

@@ -1,4 +1,6 @@
 const axios = require('axios');
+const formatSale = require('./format.sale');
+const formatListing = require('./format.listing');
 
 module.exports = function(startTime, limit) {
     const url = "https://api.niftygateway.com//market/all-data/";
@@ -9,27 +11,18 @@ module.exports = function(startTime, limit) {
         timeout: 30000
     })
     .then(res => {
-        let transactions = res.data.data.results.filter(item => item.Type === "sale");
-
-        return transactions.map(item => {
-            let nft = {
-                name: item.NiftyObject.name,
-                url: `https://niftygateway.com/itemdetail/secondary/${ item.NiftyObject.contractAddress }`,
-                img: item.NiftyObject.image_url,
-                date: item.Timestamp,
-                event: 'sale',
-                platform: 'nifty',
-                transaction: {
-                    price: '$' + item.SaleAmountInCents/100
-                },
-                seller: {
-                    name: item.SellingUserProfile.name,
-                    url: `https://niftygateway.com/profile/${ item.SellingUserProfile.profile_url }`
-                },
-                buyer: {
-                    name: item.PurchasingUserProfile.name,
-                    url: `https://niftygateway.com/profile/${ item.PurchasingUserProfile.profile_url }`
-                }
+        return res.data.data.results.map(item => {
+            let nft;
+            switch(item.Type) {
+                case 'sale':
+                    nft = formatSale(item);
+                    break;
+                case 'listing':
+                    nft = formatListing(item);
+                    break;
+                default:
+                    nft = {platform: 'nifty'}
+                    break;
             }
 
             return nft;

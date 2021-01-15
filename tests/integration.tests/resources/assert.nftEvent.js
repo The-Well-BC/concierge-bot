@@ -1,10 +1,15 @@
-const keys = [ 'name', 'url', 'event', 'creator', 'platform', 'date' ];
+const keys = [ 'event', 'platform', 'date' ];
+const events = ['sale', 'drop', 'bid', 'listing', 'offer']
+
+const dropAssert = require('./assert.drop');
+const bidAssert = require('./assert.bid');
+const transactionAssert = require('./assert.tx');
 
 module.exports = function(chai, utils) {
     let Assertion = chai.Assertion;
     let expect = chai.expect;
 
-    Assertion.addMethod('nftDrop', function(startTime) {
+    Assertion.addMethod('nftEvent', function(startTime) {
         let obj = this._obj
         if( !Array.isArray(obj) )
             obj = [ obj ];
@@ -24,15 +29,6 @@ module.exports = function(chai, utils) {
                 new Date(item.date)
             );
 
-            if(item.buyer && item.buyer.name) {
-                assert( item.buyer.name && typeof item.buyer.name === 'string',
-                    `Property "buyer" should have property "name" of type #{exp}. Got ${ item.buyer.name} instead\n #{act}`,
-                    '',
-                    'String',
-                    item.buyer
-                );
-            }
-
             assert( 
                 typeof item.creator === 'object' && item.creator != null,
                 'Property "creator" should be an #{exp}, not #{act}',
@@ -49,14 +45,6 @@ module.exports = function(chai, utils) {
                 item.creator.name
             );
 
-            assert(
-                !item.url.includes('undefined'),
-                'Property "url" should not include string \'undefined\'. Got \'#{act}\'',
-                '',
-                'String',
-                item.url
-            );
-
             if(item.img) {
                 assert( 
                     !item.img.includes('undefined'),
@@ -66,12 +54,26 @@ module.exports = function(chai, utils) {
                 );
             }
 
-            assert(item.event === 'drop',
+            assert(events.includes(item.event),
                 'Expected item to have property \'event\' that is #{exp}. Got #{act}',
                 '',
-                'drop',
+                '[drop, sale, bid, offer, listing]',
                 item.event
             );
+
+            if(item.event === 'sale')
+                transactionAssert(item, assert, chai);
+            else if(item.event === 'drop')
+                dropAssert(item, assert, chai);
+            else if(item.event === 'bid')
+                bidAssert(item, assert, chai);
+            else if(item.event === 'listing')
+                bidAssert(item, assert, chai);
+            else {
+                chai.assert.fail(item.event, events,
+                    'Event should be one of ' + events
+                );
+            }
         });
     });
 }
