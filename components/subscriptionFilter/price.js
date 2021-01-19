@@ -13,6 +13,8 @@ const extractPriceFromCurrencyString = function(priceString) {
         number = priceString.replace(/eth/i, '');
 
         number = number / ethConverter.getEth();
+    } else {
+        throw new Error('Price should be USD or ETH, not:', priceString);
     }
 
     if( priceString.match(/^\$\d+$/))
