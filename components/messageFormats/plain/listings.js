@@ -18,7 +18,7 @@ module.exports = function(payload) {
     }
 
     text += `Date: ${ date } (${ time })`;
-    if(payload.creator.url) {
+    if(payload.creator && payload.creator.url) {
         let cname;
         if(payload.creator.name.slice(-1) == 's')
             text += `\nView ${ payload.creator.name }' other NFTs - ${ payload.creator.url }`;

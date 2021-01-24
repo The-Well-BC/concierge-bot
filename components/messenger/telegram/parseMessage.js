@@ -12,7 +12,7 @@ module.exports = (payload) => {
 
         let paramsText = text_.replace(/\s+/g, ' ').match(/(?<=\/\w+\s+).+/g);
 
-        params = (paramsText) ? paramsText[0].split(' ') : null;
+        params = (paramsText) ? paramsText[0] : null;
 
         if(command === 'subscribe' && params == null)
             params = 'all';

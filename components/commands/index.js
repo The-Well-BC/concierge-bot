@@ -4,8 +4,14 @@ const browse = require('./command.browse');
 
 const messengerCommands = require('./text');
 
-module.exports = (payload, messenger, formatter) => {
-    let response;
+const formatter = require('../messages');
+
+module.exports = (payload, messenger) => {
+    let response, format = payload.format;
+
+    if(payload.command.params && Array.isArray(payload.command.params))
+        throw new Error('Command params should be a string');
+
     switch(payload.command.name) {
         case 'browse':
             return browse(payload, messenger, formatter, messengerCommands)
@@ -19,13 +25,14 @@ module.exports = (payload, messenger, formatter) => {
 
             return subscribe(params, messenger, payload.chatID)
             .then(res => {
-                let names;
+                let subFilters = {};
                 if(params == 'all')
-                    names = 'all'
-                else
-                    names = payload.command.params.map( item => nftPlatforms[item] );
+                    subFilters = 'all'
+                else {
+                    subFilters = {...res.filters }
+                }
 
-                response = formatter.subscribe(names, messengerCommands);
+                response = formatter.subscribe(subFilters, messengerCommands);
                 return response;
             })
             .catch(e => {
@@ -39,16 +46,10 @@ module.exports = (payload, messenger, formatter) => {
             break;
 
         case 'help':
-            if(!payload.command.params)
-                response = formatter.help(messenger).main;
-            else if(!formatter.help(messenger)[payload.command.params[0]])
-                response = formatter.help(messenger).default;
-            else
-                response = formatter.help(messenger)[payload.command.params[0]];
+            response = formatter.help(messenger, format, payload.command.params);
             break;
         default:
-            response = formatter.error().badCommand;
-            console.log('Commandn ot recoginzed', response);
+            response = formatter.error(format).badCommand;
             break;
     }
 

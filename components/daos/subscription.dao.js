@@ -28,7 +28,7 @@ module.exports = {
                             messenger: item.messenger,
                             filters: item.data
                         }
-                    });
+                    })[0];
                 });
             } else 
                 return res.rows;

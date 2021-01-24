@@ -9,17 +9,17 @@ describe('Twitter functions', function() {
         let payload = {
             "for_user_id": "4337869213",
             "direct_message_events": [{
-                    "id": "110", 
-                    "created_timestamp": "5300",
-                    "type": "message_create",
-                    "message_create": {
-                        target: { recipient_id: '1346809710993879047' },
-                        sender_id: '352654309',
-                        message_data: {
-                            text: '!subscribe',
-                            entities: { hashtags: [], symbols: [], user_mentions: [], urls: [] }
-                        }
+                "id": "110", 
+                "created_timestamp": "5300",
+                "type": "message_create",
+                "message_create": {
+                    target: { recipient_id: '1346809710993879047' },
+                    sender_id: '352654309',
+                    message_data: {
+                        text: '!subscribe',
+                        entities: { hashtags: [], symbols: [], user_mentions: [], urls: [] }
                     }
+                }
             }]
         };
 
@@ -35,17 +35,17 @@ describe('Twitter functions', function() {
         let payload = {
             "for_user_id": "4337869213",
             "direct_message_events": [{
-                    "id": "110", 
-                    "created_timestamp": "5300",
-                    "type": "message_create",
-                    "message_create": {
-                        target: { recipient_id: '1346809710993879047' },
-                        sender_id: 1234,
-                        message_data: {
-                            text: '!stoked foo bar',
-                            entities: { hashtags: [], symbols: [], user_mentions: [], urls: [] }
-                        }
+                "id": "110", 
+                "created_timestamp": "5300",
+                "type": "message_create",
+                "message_create": {
+                    target: { recipient_id: '1346809710993879047' },
+                    sender_id: 1234,
+                    message_data: {
+                        text: '!stoked foo bar',
+                        entities: { hashtags: [], symbols: [], user_mentions: [], urls: [] }
                     }
+                }
             }]
         };
 
@@ -55,7 +55,7 @@ describe('Twitter functions', function() {
             chatID: 1234,
             command: {
                 name: 'stoked',
-                params: ['foo', 'bar']
+                params: 'foo bar'
             }
         });
     });
@@ -64,17 +64,17 @@ describe('Twitter functions', function() {
         let payload = {
             "for_user_id": "4337869213",
             "direct_message_events": [{
-                    "id": "110", 
-                    "created_timestamp": "5300",
-                    "type": "message_create",
-                    "message_create": {
-                        target: { recipient_id: '1346809710993879047' },
-                        sender_id: 1234,
-                        message_data: {
-                            text: '!subscribe',
-                            entities: { hashtags: [], symbols: [], user_mentions: [], urls: [] }
-                        }
+                "id": "110", 
+                "created_timestamp": "5300",
+                "type": "message_create",
+                "message_create": {
+                    target: { recipient_id: '1346809710993879047' },
+                    sender_id: 1234,
+                    message_data: {
+                        text: '!subscribe',
+                        entities: { hashtags: [], symbols: [], user_mentions: [], urls: [] }
                     }
+                }
             }]
         };
 

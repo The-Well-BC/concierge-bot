@@ -21,7 +21,6 @@ describe('Sending alerts', function() {
     it('Send alerts for 1 day period', function() {
         return alertsModel.sendAlerts('1 day')
         .then(res => {
-            console.log('Sent Alerts', res);
             expect(res).to.satisfy( arr => {
                 let oneTwitter = arr.some(item => {
                     return item.event && item.event.type === 'message_create';
@@ -55,11 +54,8 @@ describe('Sending alerts', function() {
     });
 
     it('Send alerts for 5 minute period', function() {
-        console.log('BALSH');
         return alertsModel.sendAlerts('5 min')
         .then(res => {
-            console.log('fETCHED');
-            // console.log('Sent Alerts 5 mins', res);
             expect(res).to.satisfy( arr => {
                 if(arr.length > 1) {
                     let oneTwitter = arr.some(item => {

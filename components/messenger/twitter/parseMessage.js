@@ -3,7 +3,6 @@ const format = require('../../messageFormats/plain');
 module.exports = (payload) => {
     let command, text, params;
     let data, message;
-    console.log('PAYLOAD', payload);
 
     if(payload.direct_message_events)
         data = payload.direct_message_events[0];
@@ -17,7 +16,7 @@ module.exports = (payload) => {
 
         let paramsText = text_.replace(/\s+/g, ' ').match(/(?<=\!\w+\s+).+/g);
 
-        params = (paramsText) ? paramsText[0].split(' ') : null;
+        params = (paramsText) ? paramsText[0] : null;
 
         if(command === 'subscribe' && params == null)
             params = 'all';

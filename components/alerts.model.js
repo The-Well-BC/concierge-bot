@@ -10,11 +10,8 @@ module.exports = {
     sendAlerts: function(interval, limit = 10) {
         let payload = [];
         const nfts = nftFn(interval);
-        return nfts.fetchDrops(limit)
-        .then(tradingDrops => {
-            payload = tradingDrops;
-            return nfts.fetchPurchases(limit)
-        }).then(res => {
+        return nfts.fetchEvents(limit)
+        .then(res => {
             payload.push(...res);
 
             return subdao.fetchSubscription()

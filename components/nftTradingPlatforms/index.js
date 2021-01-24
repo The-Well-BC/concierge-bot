@@ -1,5 +1,4 @@
-const drops = require('./fetchDrops');
-const purchases = require('./fetchTransactions');
+const events = require('./fetchEvents');
 const fetchCreators = require('./fetchCreators');
 
 module.exports = (frequency) => {
@@ -27,8 +26,7 @@ module.exports = (frequency) => {
     }
     
     return {
-        fetchDrops: (limit) => drops(startTime, limit),
-        fetchPurchases: (limit) => purchases(startTime, limit),
+        fetchEvents: (limit) => events(startTime, limit),
         fetchCreators: (limit) => fetchCreators(limit)
     }
 }

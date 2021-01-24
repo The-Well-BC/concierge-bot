@@ -1,6 +1,5 @@
 let drops = require('./drops');
-let purchases = require('./purchases');
-const bids = require('./bids');
+let transactions = require('./transactions');
 
 module.exports = {
     fetchEvents: (startTime, limit) => {
@@ -9,7 +8,7 @@ module.exports = {
         return drops(startTime, number)
         .then(res => {
             events = res
-            return purchases(startTime, number);
+            return transactions(startTime, number);
         })
         .then(res => {
             events.push(...res);

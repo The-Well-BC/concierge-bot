@@ -102,7 +102,7 @@ describe('Telegram functions', function() {
             chatID: 1234,
             command: {
                 name: 'stoked',
-                params: ['foo', 'bar']
+                params: 'foo bar'
             }
         });
     });

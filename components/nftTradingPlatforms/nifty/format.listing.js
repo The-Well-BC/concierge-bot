@@ -1,5 +1,4 @@
 module.exports = function(item) {
-    console.log('ITEM LISTING', item);
     let nft = {
         name: item.NiftyObject.name,
         url: `https://niftygateway.com/itemdetail/secondary/${ item.NiftyObject.contractAddress }`,

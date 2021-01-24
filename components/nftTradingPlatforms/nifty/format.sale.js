@@ -4,7 +4,7 @@ module.exports = function(item) {
         url: `https://niftygateway.com/itemdetail/secondary/${ item.NiftyObject.contractAddress }`,
         img: item.NiftyObject.image_url,
         date: item.Timestamp,
-        event: 'listing',
+        event: 'sale',
         platform: 'nifty',
         transaction: {
             price: '$' + item.SaleAmountInCents/100

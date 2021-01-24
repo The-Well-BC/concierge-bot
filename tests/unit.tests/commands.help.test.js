@@ -2,7 +2,6 @@ const chai = require('chai').use(require('chai-as-promised'));
 const expect = chai.expect;
 const assert = chai.assert;
 const commands = require('../../components/commands');
-const plain = require('../../components/messageFormats/plain');
 const markdown = require('../../components/messageFormats/markdown');
 
 describe('Test commands: Help command', function() {
@@ -13,8 +12,8 @@ describe('Test commands: Help command', function() {
         }
 
         let promises = [
-            commands(payload, 'twitter', plain),
-            commands(payload, 'telegram', markdown)
+            commands(payload, 'twitter'),
+            commands(payload, 'telegram')
         ];
 
         return Promise.all(promises)
@@ -66,38 +65,14 @@ describe('Test commands: Help command', function() {
         }
 
         let messageFns = [
-            commands(payload, 'telegram', plain),
-            commands(payload, 'twitter', plain)
+            commands(payload, 'telegram'),
+            commands(payload, 'twitter')
         ]
 
-        console.log('PROMISED MESAGE', messageFns[0]);
         return Promise.all(messageFns)
         .then(messages => {
             expect(messages).to.all.have.keys('text', 'replies');
             expect(messages[0].text).to.have.string('Hello littlezigy');
-        });
-    });
-
-    it('Help command: subscribe', function() {
-        let payload = {
-            command: {
-                name: 'help',
-                params: [ 'subscribe' ]
-            },
-            user: { username: 'Adesuwa' }
-        }
-
-        return commands(payload, 'twitter', plain)
-        .then(message => {
-            expect(message).to.be.an('object').and.have.keys('text', 'replies');
-            expect(message.text).to.equal('You can subscribe to alerts from only certain platforms. \nTo subscribe to all platforms, simply type !subscribe. To subscribe to alerts from a particular platform, just type !subscribe <platform>.\n If you would like to receive updates from Zora instead, type !subscribe zora.');
-            expect(message.replies).to.have.deep.members([
-                    {text: '!subscribe'},
-                    {text: '!subscribe zora'},
-                    {text: '!subscribe nifty'},
-                    {text: '!subscribe superrare'},
-                    {text: '!subscribe foundation'}
-            ]);
         });
     });
 });
