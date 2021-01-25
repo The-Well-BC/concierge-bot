@@ -1,7 +1,6 @@
 const dateFormatter = require('../utils/dateFormatter');
 
 module.exports = function(payload) {
-    let text = `${product} was put up for sale`;
     let dDate = payload.date;
 
     if(payload.closedOn) {
@@ -12,6 +11,8 @@ module.exports = function(payload) {
 
     let seller = payload.seller;
     let product = payload.name;
+
+    let text = `${product} was put up for sale`;
 
     if(payload.transaction && payload.transaction.price)
         text = ` at a price of *${ payload.transaction.price }*\n`;
