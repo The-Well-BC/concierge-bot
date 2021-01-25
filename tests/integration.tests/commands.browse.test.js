@@ -6,8 +6,6 @@ const clone = require('rfdc')();
 const commands = require('../../components/commands');
 const samplePayload = require('../samplePayload');
 
-const markdown = require('../../components/messageFormats/markdownV2');
-
 describe('The Browse Command', function() {
     const payload_ = {
         command: { },
@@ -21,7 +19,7 @@ describe('The Browse Command', function() {
             command: { name: 'browse' }
         }
 
-        return commands(payload, 'telegram', markdown)
+        return commands(payload, 'telegram')
         .then(message => {
             expect(message).to.be.an('object');
             expect(message).to.include.keys('text', 'replies');
@@ -42,8 +40,8 @@ describe('The Browse Command', function() {
         }
 
         let promises = [
-            commands(payload, 'telegram', markdown),
-            commands(payload, 'twitter', markdown)
+            commands(payload, 'telegram'),
+            commands(payload, 'twitter')
         ]
 
         return Promise.all(promises)

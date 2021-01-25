@@ -1,6 +1,5 @@
 const sendText = require('./api/sendText');
 const sendPhoto = require('./api/sendPhoto');
-const markdown = require('../../messageFormats/markdown');
 const prepareMessages = require('./prepareMessages');
 const parseMessage = require('./parseMessage');
 
@@ -9,8 +8,7 @@ module.exports = {
     prepareMessage: prepareMessages,
     parseMessage,
 
-    format: markdown,
-    formatter: markdown,
+    format: 'markdown',
 
     sendMessage(payload, chatIDs) {
         let photo = (payload.img != null || undefined) ?

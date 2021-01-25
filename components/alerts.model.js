@@ -5,6 +5,8 @@ const subscriptionFilter = require('./subscriptionFilter');
 const telegram = require('./messenger/telegram');
 const twitter = require('./messenger/twitter');
 
+const messages = require('./messages');
+
 module.exports = {
     //sendAlerts: function(messages, interval) {
     sendAlerts: function(interval, limit = 10) {
@@ -21,23 +23,24 @@ module.exports = {
             let sortedMessages = {};
 
             subscriptions.push({ chatID: 'all', messenger: 'twitter' });
-            sortedMessages.telegram = subscriptionFilter(payload, subscriptions.filter(i => i.messenger === 'telegram'));
+
             sortedMessages.twitter = subscriptionFilter(payload, subscriptions.filter(i => i.messenger === 'twitter'));
+            sortedMessages.telegram = subscriptionFilter(payload, subscriptions.filter(i => i.messenger === 'telegram'));
 
             let telegramAlerts = sortedMessages.telegram.map(p =>  {
-                return { message: telegram.formatter.alertMessage(p.payload), chatIDs: p.chatIDs }
+                return { message: messages.alertMessage(p.payload, telegram.format), chatIDs: p.chatIDs }
             });
 
             let twitterAlerts = sortedMessages.twitter.map(p =>  {
-                return { message: twitter.formatter.alertMessage(p.payload), chatIDs: p.chatIDs }
+                return { message: messages.alertMessage(p.payload, twitter.format), chatIDs: p.chatIDs }
             });
 
-            let messages = telegramAlerts.map(p => telegram.sendMessage(p.message, p.chatIDs));
-            messages.push(
+            let promises = telegramAlerts.map(p => telegram.sendMessage(p.message, p.chatIDs));
+            promises.push(
                 ...twitterAlerts.map(p => twitter.sendMessage(p.message, p.chatIDs))
             );
 
-            return Promise.all(messages);
+            return Promise.all(promises);
         });
     }
 }

@@ -1,6 +1,5 @@
 const expect = require('chai').expect;
 const commands = require('../../components/commands');
-const markdown = require('../../components/messageFormats/markdownV2');
 
 const formats = ['plain', 'markdown'];
 const messengers = ['twitter', 'telegram']
@@ -70,7 +69,7 @@ describe('Commands: Start', function() {
 
         return Promise.all(promises)
 
-        return commands(payload, 'telegram', markdown)
+        return commands(payload, 'telegram')
         .then(message => {
             expect(message).to.be.an('object').and.have.keys('text', 'replies');
             expect(message.replies).to.have.deep.members([ {text: '/help subscribe' } ]);
@@ -84,7 +83,7 @@ describe('Commands: Start', function() {
             user: { username: 'Adesuwa' }
         }
 
-        return commands(payload, 'twitter', markdown)
+        return commands(payload, 'twitter')
         .then(message => {
             expect(message).to.be.an('object').and.have.keys('text', 'replies');
             expect(message.replies).to.have.deep.members([ {text: '!help subscribe' } ]);

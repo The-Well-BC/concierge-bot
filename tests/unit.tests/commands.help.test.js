@@ -2,7 +2,6 @@ const chai = require('chai').use(require('chai-as-promised'));
 const expect = chai.expect;
 const assert = chai.assert;
 const commands = require('../../components/commands');
-const markdown = require('../../components/messageFormats/markdown');
 
 describe('Test commands: Help command', function() {
     it('Text help in any case', function() {

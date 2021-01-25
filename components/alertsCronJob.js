@@ -7,8 +7,7 @@ module.exports = () => {
     if(process.env.NODE_ENV !== 'test') {
         // Ten Minutes
         cron.schedule('*/10 * * * *', function() {
-            console.log('SENDING ALERTS');
-            return alertsModel.sendAlerts('1 day')
+            return alertsModel.sendAlerts('10 min')
         });
 
         // Daily

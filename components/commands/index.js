@@ -49,7 +49,8 @@ module.exports = (payload, messenger) => {
             response = formatter.help(messenger, format, payload.command.params);
             break;
         default:
-            response = formatter.error(format).badCommand;
+            console.log('NOT FOUND');
+            response = formatter.error(null, messenger).badCommand;
             break;
     }
 

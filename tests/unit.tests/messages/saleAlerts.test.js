@@ -35,14 +35,16 @@ describe('Test NFT event alerts: SALE', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain).to.have.property('text', 'Mystery Box X by Old Frog sold to John Sommet for $80.53 on November 1, 2020 (7:42pm UTC)\n\nMORE:\nhttps://one.two.three\nvia: Nifty Gateway');
-        expect(markdown).to.have.property('text', '[Mystery Box X](https://one.two.three) by Old Frog sold to John Sommet for $80.53 on November 1, 2020 (7:42pm UTC)\n\nMORE:\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\nvia: [Nifty Gateway](https://niftygateway.com)');
+        expect(plain).to.have.property('text', 'Mystery Box X by Old Frog sold to John Sommet for $80.53 on November 1, 2020 (7:42pm UTC)\n\nMORE:\n\nhttps://one.two.three\n\nvia: Nifty Gateway');
+        // expect(markdown).to.have.property('text', '[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53 on November 1, 2020 (7:42pm UTC)\n\nMORE:\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\nvia: [Nifty Gateway](https://niftygateway.com)');
+        expect(markdown).to.have.property('text', '[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53 on November 1, 2020 (7:42pm UTC)\n\nvia: [Nifty Gateway](https://niftygateway.com)');
     });
 
     it('When NFT url is present', function() {
         let payload = {
             ...minPayload,
             url: 'https://one.two.three',
+            creator: { name: 'Old Frog' },
             transaction: {
                 price: '$80.53',
             }
@@ -54,8 +56,8 @@ describe('Test NFT event alerts: SALE', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain.text).to.have.string('Mystery Box X by Old Frog')
-        expect(markdown.text).to.have.string('[Mystery Box X](https://one.two.three)');
+        expect(plain.text).to.match(/^Mystery Box X by Old Frog/);
+        expect(markdown.text).to.match(/^\[Mystery Box X\]\(https:\/\/one.two.three\) by Old Frog/);
     });
 
     it('When image is present', function() {
@@ -90,7 +92,7 @@ describe('Test NFT event alerts: SALE', function() {
         const [plain, markdown, markdownV2] = alertMessages;
 
         expect(plain.text).to.match(/^Mystery Box X/);
-        expect(markdown.text).to.match('^Mystery Box X ');
+        expect(markdown.text).to.match(/^Mystery Box X /);
     });
 
     it('When buyer property is not available', function() {
@@ -155,31 +157,8 @@ describe('Test NFT event alerts: SALE', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain.text).to.have.string('$80.53 on November 1, 2020 (7:42pm UTC)\nMystery Box X is currently trading at $89.33\nView Old Frog\'s other creations - https://moon.jpeg.com/u/neue-goods\n\nvia: Nifty Gateway');
-        expect(markdown).to.have.property('text', 'John Sommet bought Mystery Box X for $80.53 on November 1, 2020 (7:42pm UTC)\nMystery Box X is currently trading at $89.33\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\nvia: [Nifty Gateway](https://niftygateway.com)');
-    });
-
-    it('When NFT price is stated ', function() {
-
-        let payload = {
-            ...minPayload,
-            price: '$89.33',
-            transaction: {
-                price: '$80.53',
-            },
-            buyer: {
-                name: 'John Sommet'
-            },
-        }
-
-        let alertMessages = formats.map(format => { 
-            return messages.alertMessage(payload, format);
-        });
-
-        const [plain, markdown, markdownV2] = alertMessages;
-
-        expect(plain.text).to.have.string('$80.53 on November 1, 2020 (7:42pm UTC)\nMystery Box X is currently trading at $89.33\nView Old Frog\'s other creations - https://moon.jpeg.com/u/neue-goods\n\nvia: Nifty Gateway');
-        expect(markdown).to.have.property('text', 'John Sommet bought Mystery Box X for $80.53 on November 1, 2020 (7:42pm UTC)\nMystery Box X is currently trading at $89.33\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\nvia: [Nifty Gateway](https://niftygateway.com)');
+        expect(plain.text).to.have.string('Mystery Box X is currently trading at $89.33');
+        expect(markdown.text).to.have.string('Mystery Box X is currently trading at $89.33');
     });
 
     it('When transaction price is not present', function() {
@@ -191,6 +170,9 @@ describe('Test NFT event alerts: SALE', function() {
             buyer: {
                 name: 'John Sommet'
             },
+            creator: {
+                name: 'Old Frog',
+            }
         }
 
         let alertMessages = formats.map(format => { 
@@ -199,8 +181,10 @@ describe('Test NFT event alerts: SALE', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain).to.have.property('text', 'John Sommet bought a Mystery Box X token on November 1, 2020 (7:42pm UTC)\nMystery Box X is currently trading at $89.33\nView Old Frog\'s other creations - https://moon.jpeg.com/u/neue-goods\n\nvia: Nifty Gateway');
-        expect(markdown).to.have.property('text', 'John Sommet bought a Mystery Box X token on November 1, 2020 (7:42pm UTC)\nMystery Box X is currently trading at $89.33\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\nvia: [Nifty Gateway](https://niftygateway.com)');
+        expect(alertMessages).to.all.satisfy(message => {
+            expect(message.text).to.match(/^Mystery Box X by Old Frog sold to John Sommet on/);
+            return true;
+        });
     });
 });
 

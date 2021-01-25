@@ -1,5 +1,3 @@
-const format = require('../../messageFormats/plain');
-
 module.exports = (payload) => {
     let command, text, params;
     let data, message;
@@ -30,6 +28,6 @@ module.exports = (payload) => {
         ...text && {text},
         chatID: data.message_create.sender_id,
         command: {name: command, ...params && {params} },
-        formatter: format
+        format: 'plain'
     }
 }

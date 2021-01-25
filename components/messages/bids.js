@@ -10,15 +10,36 @@ module.exports = function(payload) {
 
     let { date, time } = dateFormatter(dDate);
 
-    let seller = payload.seller;
     let product = payload.name;
+    let buyer, seller;
+    if(payload.buyer) {
+        if(payload.buyer.name)
+            buyer = payload.buyer.name;
+    }
 
-    if(payload.event === 'listing') {
-        text = `${product} was put up for sale at a price of *${ payload.price }*.\n`;
+    if(payload.seller) {
+        if(payload.seller.name)
+            seller = payload.seller.name;
+    }
+
+    switch(payload.event) {
+        case 'listing':
+            text = `${product} was put up for sale`;
+            if(payload.transaction && payload.transaction.price)
+                text = ` at a price of *${ payload.transaction.price }*`;
+            text = `.\n`;
+
+            break;
+        case 'offer':
+            text = `${product} was put up for sale`;
+            if(payload.transaction && payload.transaction.price)
+                text = ` at a price of *${ payload.transaction.price }*`;
+            text = `.\n`;
+
     }
 
     text += `Date: ${ date } (${ time })`;
-    if(payload.creator.url) {
+    if(payload.creator && payload.creator.url) {
         let cname;
         if(payload.creator.name.slice(-1) == 's')
             text += `\nView ${ payload.creator.name }' other NFTs - ${ payload.creator.url }`;

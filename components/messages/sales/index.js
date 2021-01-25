@@ -4,19 +4,40 @@ const markdown = require('./format.markdown');
 const markdownV2 = require('./format.markdownV2');
 
 module.exports = function(payload, format) {
-    let text;
+    let textParts;
+    let { date, time } = dateFormatter(payload.date);
+    let dateStr = `${ date } (${time})`, price, txPrice;
+
+    if(payload.transaction && payload.transaction.price)
+        txPrice = payload.transaction.price;
 
     switch(format) {
         case 'plain':
-            text = plain(payload, format)
+            textParts = plain(payload, format)
             break;
         case 'markdown':
-            text = markdown(payload, format);
-            break;
         case 'markdownV2':
         case 'markdownv2':
-            text = markdownV2(payload, format);
+            textParts = markdown(payload, format);
             break;
+    }
+
+    const { nftName, creator, buyer, more } = textParts;
+
+    let text = `${ nftName } by ${ creator } sold to ${ buyer }`;
+
+    if(txPrice)
+        text += ` for ${ txPrice }`
+
+    text += ` on ${ dateStr }`;
+
+    if(payload.price)
+        text += `\n${ nftName } is currently trading at ${ payload.price }`;
+
+    if(more && Array.isArray(more) && more.length > 0) {
+        text += `\n\nMORE:`;
+
+        more.forEach(i => text += `\n${ i }`);
     }
 
     return text;

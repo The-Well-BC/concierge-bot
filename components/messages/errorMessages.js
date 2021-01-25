@@ -1,4 +1,5 @@
-module.exports = (err, messenger) => {
+module.exports = function(err, messenger) {
+    console.log('MERRREO ', err, messenger, arguments);
     if(!err) {
         return {
             badCommand: {

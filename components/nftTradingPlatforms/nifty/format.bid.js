@@ -2,7 +2,6 @@ module.exports = function(item) {
     let niftyObj = item.NiftyObject || item.UnmintedNiftyObj;
     let nft = {
         name: niftyObj.name || niftyObj.niftyTitle,
-        url: `https://niftygateway.com/itemdetail/secondary/${ niftyObj.contractObj.contractAddress }`,
         img: niftyObj.niftyImageURL,
         date: item.Timestamp,
         event: 'bid',
@@ -15,6 +14,9 @@ module.exports = function(item) {
             url: `https://niftygateway.com/profile/${ item.ListingUserProfile.profile_url }`
         }
     }
+
+    if(niftyObj.contractObj && niftyObj.contractObj.contractAddress)
+        nft.url = `https://niftygateway.com/itemdetail/secondary/${ niftyObj.contractObj.contractAddress }`;
 
     if(item.Type === 'offer') {
         nft.event = 'offer';

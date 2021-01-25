@@ -3,10 +3,9 @@ const clone = require('rfdc')();
 
 const command = require('../../components/commands');
 
-const plain = require('../../components/messageFormats/plain');
-const markdown = require('../../components/messageFormats/markdownV2');
+const thingies = [{format: 'plain', messenger: 'twitter'}, {format:'markdown', messenger:'telegram'}];
 
-describe('Other Commands', function() {
+describe('#dev Other Commands', function() {
     it('Unrecoginzed command', function() {
         const payload = {
             command: { name: 'pafloopa', },
@@ -14,10 +13,10 @@ describe('Other Commands', function() {
             chatID: 1234
         }
 
-        let promises = [
-            command(payload, 'telegram', markdown),
-            command(payload, 'twitter', plain)
-        ]
+        let promises = thingies.map(o => {
+            payload.format = o.format;
+            return command(payload, o.messenger);
+        });
 
         return Promise.all(promises)
         .then(messages => {

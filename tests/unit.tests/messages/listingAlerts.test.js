@@ -19,13 +19,13 @@ describe('Test listing texts', function() {
             },
             price: '$73.58',
             date: '2020-08-31T19:00:00.000Z',
-            platform: 'foundation',
+            platform: 'superrare',
             brand: 'postdigital',
             img: 'https://images.ctfassets.net/9tp4nbs38ooy/4UmMq3wdsrhbRq8sK7YNbR/f0d1d4cf77dfe6ffdb1f1e63ef990360/Neuegoods_Box_006.jpg'
         }
 
         let alertMessage =  messages.alertMessage(data);
-        expect(alertMessage).to.have.property('text', 'Unit-002 was put up for sale at a price of *$73.58*.\nDate: August 31, 2020 (7:00pm UTC)\nView Neue Goods\' other NFTs - https://seller.js\n\nvia: Foundation');
+        expect(alertMessage).to.have.property('text', 'Unit-002 was put up for sale at a price of *$73.58*.\nDate: August 31, 2020 (7:00pm UTC)\nView Neue Goods\' other NFTs - https://seller.js\n\nvia: SuperRare');
     });
 
     it('Seller url is not available', function() {
@@ -41,13 +41,13 @@ describe('Test listing texts', function() {
             },
             price: '$73.58',
             date: '2020-08-31T19:00:00.000Z',
-            platform: 'foundation',
+            platform: 'superrare',
             brand: 'postdigital',
             img: 'https://images.ctfassets.net/9tp4nbs38ooy/4UmMq3wdsrhbRq8sK7YNbR/f0d1d4cf77dfe6ffdb1f1e63ef990360/Neuegoods_Box_006.jpg'
         }
 
         let alertMessage =  messages.alertMessage(data);
-        expect(alertMessage).to.have.property('text', 'Unit-002 was put up for sale at a price of *$73.58*.\nDate: August 31, 2020 (7:00pm UTC)\n\nvia: Foundation');
+        expect(alertMessage).to.have.property('text', 'Unit-002 was put up for sale at a price of *$73.58*.\nDate: August 31, 2020 (7:00pm UTC)\n\nvia: SuperRare');
     });
 });
 

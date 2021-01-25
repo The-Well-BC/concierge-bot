@@ -45,6 +45,7 @@ module.exports = {
 
         switch(format) {
             case 'plain':
+            default:
                 platform = nftPlatforms[payload.platform].name;
                 text += `via: ${ platform }`;
                 break;

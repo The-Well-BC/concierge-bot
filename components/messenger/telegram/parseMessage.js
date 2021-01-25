@@ -1,5 +1,3 @@
-const format = require('../../messageFormats/markdownV2');
-
 module.exports = (payload) => {
     let text_ = payload.message.text;
     let chatID = payload.message.chat.id;
@@ -32,6 +30,6 @@ module.exports = (payload) => {
         ...text && {text}, user,
         command: {name: command, ...params && {params} },
         chatID,
-        formatter: format
+        format: 'markdown'
     };
 }

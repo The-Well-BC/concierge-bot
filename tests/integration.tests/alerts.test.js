@@ -18,8 +18,8 @@ describe('Sending alerts', function() {
         });
     });
 
-    it('Send alerts for 1 day period', function() {
-        return alertsModel.sendAlerts('1 day')
+    it('Send alerts for 5 day period', function() {
+        return alertsModel.sendAlerts('5 day')
         .then(res => {
             expect(res).to.satisfy( arr => {
                 let oneTwitter = arr.some(item => {

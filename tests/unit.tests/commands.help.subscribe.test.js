@@ -2,8 +2,6 @@ const chai = require('chai').use(require('chai-as-promised'));
 const expect = chai.expect;
 const assert = chai.assert;
 const commands = require('../../components/commands');
-const plain = require('../../components/messageFormats/plain');
-const markdown = require('../../components/messageFormats/markdown');
 
 const formats = ['plain', 'markdown'];
 const messengers = ['twitter', 'telegram']
