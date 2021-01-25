@@ -13,6 +13,7 @@
     "test:messengers": ". ./.env && NODE_ENV=test mocha --timeout 20000 --recursive tests/integration.tests/messengers/ --watch",
     "test:messages": ". ./.env && NODE_ENV=test mocha --timeout 20000 --recursive tests/unit.tests/messagingFormats/ --watch",
     "test:unit": "mocha --recursive tests/unit.tests --watch",
+    "update-staging": "git pull origin main && npm i && npm stop && npm start",
     "dev:exportSchema": ". ./SQL/scripts/exportDevSchema.sh"
   },
   "repository": {
