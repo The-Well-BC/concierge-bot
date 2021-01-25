@@ -14,7 +14,10 @@ module.exports = function(payload) {
     let product = payload.name;
 
     if(payload.event === 'listing') {
-        text = `${product} was put up for sale at a price of *${ payload.price }*.\n`;
+        text = `${product} was put up for sale`;
+        if(payload.transaction.price)
+            text = ` at a price of *${ payload.transaction.price }*\n`;
+        text = `.\n`;
     }
 
     text += `Date: ${ date } (${ time })`;
