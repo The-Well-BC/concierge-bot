@@ -17,7 +17,9 @@ describe('Test listing texts', function() {
                 name: 'HeyGoomba',
                 url: 'https://goomba.com/'
             },
-            price: '$73.58',
+            transaction: {
+                price: '$73.58',
+            },
             date: '2020-08-31T19:00:00.000Z',
             platform: 'superrare',
             brand: 'postdigital',
@@ -39,7 +41,9 @@ describe('Test listing texts', function() {
             seller: {
                 name: 'HeyGoomba'
             },
-            price: '$73.58',
+            transaction: {
+                price: '$73.58',
+            },
             date: '2020-08-31T19:00:00.000Z',
             platform: 'superrare',
             brand: 'postdigital',
