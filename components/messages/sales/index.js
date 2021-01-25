@@ -24,7 +24,11 @@ module.exports = function(payload, format) {
 
     const { nftName, creator, buyer, more } = textParts;
 
-    let text = `${ nftName } by ${ creator } sold to ${ buyer }`;
+    let text = nftName;
+    if(creator)
+        text += ` by ${ creator }`;
+
+    text += ` sold to ${ buyer }`;
 
     if(txPrice)
         text += ` for ${ txPrice }`
