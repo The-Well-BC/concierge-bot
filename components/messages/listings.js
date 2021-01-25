@@ -15,7 +15,7 @@ module.exports = function(payload) {
 
     if(payload.event === 'listing') {
         text = `${product} was put up for sale`;
-        if(payload.transaction.price)
+        if(payload.transaction && payload.transaction.price)
             text = ` at a price of *${ payload.transaction.price }*\n`;
         text = `.\n`;
     }
