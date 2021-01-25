@@ -15,7 +15,7 @@ describe('Fetch NFT events', function() {
     const now = new Date();
     let startTime = new Date().setDate(now.getDate() - 220);
 
-    it('#dev Fetch from Nifty Gateway', function() {
+    it('Fetch from Nifty Gateway', function() {
         const limit = 15;
         startTime = new Date().setDate(now.getDate() - 8);
 

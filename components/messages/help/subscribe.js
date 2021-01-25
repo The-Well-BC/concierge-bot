@@ -35,12 +35,12 @@ module.exports = function(messenger, format, params) {
 
     switch(helpParameter) {
         case 'subscribe':
-            let text = 'You can subscribe to certain creators, events (drops, sales, listings, bids, offers), platforms (Nifty Gateway, SuperRare...). Combine subscribe commands to create a subscription filter.\nFor example,';
+            let text = 'You can subscribe to certain creators, events (drops, sales, listings, bids, offers), platforms (Nifty Gateway, SuperRare...).\n\nCombine subscribe commands to create a subscription filter.\nFor example,\n\n';
             if(format === 'plain')
-                text += '\nSubscribe to all drops from creator CryptoKitties on Nifty Gateway.';
+                text += 'subscribe to all drops from creator CryptoKitties on Nifty Gateway.';
             else if(format === 'markdown')
-                text += '\n*Subscribe to all drops from creator CryptoKitties on Nifty Gateway*.';
-            text += '\nUse the options below to find more information on subscription usecases.\nTo view your subscription filters, type subscription filters';
+                text += '*subscribe to all drops from creator CryptoKitties on Nifty Gateway*.';
+            text += '\n\nUse the options below to find more information on subscription usecases.\nTo view your subscription filters, type subscription filters';
 
             response = {
                 text,

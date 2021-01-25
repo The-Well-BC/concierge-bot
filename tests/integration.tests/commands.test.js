@@ -5,7 +5,7 @@ const command = require('../../components/commands');
 
 const thingies = [{format: 'plain', messenger: 'twitter'}, {format:'markdown', messenger:'telegram'}];
 
-describe('#dev Other Commands', function() {
+describe('Other Commands', function() {
     it('Unrecoginzed command', function() {
         const payload = {
             command: { name: 'pafloopa', },

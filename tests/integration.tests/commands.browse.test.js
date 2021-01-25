@@ -6,7 +6,7 @@ const clone = require('rfdc')();
 const commands = require('../../components/commands');
 const samplePayload = require('../samplePayload');
 
-describe('The Browse Command', function() {
+describe('#dev The Browse Command', function() {
     const payload_ = {
         command: { },
         user: { username: 'Adesuwa' },

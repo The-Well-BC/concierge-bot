@@ -5,6 +5,7 @@ const commands = require('../../components/commands');
 
 const formats = ['plain', 'markdown'];
 const messengers = ['twitter', 'telegram']
+let commandChars = ['!', '/'];
 
 describe('#dev Test commands: Help command', function() {
     it('Help command: subscribe', function() {
@@ -13,30 +14,36 @@ describe('#dev Test commands: Help command', function() {
                 name: 'help',
                 params: 'subscribe'
             },
-            format: 'plain',
             user: { username: 'Adesuwa' }
         }
 
         let promises = Array.apply(null, {length: 2}).map((a, i) => {
             payload.format = formats[i];
-            return commands(payload, 'twitter')
+            return commands(payload, messengers[i % 2])
         });
 
         return Promise.all(promises)
         .then(messages => {
             expect(messages).to.all.have.keys('text', 'replies');
-            expect(messages[0].text).to.equal('You can subscribe to certain creators, events (drops, sales, listings, bids, offers), platforms (Nifty Gateway, SuperRare...). Combine subscribe commands to create a subscription filter.\nFor example,\nSubscribe to all drops from creator CryptoKitties on Nifty Gateway.\nUse the options below to find more information on subscription usecases.\nTo view your subscription filters, type subscription filters');
-            expect(messages[1].text).to.equal('You can subscribe to certain creators, events (drops, sales, listings, bids, offers), platforms (Nifty Gateway, SuperRare...). Combine subscribe commands to create a subscription filter.\nFor example,\n*Subscribe to all drops from creator CryptoKitties on Nifty Gateway*.\nUse the options below to find more information on subscription usecases.\nTo view your subscription filters, type subscription filters');
-            expect(messages).to.all.satisfy(message => {
-                expect(message.replies).to.have.deep.members([
-                    {text: '!subscribe'},
-                    {text: '!help subscribe creators'},
-                    {text: '!help subscribe events'},
-                    {text: '!help subscribe platforms'},
-                    {text: '!help subscription filters'}
-                ]);
+            expect(messages[0].text).to.have.string('subscribe to all drops from creator CryptoKitties on Nifty Gateway.', 'subscription filters');
+            expect(messages[1].text).to.have.string('*subscribe to all drops from creator CryptoKitties on Nifty Gateway*.', '*type subscription filters*');
 
-                return true;
+            expect(messages).to.satisfy(arr => {
+                return arr.every((message, i) => {
+                    expect(message.text).to.match(/^You can subscribe to certain creators, events \(drops, sales, listings, bids, offers\), platforms \(Nifty Gateway, SuperRare\.\.\.\)/);
+                    expect(message.text).to.have.string('\n\nCombine subscribe commands to create a subscription filter.\nFor example,\n', '\n\nUse the options below to find more information on subscription usecases.\n\nTo view your subscription filters, type');
+
+                    let c = commandChars[i];
+                    expect(message.replies).to.have.deep.members([
+                        {text: `${c}subscribe`},
+                        {text: `${c}help subscribe creators`},
+                        {text: `${c}help subscribe events`},
+                        {text: `${c}help subscribe platforms`},
+                        {text: `${c}help subscription filters`}
+                    ]);
+
+                    return true;
+                });
             });
         });
     });
@@ -47,7 +54,6 @@ describe('#dev Test commands: Help command', function() {
                 name: 'help',
                 params: 'subscribe platforms'
             },
-            format: 'plain',
             user: { username: 'Adesuwa' }
         }
 
@@ -63,23 +69,23 @@ describe('#dev Test commands: Help command', function() {
         .then(messages => {
             expect(messages).to.all.have.keys('text', 'replies');
             expect(messages).to.satisfy(arr => {
-                expect(messages[0]).to.eql({
-                    text: 'You can choose to subscribe to alerts from only certain platforms.\nTo subscribe to all platforms, simply type !subscribe. To subscribe to alerts from a particular platform, just type !subscribe <platform>.\nFor example, if you would like to receive updates from SuperRare, type !subscribe SuperRare.',
-                    replies: [
-                        {text: '!subscribe nifty'},
-                        {text: '!subscribe superrare'},
-                    ]
-                });
+                expect(messages[0].text).to.have.string(
+                    '!subscribe','!subscribe <platform>.', '!subscribe SuperRare.'
+                );
 
-                expect(messages[1]).to.eql({
-                    text: 'You can choose to subscribe to alerts from only certain platforms.\nTo subscribe to all platforms, simply type */subscribe*. To subscribe to alerts from a particular platform, just type */subscribe <platform>*.\nFor example, if you would like to receive updates from SuperRare, type */subscribe SuperRare*.',
-                    replies: [
-                        {text: '/subscribe nifty'},
-                        {text: '/subscribe superrare'},
-                    ]
-                });
+                expect(messages[1].text).to.have.string( '*/subscribe*', '*/subscribe <platform>*', '*/subscribe SuperRare*');
 
-                return true;
+                return arr.every((message, i) => {
+                    let c = commandChars[i];
+                    expect(message.replies).to.have.deep.members([
+                        {text: `${c}subscribe nifty`},
+                        {text: `${c}subscribe superrare`},
+                    ]);
+
+                    expect(message.text).to.match(/You can choose to subscribe to alerts from only certain platforms.\nTo subscribe to all platforms, simply type \*?[\!\/]subscribe\*?\.\nTo subscribe to alerts from a particular platform, just type \*?[!\/]subscribe <platform>\*?.\nFor example, if you would like to receive updates from SuperRare, type \*?[!\/]subscribe SuperRare/);
+
+                    return true;
+                });
             });
         });
     });
@@ -105,22 +111,17 @@ describe('#dev Test commands: Help command', function() {
         .then(messages => {
             expect(messages).to.all.have.keys('text', 'replies');
             expect(messages).to.satisfy(arr => {
-                expect(messages[0]).to.eql({
-                    text: 'You can subscribe to receive alerts whenever certain events occur.\nEvents you can subscribe to include: Sales, Listings, Bids, Offers and Drops/Releases. To subscribe to one or more events, for example sales and drops, type !subscribe sales, drops.',
-                    replies: [
-                        {text: '!subscribe nifty'},
-                        {text: '!subscribe superrare'},
-                    ]
-                });
-                expect(messages[1]).to.eql({
-                    text: 'You can subscribe to receive alerts whenever certain events occur.\nEvents you can subscribe to include: Sales, Listings, Bids, Offers and Drops/Releases. To subscribe to one or more events, for example sales and drops, type /subscribe sales, drops.',
-                    replies: [
-                        {text: '/subscribe nifty'},
-                        {text: '/subscribe superrare'},
-                    ]
-                });
+                return arr.every((message, i) => {
+                    let c = commandChars[i];
+                    expect(message.text).to.match(/You can subscribe to receive alerts whenever certain events occur.\nEvents you can subscribe to include\: Sales, Listings, Bids, Offers and Drops\/Releases\. To subscribe to one or more events, for example sales and drops, type [!\/]subscribe sales, drops\./);
 
-                return true;
+                    expect(message.replies).to.have.deep.members([
+                        {text: `${c}subscribe nifty`},
+                        {text: `${c}subscribe superrare`},
+                    ]);
+
+                    return true;
+                });
             });
         });
     });
