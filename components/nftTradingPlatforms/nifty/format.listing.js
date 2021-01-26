@@ -7,7 +7,7 @@ module.exports = function(item) {
         event: 'listing',
         platform: 'nifty',
         transaction: {
-            price: '$' + item.SaleAmountInCents/100
+            price: '$' + item.ListingAmountInCents/100
         },
         owner: {
             name: item.ListingUserProfile.name,
