@@ -18,7 +18,7 @@ module.exports = function(item) {
     if(item.Type === 'offer') {
         nft.event = 'offer';
         nft.transaction = {
-            price: '$' + item.BidAmountInCents/100
+            price: '$' + item.OfferAmountInCents/100
         };
     } else {
         nft.transaction = {
