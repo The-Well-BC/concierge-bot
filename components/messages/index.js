@@ -37,6 +37,8 @@ module.exports = {
             case 'sale':
                 text += saleText(payload, format);
                 break;
+            default:
+                return null;
         }
 
         text += '\n\n';

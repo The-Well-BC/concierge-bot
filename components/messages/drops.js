@@ -14,7 +14,8 @@ module.exports = function(payload) {
     let product = `${ payload.name }(${ payload.url })`;
 
 
-    let text = `${ creator } released ${ product } on ${ date } (${ time }).`;
+    let text = '💫 FRESH MINT / DROP\n';
+    text += `${ creator } released ${ product } on ${ date } (${ time }).`;
 
     if(payload.price)
         text += `\nStarting price is ${ payload.price }`;
