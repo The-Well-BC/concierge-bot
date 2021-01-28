@@ -1,6 +1,6 @@
 module.exports = [
     {
         events: ['sale', 'drop'],
-        txPriceGTE: '$500'
+        txPriceGTE: '$1000'
     }
 ]

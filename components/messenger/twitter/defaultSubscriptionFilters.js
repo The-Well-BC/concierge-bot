@@ -1,5 +1,4 @@
 module.exports = [
-    {
-        txPriceGTE: '$500'
-    }
+    { txPriceGTE: '$1000' },
+    { priceGT: '$1000' }
 ]
