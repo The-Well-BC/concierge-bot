@@ -6,9 +6,6 @@ module.exports = function(item) {
         date: item.Timestamp,
         event: 'bid',
         platform: 'nifty',
-        transaction: {
-            price: '$' + item.BidAmountInCents/100
-        },
         seller: {
             name: item.ListingUserProfile.name,
             url: `https://niftygateway.com/profile/${ item.ListingUserProfile.profile_url }`
@@ -20,6 +17,13 @@ module.exports = function(item) {
 
     if(item.Type === 'offer') {
         nft.event = 'offer';
+        nft.transaction = {
+            price: '$' + item.BidAmountInCents/100
+        };
+    } else {
+        nft.transaction = {
+            price: '$' + item.BidAmountInCents/100
+        }
     }
 
     return nft;

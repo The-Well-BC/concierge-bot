@@ -24,6 +24,9 @@ module.exports = function(startTime, limit) {
                 case 'offer':
                     nft = formatBid(item);
                     break;
+                case 'bid':
+                    nft = formatBid(item);
+                    break;
                 default:
                     nft = {platform: 'nifty'}
                     break;

@@ -2,9 +2,17 @@ module.exports = (item) => {
     let url = `https://superrare.co/artwork-v2/${ item.nonFungibleToken.name.replace(/\s/g, '-') }-${ item.nonFungibleToken.tokenId }`;
     let price, transaction = {};
 
-    let buyer = {
-        name: item.sale.buyer.username,
-        url: `https://superrare.co/${ item.sale.buyer.username }`,
+    let buyer = { };
+
+    if(item.sale.buyer) {
+        buyer = {
+            name: item.sale.buyer.username,
+            url: `https://superrare.co/${ item.sale.buyer.username }`,
+        }
+    /*
+    } else if (item.sale.buyerAddress) {
+        buyer.url = 
+    */
     }
 
     transaction.price = item.sale.amount;
