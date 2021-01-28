@@ -60,6 +60,23 @@ module.exports = function(chai, utils) {
                 );
             }
 
+            // Price
+            if(item.price) {
+                if(/^\$\d/.test(item.price)) {
+                    console.log('ITEM PRICE', item.price);
+                    
+                    assert(/\$\s?0/.test(item.price),
+                        'Price should not be $0',
+                        '',
+                        'Price greater than 0',
+                        item.price
+                    );
+                }
+            }
+
+            if(item.transaction && item.transaction.price) {
+            }
+
             assert(events.includes(item.event),
                 'Expected item to have property \'event\' that is #{exp}. Got #{act}',
                 '',

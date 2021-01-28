@@ -9,11 +9,42 @@ const expect = chai.expect;
 const nifty = require('../../../components/nftTradingPlatforms/nifty');
 const superrare = require('../../../components/nftTradingPlatforms/superrare');
 
-describe('Fetch NFT events', function() {
+const nftFn = require('../../../components/nftTradingPlatforms');
+
+describe('#dev Fetch NFT events', function() {
     this.timeout(10000);
 
     const now = new Date();
     let startTime = new Date().setDate(now.getDate() - 220);
+
+    const platformArr = ['nifty', 'superrare'];
+
+    it('Fetch all events', function() {
+        const limit = 15;
+
+        return nftFn('3 day').fetchEvents( limit )
+        .then(res => {
+            expect(res, 'No undefined properties').to.all.have.noUndefinedKeys();
+            expect(res, 'Nft Event test').to.all.be.nftEvent(startTime);
+
+            expect(res).to.satisfy(arr => {
+                let c1 = arr.some(item => {
+                    return item.platform === 'nifty';
+                });
+                let c2 = arr.some(item => {
+                    return item.platform === 'superrare';
+                });
+
+                expect(c1, 'At least one Nifty Gateway item').to.be.true;
+                expect(c2, 'At least one SuperRare item').to.be.true;
+
+                return arr.every(item => {
+                    expect(platformArr).to.include(item.platform);
+                    return true;
+                });
+            });
+        });
+    });
 
     it('Fetch from Nifty Gateway', function() {
         const limit = 15;

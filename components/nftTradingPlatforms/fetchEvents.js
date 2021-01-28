@@ -21,13 +21,13 @@ module.exports = (startTime, limit = 10) => {
     */
     }).then(res => {
         drops = res;
-        return nifty.fetchEvents(startTime, limit = 10)
+        return nifty.fetchEvents(startTime, limit)
         .catch(e => {
             console.error(e);
             return [];
         })
     }).then(res => {
-        drops = res;
+        drops.push( ...res );
         return drops;
     });
 }
