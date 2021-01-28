@@ -22,17 +22,15 @@ module.exports = function(startTime, limit) {
                     nft = formatListing(item);
                     break;
                 case 'offer':
-                    nft = formatBid(item);
-                    break;
                 case 'bid':
                     nft = formatBid(item);
                     break;
                 default:
-                    nft = {platform: 'nifty'}
+                    nft = false
                     break;
             }
 
             return nft;
-        });
+        }).filter(item => item !== false);
     });
 }
