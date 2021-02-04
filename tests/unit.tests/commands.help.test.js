@@ -3,56 +3,37 @@ const expect = chai.expect;
 const assert = chai.assert;
 const commands = require('../../components/commands');
 
-describe('Test commands: Help command', function() {
+let commandChars = ['!', '/'];
+let messengers = ['twitter', 'telegram'];
+
+describe('#dev Test commands: Help command', function() {
     it('Text help in any case', function() {
         let payload = {
             command: { name: 'help', },
             user: { name: 'Adesuwa' }
         }
 
-        let promises = [
-            commands(payload, 'twitter'),
-            commands(payload, 'telegram')
-        ];
+        let promises = messengers.map(messenger => {
+
+            return commands(payload, messenger);
+        });
 
         return Promise.all(promises)
         .then(messages => {
             expect(messages).to.have.lengthOf(2);
             expect(messages).to.all.satisfy(message => {
-                messages.every(message => {
+                return messages.every((message, i) => {
+
+                    let c = commandChars[i];
                     expect(message).to.be.an('object').and.have.keys('text', 'replies');
+
+                    expect(message.replies).to.have.deep.members([
+                        {text: `${c}help subscribe`},
+                        {text: `${c}help unsubscribe`},
+                    ]);
                     return true;
 
                 });
-
-                let plainTextMessage = messages.some(message => {
-                    return (message.replies[0].text === '/help subscribe' );
-                });
-                let markdownMessage = messages.some(message => {
-                    return message.replies[0].text === '!help subscribe';
-                });
-
-                if(!plainTextMessage) {
-                    assert.fail(messages,
-                        [{
-                            replies: [
-                                {text: '/help subscribe'}
-                            ]
-                        }],
-                        'Should have replies for telegram message'); 
-                }
-
-                if(!markdownMessage) {
-                    assert.fail(messages,
-                        [{
-                            replies: [
-                                {text: '/help subscribe'}
-                            ]
-                        }],
-                        'Should have replies for telegram message'); 
-                }
-
-                return true;
             });
         });
     });
