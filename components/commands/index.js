@@ -1,4 +1,6 @@
 const subscribeCommand = require('./command.subscribe');
+const unsubscribeCommand = require('./command.unsubscribe');
+
 let nftPlatforms = require('../nftTradingPlatforms/platformNames');
 const browse = require('./command.browse');
 
@@ -39,6 +41,14 @@ module.exports = (payload, messenger) => {
                 throw e;
             });
 
+        case 'unsubscribe':
+            const unsubscribe = unsubscribeCommand;
+
+            return unsubscribe(messenger, payload.chatID)
+            .then(res => {
+                return formatter.unsubscribe();
+            });
+            break;
         case 'start':
             let name = (payload.user) ? payload.user.name || payload.user.username : null;
 

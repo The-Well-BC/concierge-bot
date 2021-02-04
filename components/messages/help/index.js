@@ -6,7 +6,11 @@ const subscribe = require('./subscribe');
 module.exports = function(messenger, format, params) {
     let subC = commands.subscribe[messenger ];
 
-    let helpReplies = [{ text: commands.help[messenger] + ' subscribe' }];
+    let helpReplies = [
+        { text: commands.help[messenger] + ' subscribe' },
+        { text: commands.help[messenger] + ' unsubscribe' },
+    ];
+
     let helpC = commands.help[messenger];
 
     let subscribeReplies = [{
@@ -28,6 +32,9 @@ module.exports = function(messenger, format, params) {
         switch(params.split(' ')[0]) {
             case 'subscribe':
                 response = subscribe(messenger, format, params);
+                break;
+            case 'unsubscribe':
+                response = { text: 'Text unsubscribe to stop receiving all messages' };
                 break;
             default:
                 response = {text: 'Don\'t have this help item', replies: helpReplies}
