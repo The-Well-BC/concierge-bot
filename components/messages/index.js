@@ -7,6 +7,7 @@ const help = require('./help');
 const start = require('./messages.start');
 const browse = require('./messages.browse');
 const subscribe = require('./messages.subscribe');
+const unsubscribe = require('./messages.unsubscribe');
 const creatorSummary = require('./text.creatorSummary.js');
 const error = require('./errorMessages');
 
@@ -14,6 +15,7 @@ const nftPlatforms = require('../nftTradingPlatforms/platformNames');
 
 module.exports = {
     creatorSummary,
+    unsubscribe,
     subscribe,
     browse,
     start,
