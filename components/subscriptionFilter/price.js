@@ -73,6 +73,9 @@ module.exports = (item, filter) => {
 
             if(priceLTE && !(price <= priceLTE) )
                 passedFilter = false;
+        } else {
+            if(priceGT || priceGTE || priceLT || priceLTE)
+                passedFilter = false;
         }
 
         if(txPrice) {
@@ -86,6 +89,9 @@ module.exports = (item, filter) => {
                 passedFilter = false;
 
             if(txPriceLTE && !(txPrice <= txPriceLTE) )
+                passedFilter = false;
+        } else {
+            if(txPriceGT || txPriceGTE || txPriceLT || txPriceLTE)
                 passedFilter = false;
         }
     }

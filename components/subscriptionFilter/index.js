@@ -20,7 +20,6 @@ module.exports = (payload, chatidArray) => {
         let price = null;
         let txPrice = null;
 
-
         chatidArray.forEach(user => {
             let filters = (user.filters && user.filters.length > 0) ?  user.filters :
                             defaultFilters(user.messenger);
@@ -55,6 +54,7 @@ module.exports = (payload, chatidArray) => {
 
         if(chatIDs.length > 0)
             sorted.push({ payload: item, chatIDs });
+
     });
 
     return sorted;

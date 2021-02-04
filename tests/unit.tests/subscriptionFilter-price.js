@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const subscriptionFilter = require('../../components/subscriptionFilter');
 const ethPrice = require('../../components/ethPrice');
 
-describe('Test Subscription filter: Transaction Price and NFT Price:', function() {
+describe.only('Test Subscription filter: Transaction Price and NFT Price:', function() {
     before(() => {
         ethPrice.reset();
     });
@@ -19,7 +19,8 @@ describe('Test Subscription filter: Transaction Price and NFT Price:', function(
             { name: 'bronn', price: '$1,024.22' },
             { name: 'Broken Broom', price: '$1,000' },
             { name: 'Chicken Boo', price: '$228.21' },
-            { name: 'Old fan', price: '$400' }
+            { name: 'Old fan', price: '$400' },
+            { name: 'No Price NFT' }
         ];
 
         let sortedEvents = subscriptionFilter(events, chats);
@@ -37,7 +38,8 @@ describe('Test Subscription filter: Transaction Price and NFT Price:', function(
             { name: 'bronn', price: '$524.22' },
             { name: 'Broken Broom', price: '$1,000' },
             { name: 'Chicken Boo', price: '58.21 eth' },
-            { name: 'Old fan', price: '$400' }
+            { name: 'Old fan', price: '$400' },
+            { name: 'No Price NFT eth' }
         ];
 
         let subscriptions = [
@@ -69,7 +71,9 @@ describe('Test Subscription filter: Transaction Price and NFT Price:', function(
             { name: 'bronn', transaction: { price: '$1,024.22' } },
             { name: 'Broken Broom', transaction: {price: '$1,000' } },
             { name: 'Chicken Boo', transaction: { price: '$228.21' }},
-            { name: 'Old fan', transaction: {price: '$400' }}
+            { name: 'Old fan', transaction: {price: '$400' }},
+            { name: 'No TX price', transaction: {url: 'https://example.com'}},
+            { name: 'NO TX obj'}
         ];
 
         let sortedEvents = subscriptionFilter(events, chats);
