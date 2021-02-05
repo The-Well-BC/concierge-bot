@@ -34,7 +34,6 @@ module.exports = function(messenger, format, params) {
                 response = subscribe(messenger, format, params);
                 break;
             case 'unsubscribe':
-                console.log('MESSENGER', messenger);
                 response = { text: `Text ${commands.unsubscribe[messenger]} to stop receiving all messages` };
                 break;
             default:
