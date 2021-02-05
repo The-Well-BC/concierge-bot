@@ -2,6 +2,7 @@ const commands = require('../messengerCommands');
 const nfts = require('../../nftTradingPlatforms/platformNames');
 
 const subscribe = require('./subscribe');
+const filter = require('./subscriptionFilter');
 
 module.exports = function(messenger, format, params) {
     let subC = commands.subscribe[messenger ];
@@ -29,16 +30,20 @@ module.exports = function(messenger, format, params) {
             replies: helpReplies
         }
     } else {
-        switch(params.split(' ')[0]) {
-            case 'subscribe':
-                response = subscribe(messenger, format, params);
-                break;
-            case 'unsubscribe':
-                response = { text: `Text ${commands.unsubscribe[messenger]} to stop receiving all messages` };
-                break;
-            default:
-                response = {text: 'Don\'t have this help item', replies: helpReplies}
-                break;
+        if(/(subscription filter|filter)/i.test(params))
+            response = filter(messenger, format, params);
+        else {
+            switch(params.split(' ')[0]) {
+                case 'subscribe':
+                    response = subscribe(messenger, format, params);
+                    break;
+                case 'unsubscribe':
+                    response = { text: `Text ${commands.unsubscribe[messenger]} to stop receiving all messages` };
+                    break;
+                default:
+                    response = {text: 'Don\'t have this help item', replies: helpReplies}
+                    break;
+            }
         }
     }
 
