@@ -1,7 +1,7 @@
 module.exports = (item) => {
     let url = `https://superrare.co/artwork-v2/${ item.nonFungibleToken.name.replace(/\s/g, '-') }-${ item.nonFungibleToken.tokenId }`;
 
-    let price, transaction = {}, buyer, seller, bidder;
+    let price, transaction = {}, buyer, seller, bidder, previousBidder;
 
     switch(item.nftEventType) {
         case 'ACCEPT_BID':
@@ -29,9 +29,17 @@ module.exports = (item) => {
                 bidder = {name: 'An anonymous user'};
             break;
         case 'AUCTION_BID':
-            bidder = {
-                name: item.auctionBid.bidder.username,
-                url: `https://superrare.co/${ item.auctionBid.bidder.username }`
+            if(item.auctionBid.bidder) {
+                bidder = {
+                    name: item.auctionBid.bidder.username,
+                    url: `https://superrare.co/${ item.auctionBid.bidder.username }`
+                }
+            }
+
+            if(item.auctionBid.previousBidder) {
+                previousBidder = {
+                    name: item.auctionBid.previousBidder.username
+                }
             }
             break;
     }
@@ -48,6 +56,7 @@ module.exports = (item) => {
         platform: 'superrare',
         url,
         ...bidder && {bidder},
+        ...previousBidder && {previousBidder},
         ...buyer && {buyer},
         ...seller && {seller}
     }
