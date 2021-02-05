@@ -34,8 +34,6 @@ module.exports = function(payload, format) {
     if(txPrice)
         text += ` for ${ txPrice }`
 
-    text += ` on ${ dateStr }`;
-
     if(payload.price)
         text += `\n${ nftName } is currently trading at ${ payload.price }`;
 
