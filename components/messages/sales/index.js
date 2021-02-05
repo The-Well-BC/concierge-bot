@@ -34,12 +34,8 @@ module.exports = function(payload, format) {
     if(txPrice)
         text += ` for ${ txPrice }`
 
-    if(payload.price)
-        text += `\n${ nftName } is currently trading at ${ payload.price }`;
-
     if(more && Array.isArray(more) && more.length > 0) {
-        text += `\n\nMORE:`;
-
+        text += `\n`;
         more.forEach(i => text += `\n${ i }`);
     }
 

@@ -20,6 +20,7 @@ describe('Test NFT event alerts: SALE', function() {
         let payload = {
             ...minPayload,
             url: 'https://one.two.three',
+            price: '$42.93',
             buyer: {
                 name: 'John Sommet',
                 url: 'https://moon.jpeg.com/u/john-sommet'
@@ -35,9 +36,8 @@ describe('Test NFT event alerts: SALE', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain).to.have.property('text', 'Mystery Box X by Old Frog sold to John Sommet for $80.53 on November 1, 2020 (7:42pm UTC)\n\nMORE:\n\nhttps://one.two.three\n\nvia: Nifty Gateway');
-        // expect(markdown).to.have.property('text', '[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53 on November 1, 2020 (7:42pm UTC)\n\nMORE:\n[View Old Frog\'s other creations](https://moon.jpeg.com/u/neue-goods)\n\nvia: [Nifty Gateway](https://niftygateway.com)');
-        expect(markdown).to.have.property('text', '[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53 on November 1, 2020 (7:42pm UTC)\n\nvia: [Nifty Gateway](https://niftygateway.com)');
+        expect(plain).to.have.property('text', '⚡ NEW SALE\nMystery Box X by Old Frog sold to John Sommet for $80.53\n\nMORE →  https://one.two.three\n\nvia: Nifty Gateway');
+        expect(markdown).to.have.property('text', '⚡ NEW SALE\n[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53\n\nvia: [Nifty Gateway](https://niftygateway.com)');
     });
 
     it('When NFT url is present', function() {
@@ -56,8 +56,8 @@ describe('Test NFT event alerts: SALE', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain.text).to.match(/^Mystery Box X by Old Frog/);
-        expect(markdown.text).to.match(/^\[Mystery Box X\]\(https:\/\/one.two.three\) by Old Frog/);
+        expect(plain.text).to.match(/^.*\r?\nMystery Box X by Old Frog/);
+        expect(markdown.text).to.match(/^.*\r?\n\[Mystery Box X\]\(https:\/\/one.two.three\) by Old Frog/);
     });
 
     it('When image is present', function() {
@@ -91,8 +91,8 @@ describe('Test NFT event alerts: SALE', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain.text).to.match(/^Mystery Box X/);
-        expect(markdown.text).to.match(/^Mystery Box X /);
+        expect(plain.text).to.match(/^.*\r?\nMystery Box X/);
+        expect(markdown.text).to.match(/^.*\r?\nMystery Box X /);
     });
 
     it('When buyer property is not available', function() {
@@ -138,29 +138,6 @@ describe('Test NFT event alerts: SALE', function() {
         expect(markdown.text).to.have.string('[John Sommet](https://moon.jpeg.com/u/john-sommet)')
     });
 
-    it('When NFT price is stated ', function() {
-
-        let payload = {
-            ...minPayload,
-            price: '$89.33',
-            transaction: {
-                price: '$80.53',
-            },
-            buyer: {
-                name: 'John Sommet'
-            },
-        }
-
-        let alertMessages = formats.map(format => { 
-            return messages.alertMessage(payload, format);
-        });
-
-        const [plain, markdown, markdownV2] = alertMessages;
-
-        expect(plain.text).to.have.string('Mystery Box X is currently trading at $89.33');
-        expect(markdown.text).to.have.string('Mystery Box X is currently trading at $89.33');
-    });
-
     it('When transaction price is not present', function() {
         // Sale price can be in fiat, or eth or any other crypto token. Sale price is not the same as token in transaction
 
@@ -182,7 +159,7 @@ describe('Test NFT event alerts: SALE', function() {
         const [plain, markdown, markdownV2] = alertMessages;
 
         expect(alertMessages).to.all.satisfy(message => {
-            expect(message.text).to.match(/^Mystery Box X by Old Frog sold to John Sommet on/);
+            expect(message.text).to.match(/^.*\r?\nMystery Box X by Old Frog sold to John Sommet/);
             return true;
         });
     });
