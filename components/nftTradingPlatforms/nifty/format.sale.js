@@ -19,5 +19,8 @@ module.exports = function(item) {
         }
     }
 
+    if(item.NiftyObject.tokenId)
+        nft.url += '/' + item.NiftyObject.tokenId;
+
     return nft;
 }
