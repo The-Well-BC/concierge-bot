@@ -8,7 +8,7 @@ module.exports = (payload) => {
         access_token_secret: process.env.TWITTER_BOT_ACCESS_TOKEN_SECRET,
     });
 
-    const body = {
+    let body = {
         type: 'message_create',
         message_create: {
             target: {
@@ -20,6 +20,17 @@ module.exports = (payload) => {
             }
         }
     };
+
+    if(payload.mediaID) {
+        body.message_create.message_data.attachment = {
+            type: 'media',
+            media_category: 'dm_image',
+            shared: true,
+            media: {
+                id: payload.mediaID
+            }
+        }
+    }
 
     return new Promise(function(resolve, reject) {
         client.post('direct_messages/events/new', {event: body}, function(error, tweet, response) {

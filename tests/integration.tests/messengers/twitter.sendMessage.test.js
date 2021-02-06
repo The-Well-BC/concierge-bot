@@ -112,5 +112,76 @@ describe('Twitter methods: Send Text Message', function() {
             });
         });
     });
+    it('Should send photos if photo is specified', function() {
+        const message = {
+            text: 'PHOTO MESSAGE\nSucceeded in sending text only DM for multiple users and one tweet\n' + new Date(),
+            img: 'https://ipfs.pixura.io/ipfs/QmfGPaD6kKoKVzjQUcj2KHEL4JWTPikGewREbYz4TywNWg/into-the-ether-verse.mp4'
+        }
+
+        let tweetid;
+
+        return twitter.sendMessage(message, [...chatIDs, 'all'])
+        .then(res => {
+            expect(res).to.have.lengthOf(3);
+
+            expect(res).to.satisfy(arr => {
+                let dms = arr.some(item => {
+                    assert.property(item, 'event');
+
+                    assert.propertyVal(item.event, 'type', 'message_create');
+                    assert.property(item.event.message_create, 'message_data');
+                    expect(item.event.message_create.message_data.text).to.have.string(message.text);
+
+                    return true;
+                });
+
+                assert.isTrue(dms, 'Should have a few dm items' + arr);
+
+                let dm1 =  arr.some(item => {
+                    return item.event.message_create.target.recipient_id === chatIDs[0];
+                });
+
+                let dm2 = arr.some(item => {
+                    return item.event.message_create.target.recipient_id === chatIDs[1];
+                });
+
+                if(!(dm1 && dm2)) {
+                    assert.fail(
+                        arr,
+                        [{event: {message_create:{target:{recipient_id:chatIDs[0]}}} },
+                            {event: {message_create:{target:{recipient_id: chatIDs[1]}}} }],
+                        'Messages with recipient ids missing'
+                    );
+                }
+
+                // Tweet
+                let tweet = arr.some(item => {
+                    let c1 = item.tweet && typeof item.tweet === 'object';
+                    let c2 = false;
+                    if(item.tweet)
+                        expect(item.tweet.text).to.have.string(message.text);
+
+                    return c1;
+                });
+
+                if(!tweet) {
+                    assert.fail(arr, [{tweet: {}}], 'Expected this to contain one tweet object');
+                }
+
+                return dms, dm1 && dm2 && tweet;
+            });
+
+            expect(res).to.satisfy(arr => {
+                let c1 = arr.some(item => {
+                    return (item.event.message_create.target.recipient_id === chatIDs[0]);
+                });
+                let c2 = arr.some(item => {
+                    return (item.event.message_create.target.recipient_id === chatIDs[1]);
+                });
+
+                return c1 && c2;
+            });
+        });
+    });
 });
 

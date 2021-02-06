@@ -8,9 +8,12 @@ module.exports = (payload) => {
         access_token_secret: process.env.TWITTER_BOT_ACCESS_TOKEN_SECRET,
     });
 
-    const body = {
+    let body = {
         status: payload.text
     };
+
+    if(payload.mediaID)
+        body.media_ids = payload.mediaID;
 
     return new Promise(function(resolve, reject) {
         client.post('statuses/update', body, function(error, tweet, response) {

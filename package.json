@@ -38,6 +38,7 @@
     "node-cron": "^2.0.3",
     "node-twitter-api": "^1.8.0",
     "postgresorm": "^4.9.1",
+    "randomstring": "^1.1.5",
     "rfdc": "^1.1.4",
     "twit": "^2.2.11",
     "twitter": "^1.7.1",
