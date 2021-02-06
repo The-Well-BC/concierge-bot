@@ -6,9 +6,15 @@ module.exports = (filter) => {
     if(filter == 'all') {
         text = 'You have opted to receive notifications whenever any NFTs are traded or released.';
     } else if(typeof filter === 'object' && filter != null) {
+
         text = `Successfully added subscription filter: `;
 
-        let { events, platforms, creators } = filter;
+        let { events, platforms, creators,
+            priceGT, priceLT, priceGTE, priceLTE,
+            txPriceGT, txPriceLT, txPriceGTE, txPriceLTE
+        } = filter;
+
+        let currencyRegex = /(\d)(?=(\d{3})+(?!\d))(?!=\,)/;
 
         if(events) {
             events = events.map(i => {
@@ -23,12 +29,50 @@ module.exports = (filter) => {
             text += `NFT ${ events.join(', ') }`;
             if(creators)
                 text += 'for ';
-        } else if(!creators)
-            text += 'NFT events ';
+        } else if(!creators) {
+            text += 'Events ';
+        }
 
         if(creators) {
             text += `NFTs created by ${ filter.creators.join(', ') }`;
         }
+
+        let txPrice = false;
+        if(txPriceGT || txPriceGTE || txPriceLT || txPriceLTE) {
+            txPrice = true;
+            if(creators)
+                text += ', ';
+
+            if(events)
+                text += ' '
+            else text += 'for transactions ';
+
+            if(txPriceGT) 
+                text += 'over ' + txPriceGT.replace(currencyRegex, '$1,');
+            if(txPriceGTE)
+                text += 'of '+ txPriceGTE.replace(currencyRegex, '$1,') + ' and above';
+            if(txPriceLT)
+                text += 'under ' + txPriceLT.replace(currencyRegex, '$1,');
+            if(txPriceLTE)
+                text += 'of '+ txPriceLTE.replace(currencyRegex, '$1,') + ' and under';
+        }
+
+        if(priceGT || priceGTE || priceLT || priceLTE) {
+            if(events || creators || txPrice)
+                text += ', ';
+
+            text += 'for items that are worth ';
+
+            if(priceGT) 
+                text += 'more than ' + priceGT.replace(currencyRegex, '$1,');
+            if(priceGTE)
+                text += priceGTE.replace(currencyRegex, '$1,') + ' or more';
+            if(priceLT)
+                text += 'less than ' + priceLT.replace(currencyRegex, '$1,');
+            if(priceLTE)
+                text += priceLTE.replace(currencyRegex, '$1,') + ' or less';
+        }
+
 
         if( Array.isArray(platforms)) {
             let platformStr = platforms.map(p => nftPlatforms[p].name);
