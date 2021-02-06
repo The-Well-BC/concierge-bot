@@ -4,7 +4,7 @@ const expect = chai.expect;
 const tweetPhoto = require('../../../components/messenger/twitter/api/uploadImage-chunked');
 const chatID = require('../../twitterSamplePayload').chatID;
 
-describe('#dev Twitter API: Send Tweet', function() {
+describe('Twitter API: Send Tweet', function() {
     it('Send photo tweet', function() {
         const message = {
             url: 'https://picsum.photos/200',
@@ -15,6 +15,7 @@ describe('#dev Twitter API: Send Tweet', function() {
 
         return tweetPhoto(message)
         .then(res => {
+            console.log('TWEET', res.tweet, '\nMEDIA IMAGE', res.media);
             expect(res).to.have.keys('response', 'tweet');
             let response = JSON.parse(res.response.body);
             expect(response).to.have.property('text', message.text);
@@ -33,6 +34,7 @@ describe('#dev Twitter API: Send Tweet', function() {
 
         return tweetPhoto(message)
         .then(res => {
+            console.log('MEDIA', media);
             expect(res).to.have.keys('response', 'tweet', 'media');
             let response = JSON.parse(res.response.body);
             expect(response).to.have.property('text', message.text);

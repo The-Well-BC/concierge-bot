@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const subscriptionFilter = require('../../components/subscriptionFilter');
 const ethPrice = require('../../components/ethPrice');
 
-describe.only('Test Subscription filter: Transaction Price and NFT Price:', function() {
+describe('Test Subscription filter: Transaction Price and NFT Price:', function() {
     before(() => {
         ethPrice.reset();
     });

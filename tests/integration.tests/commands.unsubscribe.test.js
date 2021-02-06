@@ -9,7 +9,7 @@ const messengers = ['twitter', 'telegram']
 
 const chatIDs = ['1234', '5673', '9102', '4567'];
 
-describe.only('#dev The Unsubscribe Command', function() {
+describe('The Unsubscribe Command', function() {
     const chatID = '1234';
 
     const payload = {

@@ -3,6 +3,14 @@ module.exports = {
         telegram: '/browse',
         twitter: '!browse'
     },
+    subscriptionFilters: {
+        telegram: '/filters',
+        twitter: '!filters'
+    },
+    subscriptionFilter: {
+        telegram: '/filter',
+        twitter: '!filter'
+    },
     browseCreators: {
         telegram: '/browse creators',
         twitter: '!browse creators'

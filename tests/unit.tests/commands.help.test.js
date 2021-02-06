@@ -6,7 +6,7 @@ const commands = require('../../components/commands');
 let commandChars = ['!', '/'];
 let messengers = ['twitter', 'telegram'];
 
-describe('#dev Test commands: Help command', function() {
+describe('Test commands: Help command', function() {
     it('Text help in any case', function() {
         let payload = {
             command: { name: 'help', },

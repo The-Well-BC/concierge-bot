@@ -6,8 +6,8 @@ const commands = require('../../components/commands');
 let commandChars = ['!', '/'];
 let messengers = ['twitter', 'telegram'];
 
-describe.only('#dev Test commands: Help Unsubscribe command', function() {
-    it('Text help in any case', function() {
+describe('Test commands: Help Unsubscribe command', function() {
+    it('Unsubscribe help message', function() {
         let payload = {
             command: { name: 'help', params: 'unsubscribe'},
             user: { name: 'Adesuwa' }
@@ -27,7 +27,7 @@ describe.only('#dev Test commands: Help Unsubscribe command', function() {
                     let c = commandChars[i];
                     expect(message).to.be.an('object').and.have.keys('text');
 
-                    expect(message.text).to.equal('Text unsubscribe to stop receiving all messages');
+                    expect(message.text).to.equal(`Text ${c}unsubscribe to stop receiving all messages`);
                     return true;
 
                 });

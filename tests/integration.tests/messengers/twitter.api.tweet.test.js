@@ -16,7 +16,7 @@ describe('Twitter API: Send Tweet', function() {
         return tweet(message)
         .then(res => {
             expect(res).to.have.keys('response', 'tweet');
-            let response = JSON.parse(res.response.body);
+            let response = res.response;
             expect(response).to.have.property('text', message.text);
         });
     });

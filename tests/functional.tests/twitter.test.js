@@ -10,7 +10,6 @@ const links = require('../../config/links');
 
 const samplePayloads = require('../twitterSamplePayload.js');
 
-// describe.only('Twitter routes', function() {
 describe('Twitter routes', function() {
     beforeEach(() => {
         const teardown = require('../teardown');
