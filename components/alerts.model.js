@@ -15,7 +15,7 @@ module.exports = {
         return nfts.fetchEvents(limit)
         .then(res => {
             // Temporary: sending texts for only sales and drops
-            // res = res.filter(i => ['sale', 'drop'].includes(i.event));
+            res = res.filter(i => ['sale', 'drop'].includes(i.event));
 
             payload.push(...res);
 
