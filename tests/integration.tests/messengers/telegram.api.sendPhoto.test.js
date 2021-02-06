@@ -6,7 +6,7 @@ const sendPhoto = require('../../../components/messenger/telegram/api/sendPhoto'
 describe('Telegram API: Send Photo', function() {
     it('Send photo with caption', function() {
         const message = {
-            url: 'https://picsum.photos/200',
+            photo: 'https://picsum.photos/200',
             text: `Testing... testing...\nMultiline string\nHowwill bot handle this??
             `, 
             chat_id: 641574672

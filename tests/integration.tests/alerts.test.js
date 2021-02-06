@@ -9,7 +9,7 @@ const subdao = require('../../components/daos/subscription.dao');
 const sampleTelegramPayloads = require('../samplePayload.json');
 const sampleTwitterPayloads = require('../twitterSamplePayload');
 
-describe('Sending alerts', function() {
+describe('#dev Sending alerts', function() {
     this.timeout(30000);
     before(() => {
         return subdao.addSubscription(sampleTelegramPayloads.chatID, 'telegram')

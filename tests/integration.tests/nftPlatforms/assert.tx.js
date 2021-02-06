@@ -1,4 +1,3 @@
-// const keys = [ 'url', 'date', 'name', 'type', 'price', 'buyer', 'seller', 'platform', 'creator', 'img', 'tokensLeft', 'transaction' ];
 const keys = [ 'url', 'date', 'name', 'platform', 'event', 'seller', 'img' ];
 
 module.exports = function(item, assert, chai) {

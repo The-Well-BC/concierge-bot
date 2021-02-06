@@ -20,9 +20,6 @@ module.exports = function(chai, utils) {
 
         let assert = this.assert;
 
-        if(obj.platform === 'nifty')
-            console.log('EVENT NIFTY', obj);
-
         expect(obj).to.all.include.keys(...keys);
 
         return obj.forEach(item => {

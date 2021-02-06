@@ -15,7 +15,7 @@ module.exports = {
         return nfts.fetchEvents(limit)
         .then(res => {
             // Temporary: sending texts for only sales and drops
-            res = res.filter(i => ['sale', 'drop'].includes(i.event));
+            // res = res.filter(i => ['sale', 'drop'].includes(i.event));
 
             payload.push(...res);
 
@@ -38,12 +38,17 @@ module.exports = {
                 return { message: messages.alertMessage(p.payload, twitter.format), chatIDs: p.chatIDs }
             });
 
+            console.log('TELEGRAM ALERTGS', telegramAlerts);
+            console.log('TWITTER ALERTGS', twitterAlerts);
+
             let promises = telegramAlerts.map(p => telegram.sendMessage(p.message, p.chatIDs));
             promises.push(
                 ...twitterAlerts.map(p => twitter.sendMessage(p.message, p.chatIDs))
             );
 
             return Promise.all(promises);
+        }).catch(e => {
+            console.log('ERROR', e);
         });
     }
 }

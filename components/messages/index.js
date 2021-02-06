@@ -69,6 +69,18 @@ module.exports = {
         let photo = (payload.img != null || undefined) ?
             payload.img : null;
 
+                console.log('PHOTO URL', photo);
+
+                if(/res\.cloudinary\.com/.test(photo)) {
+                    if(/\.gif$/.test(photo))
+                photo = photo.replace(/\.gif$/, '.jpg');
+            if(/\.mp4$/.test(photo))
+                photo = photo.replace(/\.mp4$/, '.jpg');
+
+            photo = photo.replace(/(\/image\/upload)/, '$1/w_300');
+            photo = photo.replace(/(\/video\/upload)/, '$1/w_300');
+        }
+
         return {
             text,
             ...(photo != null) && { img: photo }

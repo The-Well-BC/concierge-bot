@@ -8,7 +8,7 @@ module.exports = (message) => {
     .then(res => {
         return res.data;
     }).catch(e => {
-        console.error('ERRO', e);
+        console.error('TEXT ERRO', e);
         throw e;
     });
 }

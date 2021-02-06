@@ -1,5 +1,5 @@
 const sendText = require('./api/sendText');
-const sendPhoto = require('./api/sendPhoto');
+const sendMedia = require('./api/sendMedia');
 const prepareMessages = require('./prepareMessages');
 const parseMessage = require('./parseMessage');
 
@@ -11,16 +11,17 @@ module.exports = {
     format: 'markdown',
 
     sendMessage(payload, chatIDs) {
-        let photo = (payload.img != null || undefined) ?
-            payload.img : null;
 
         let messages = prepareMessages(payload, chatIDs);
 
         let promises = [];
 
         messages.forEach(message => {
+            let photo = (message.photo) ?
+                message.photo : null;
+
             if(photo) {
-                promises.push( sendPhoto(message));
+                promises.push( sendMedia({ ...message, photo }));
             }
             else {
                 return promises.push(sendText(message));
