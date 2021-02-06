@@ -26,14 +26,17 @@ describe('Test NFT event alerts: BIDS', function() {
             }
         }
 
+        let markdownEnder = 'via: [Nifty Gateway](https://niftygateway.com)\n#NFT';
+        let plainEnder = '#NiftyGateway #NFT';
+
         let alertMessages = formats.map(format => { 
             return messages.alertMessage(payload, format);
         });
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain).to.have.property('text', 'John Sommet has bid $80.53 on Mystery Box X\n\nMORE:\n\nView Mystery Box X - https://one.two.three\nView bid - https://tx.com\n\nvia: Nifty Gateway');
-        expect(markdown).to.have.property('text', 'John Sommet has bid $80.53 on [Mystery Box X](https://one.two.three)\n\nMORE:\n\n[View bid](https://tx.com)\n\nvia: [Nifty Gateway](https://niftygateway.com)');
+        expect(plain).to.have.property('text', 'John Sommet has bid $80.53 on Mystery Box X\n\nMORE:\n\nView Mystery Box X - https://one.two.three\nView bid - https://tx.com\n\n' + plainEnder);
+        expect(markdown).to.have.property('text', 'John Sommet has bid $80.53 on [Mystery Box X](https://one.two.three)\n\nMORE:\n\n[View bid](https://tx.com)\n\n' + markdownEnder);
     });
 
     it('When image is present', function() {
@@ -50,7 +53,7 @@ describe('Test NFT event alerts: BIDS', function() {
             return messages.alertMessage(payload, format);
         });
 
-        expect(alertMessages).to.all.have.property('photo', 'https://123.com');
+        expect(alertMessages).to.all.have.property('img', 'https://123.com');
     });
 
     it('When bidder property is not available', function() {

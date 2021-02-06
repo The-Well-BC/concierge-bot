@@ -12,6 +12,9 @@ describe('Test NFT event alerts: OFFER', function() {
         event: 'offer',
     }
 
+    let markdownEnder = 'via: [Nifty Gateway](https://niftygateway.com)\n#NFT';
+    let plainEnder = '#NiftyGateway #NFT';
+
     it('Test messages when all fields are present', function() {
         let payload = {
             ...minPayload,
@@ -32,8 +35,8 @@ describe('Test NFT event alerts: OFFER', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain).to.have.property('text', 'John Sommet is offering $80.53 for Mystery Box X\n\nMORE:\n\nView offer - https://tx.com\n\nvia: Nifty Gateway');
-        expect(markdown).to.have.property('text', 'John Sommet is offering $80.53 for Mystery Box X\n\nMORE:\n\n[View offer](https://tx.com)\n\nvia: [Nifty Gateway](https://niftygateway.com)');
+        expect(plain).to.have.property('text', 'John Sommet is offering $80.53 for Mystery Box X\n\nMORE:\n\nView offer - https://tx.com\n\n' + plainEnder);
+        expect(markdown).to.have.property('text', 'John Sommet is offering $80.53 for Mystery Box X\n\nMORE:\n\n[View offer](https://tx.com)\n\n' + markdownEnder);
     });
 
     it('When image is present', function() {
@@ -50,7 +53,7 @@ describe('Test NFT event alerts: OFFER', function() {
             return messages.alertMessage(payload, format);
         });
 
-        expect(alertMessages).to.all.have.property('photo', 'https://123.com');
+        expect(alertMessages).to.all.have.property('img', 'https://123.com');
     });
 
     it('When buyer property is not available', function() {

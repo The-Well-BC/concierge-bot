@@ -11,7 +11,7 @@ const superrare = require('../../../components/nftTradingPlatforms/superrare');
 
 const nftFn = require('../../../components/nftTradingPlatforms');
 
-describe('Fetch NFT events', function() {
+describe('#dev Fetch NFT events', function() {
     this.timeout(10000);
 
     const now = new Date();

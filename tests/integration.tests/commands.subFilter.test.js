@@ -9,7 +9,7 @@ const messengers = ['twitter', 'telegram']
 
 let commandChars = ['!', '/'];
 
-describe('#dev The Subscription Filter Command', function() {
+describe('The Subscription Filter Command', function() {
     const chatID = '1234';
 
     const payload = {

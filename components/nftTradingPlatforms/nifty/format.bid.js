@@ -6,7 +6,10 @@ module.exports = function(item) {
         date: item.Timestamp,
         event: 'bid',
         platform: 'nifty',
-        seller: {
+    }
+
+    if(item.ListingUserProfile) {
+        nft.seller = {
             name: item.ListingUserProfile.name,
             url: `https://niftygateway.com/profile/${ item.ListingUserProfile.profile_url }`
         }

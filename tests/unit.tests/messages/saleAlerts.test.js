@@ -16,6 +16,9 @@ describe('Test NFT event alerts: SALE', function() {
         }
     }
 
+    let markdownEnder = 'via: [Nifty Gateway](https://niftygateway.com)\n#NFT';
+    let plainEnder = '#NiftyGateway #NFT';
+
     it('Test messages when all fields are present', function() {
         let payload = {
             ...minPayload,
@@ -36,8 +39,8 @@ describe('Test NFT event alerts: SALE', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain).to.have.property('text', '⚡ NEW SALE\nMystery Box X by Old Frog sold to John Sommet for $80.53\n\nMORE →  https://one.two.three\n\nvia: Nifty Gateway');
-        expect(markdown).to.have.property('text', '⚡ NEW SALE\n[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53\n\nvia: [Nifty Gateway](https://niftygateway.com)');
+        expect(plain).to.have.property('text', '⚡ NEW SALE\nMystery Box X by Old Frog sold to John Sommet for $80.53\n\nMORE →  https://one.two.three\n\n' + plainEnder);
+        expect(markdown).to.have.property('text', '⚡ NEW SALE\n[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53\n\n' + markdownEnder);
     });
 
     it('When NFT url is present', function() {
@@ -74,7 +77,7 @@ describe('Test NFT event alerts: SALE', function() {
             return messages.alertMessage(payload, format);
         });
 
-        expect(alertMessages).to.all.have.property('photo', 'https://123.com');
+        expect(alertMessages).to.all.have.property('img', 'https://123.com');
     });
 
     it('When NFT url is not available', function() {

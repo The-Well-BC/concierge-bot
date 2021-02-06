@@ -3,7 +3,7 @@ const commands = require('../messengerCommands');
 module.exports = function(messenger, format, params) {
     let subC = commands.subscribe[messenger ];
     let helpC = commands.help[messenger ];
-    let filterC = commands.subscriptionFilter[messenger ];
+    let filterC = commands.subscriptionFilters[messenger ];
 
     let replies = [
         { text: filterC },

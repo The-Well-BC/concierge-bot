@@ -7,7 +7,7 @@ const formats = ['plain', 'markdown'];
 const messengers = ['twitter', 'telegram']
 let commandChars = ['!', '/'];
 
-describe('#dev Test commands: Help command', function() {
+describe('Test Help commands: Subscribe help', function() {
     it('Help command: subscribe', function() {
         let payload = {
             command: {

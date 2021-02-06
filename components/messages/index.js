@@ -52,7 +52,7 @@ module.exports = {
             default:
                 platform = nftPlatforms[payload.platform].name;
                 // text += `via: ${ platform }`;
-                text += `#${platform.replace(/\s+/, '')}`
+                text += `#${platform.replace(/\s+/, '')} `
                 break;
             case 'markdown':
                 platform = `[${nftPlatforms[payload.platform].name}](${nftPlatforms[payload.platform].url})`;
@@ -64,7 +64,7 @@ module.exports = {
                 break;
         }
 
-        text += ' #NFT';
+        text += '#NFT';
 
         let photo = (payload.img != null || undefined) ?
             payload.img : null;

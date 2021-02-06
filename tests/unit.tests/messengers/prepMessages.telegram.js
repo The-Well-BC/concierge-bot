@@ -3,7 +3,7 @@ const chai = require('chai');
 
 const expect = chai.expect;
 
-describe('#dev Telegram functions: Prepary payload for telegram', function() {
+describe('Telegram functions: Prepary payload for telegram', function() {
     let chatIDs = [ 1234, 5678 ];
 
     it('Checks keys', function() {

@@ -4,6 +4,9 @@ const expect = chai.expect;
 const formats = ['messages', 'markdown', 'markdownV2'];
 
 describe('Test listing texts', function() {
+    let markdownEnder = 'via: [SuperRare](https://superrare.co)\n#NFT';
+    let plainEnder = '#SuperRare #NFT';
+
     it('Closed bid, closedOn date is not supplied', function() {
         let data = {
             name: 'Unit-002',
@@ -27,7 +30,7 @@ describe('Test listing texts', function() {
         }
 
         let alertMessage =  messages.alertMessage(data);
-        expect(alertMessage).to.have.property('text', 'Unit-002 was put up for sale at a price of *$73.58*.\nDate: August 31, 2020 (7:00pm UTC)\nView Neue Goods\' other NFTs - https://seller.js\n\nvia: SuperRare');
+        expect(alertMessage).to.have.property('text', 'Unit-002 was put up for sale at a price of *$73.58*.\nDate: August 31, 2020 (7:00pm UTC)\nView Neue Goods\' other NFTs - https://seller.js\n\n' + plainEnder);
     });
 
     it('Seller url is not available', function() {
@@ -51,7 +54,7 @@ describe('Test listing texts', function() {
         }
 
         let alertMessage =  messages.alertMessage(data);
-        expect(alertMessage).to.have.property('text', 'Unit-002 was put up for sale at a price of *$73.58*.\nDate: August 31, 2020 (7:00pm UTC)\n\nvia: SuperRare');
+        expect(alertMessage).to.have.property('text', 'Unit-002 was put up for sale at a price of *$73.58*.\nDate: August 31, 2020 (7:00pm UTC)\n\n' + plainEnder);
     });
 });
 

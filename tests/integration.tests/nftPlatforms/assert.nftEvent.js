@@ -1,4 +1,4 @@
-const keys = [ 'event', 'platform', 'date' ];
+const keys = [ 'event', 'platform', 'date', 'img' ];
 const events = ['sale', 'drop', 'bid', 'listing', 'offer']
 
 const dropAssert = require('./assert.drop');
@@ -51,14 +51,12 @@ module.exports = function(chai, utils) {
                 );
             }
 
-            if(item.img) {
-                assert( 
-                    !item.img.includes('undefined'),
-                    'Property "img" should not include string \'undefined\'. Got \'#{act}\'',
-                    'String',
-                    item.img
-                );
-            }
+            assert( 
+                !item.img.includes('undefined'),
+                'Property "img" should not include string \'undefined\'. Got \'#{act}\'',
+                'String',
+                item.img
+            );
 
             // Price
             if(item.price) {
