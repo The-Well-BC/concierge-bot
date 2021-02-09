@@ -7,7 +7,18 @@ module.exports = () => {
     if(process.env.NODE_ENV !== 'test') {
         // Ten Minutes
         cron.schedule('*/10 * * * *', function() {
-            return alertsModel.sendAlerts('10 min')
+            let now = new Date();
+            // To be safe, will subtract 9 minutes incase the cron job runs a little too early. Hopefully this solves the message duplicate error
+            let startTime = new Date(new Date().setMinutes(now.getMinutes() - 9));
+            let minute = Math.floor(startTime.getMinutes() / 10) * 10;
+
+            console.log('TIME NOW:', now, '\nMINUTE ON THE TEN: - 9', minute);
+
+            startTime.setMinutes(minute,0,0);
+
+            console.log('NEW START TIME', new Date(now).toGMTString());
+
+            return alertsModel.sendAlerts(startTime)
         });
 
         // Daily

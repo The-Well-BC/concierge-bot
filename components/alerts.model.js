@@ -8,10 +8,10 @@ const twitter = require('./messenger/twitter');
 const messages = require('./messages');
 
 module.exports = {
-    //sendAlerts: function(messages, interval) {
-    sendAlerts: function(interval, limit = 10) {
+    //sendAlerts: function(messages, startTime) {
+    sendAlerts: function(startTime, limit = 10) {
         let payload = [];
-        const nfts = nftFn(interval);
+        const nfts = nftFn(startTime);
         return nfts.fetchEvents(limit)
         .then(res => {
             // Temporary: sending texts for only sales and drops

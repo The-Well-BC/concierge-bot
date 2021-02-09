@@ -11,7 +11,7 @@ const superrare = require('../../../components/nftTradingPlatforms/superrare');
 
 const nftFn = require('../../../components/nftTradingPlatforms');
 
-describe('#dev Fetch NFT events', function() {
+describe('Fetch NFT events', function() {
     this.timeout(10000);
 
     const now = new Date();
@@ -19,12 +19,13 @@ describe('#dev Fetch NFT events', function() {
 
     const platformArr = ['nifty', 'superrare'];
 
-    it('Fetch all events', function() {
+    it('#dev Fetch all events', function() {
         const limit = 35;
         startTime = new Date().setDate(now.getDate() - 1);
 
-        return nftFn('1 day').fetchEvents( limit )
+        return nftFn(startTime).fetchEvents( limit )
         .then(res => {
+            console.log('RESSY POO', res)
             expect(res, 'No undefined properties').to.all.have.noUndefinedKeys();
             expect(res, 'Nft Event test').to.all.be.nftEvent(startTime);
 
