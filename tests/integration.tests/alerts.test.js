@@ -9,7 +9,7 @@ const subdao = require('../../components/daos/subscription.dao');
 const sampleTelegramPayloads = require('../samplePayload.json');
 const sampleTwitterPayloads = require('../twitterSamplePayload');
 
-describe('Sending alerts', function() {
+describe('#dev Sending alerts', function() {
     this.timeout(30000);
     before(() => {
         return subdao.addSubscription(sampleTelegramPayloads.chatID, 'telegram')
@@ -19,18 +19,21 @@ describe('Sending alerts', function() {
     });
 
     it('Send alerts for 5 day period', function() {
-        return alertsModel.sendAlerts('5 day')
+        let now = new Date();
+        let startTime = new Date(new Date().setDate(now.getDate() - 5));
+
+        return alertsModel.sendAlerts(startTime)
         .then(res => {
             expect(res).to.satisfy( arr => {
                 let oneTwitter = arr.some(item => {
-                    return item.event && item.event.type === 'message_create';
+                    return item.event;
                 });
 
                 if(oneTwitter !== true) { 
                     assert.fail(
                         arr,
                         [{event: { type: 'message_create' }}],
-                        'Missing Expected there to be at least one telegram message object.with property "event"'
+                        'Missing Expected there to be at least one twitter message object.with property "event"'
                     );
                 }
 
@@ -54,7 +57,10 @@ describe('Sending alerts', function() {
     });
 
     it('Send alerts for 5 minute period', function() {
-        return alertsModel.sendAlerts('5 min')
+        let now = new Date();
+        let startTime = new Date(new Date().setMinutes(now.getMinutes() - 5));
+
+        return alertsModel.sendAlerts(startTime)
         .then(res => {
             expect(res).to.satisfy( arr => {
                 if(arr.length > 1) {

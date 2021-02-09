@@ -12,8 +12,6 @@ module.exports = (message) => {
 
     let photo = (message.photo) ? message.photo : message.url;
 
-    console.log('IMAGE', photo);
-
     const url = `https://api.telegram.org/bot${ process.env.TELEGRAM_BOT_TOKEN }/sendPhoto`;
     const body = { ...message, photo }
     return axios.post(url, body)

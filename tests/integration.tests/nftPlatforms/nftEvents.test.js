@@ -25,7 +25,6 @@ describe('Fetch NFT events', function() {
 
         return nftFn(startTime).fetchEvents( limit )
         .then(res => {
-            console.log('RESSY POO', res)
             expect(res, 'No undefined properties').to.all.have.noUndefinedKeys();
             expect(res, 'Nft Event test').to.all.be.nftEvent(startTime);
 
