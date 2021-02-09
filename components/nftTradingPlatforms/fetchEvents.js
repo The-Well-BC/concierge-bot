@@ -6,7 +6,7 @@ const nifty = require('./nifty');
 module.exports = (startTime, limit = 10) => {
     let drops = [];
 
-    return superrare.fetchEvents(limit)
+    return superrare.fetchEvents(startTime, limit)
     .then(res => {
         drops = res;
         return nifty.fetchEvents(startTime, limit)
