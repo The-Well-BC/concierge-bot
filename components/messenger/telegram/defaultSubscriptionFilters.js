@@ -1,5 +1,5 @@
 module.exports = [
-    { events: ['drops'] },
+    { events: ['drop'] },
     { txPriceGTE: '$1000' },
     { priceGT: '$1000' }
 ]
