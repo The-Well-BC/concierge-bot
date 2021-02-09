@@ -7,10 +7,18 @@ module.exports = (frequency) => {
     let startTime;
 
     switch(frequency.split(' ')[1]) {
+        case 'd':
         case 'day':
         case 'days':
             startTime = new Date().setDate(now.getDate() - freqAmount);
             break;
+        case 'h':
+        case 'hour':
+        case 'hours':
+        case 'hr':
+            startTime = new Date().setHours(now.getHours() - freqAmount);
+            break;
+        case 'm':
         case 'min':
         case 'minutes':
         case 'mins':
@@ -24,6 +32,8 @@ module.exports = (frequency) => {
             startTime = new Date().setMinutes(now.getMinutes() - 10);
             break;
     }
+
+    console.log('START TIME', new Date(startTime).toISOString());
     
     return {
         fetchEvents: (limit) => events(startTime, limit),

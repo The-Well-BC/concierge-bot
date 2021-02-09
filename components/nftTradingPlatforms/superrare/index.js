@@ -6,7 +6,10 @@ module.exports = {
         return purchases(startTime, limit)
         .then(res => {
             events = res
-            return events;
+            return events
+            .filter(item => {
+                return new Date(item.date) >= startTime;
+            });
         });
     }
 }

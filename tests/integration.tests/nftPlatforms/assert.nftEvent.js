@@ -1,4 +1,4 @@
-const keys = [ 'event', 'platform', 'date', 'img' ];
+const keys = [ 'event', 'platform', 'date', 'img', 'url' ];
 const events = ['sale', 'drop', 'bid', 'listing', 'offer']
 
 const dropAssert = require('./assert.drop');
@@ -53,6 +53,14 @@ module.exports = function(chai, utils) {
                 'Property "img" should not include string \'undefined\'. Got \'#{act}\'',
                 'String',
                 item.img
+            );
+
+            assert(
+                !item.url.includes('undefined'),
+                'Property "url" should not include string \'undefined\'. Got \'#{act}\'',
+                '',
+                'String',
+                item.url
             );
 
             // Price

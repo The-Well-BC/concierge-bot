@@ -20,9 +20,10 @@ describe('#dev Fetch NFT events', function() {
     const platformArr = ['nifty', 'superrare'];
 
     it('Fetch all events', function() {
-        const limit = 15;
+        const limit = 35;
+        startTime = new Date().setDate(now.getDate() - 1);
 
-        return nftFn('3 day').fetchEvents( limit )
+        return nftFn('1 day').fetchEvents( limit )
         .then(res => {
             expect(res, 'No undefined properties').to.all.have.noUndefinedKeys();
             expect(res, 'Nft Event test').to.all.be.nftEvent(startTime);
@@ -47,8 +48,8 @@ describe('#dev Fetch NFT events', function() {
     });
 
     it('Fetch from Nifty Gateway', function() {
-        const limit = 15;
-        startTime = new Date().setDate(now.getDate() - 8);
+        const limit = 30;
+        startTime = new Date().setDate(now.getDate() - 1);
 
         return nifty.fetchEvents( startTime, limit )
         .then(res => {
@@ -64,7 +65,7 @@ describe('#dev Fetch NFT events', function() {
     it('Fetch from SuperRare', function() {
         const limit = 53;
 
-        startTime = new Date().setDate(now.getDate() - 9);
+        startTime = new Date().setDate(now.getDate() - 1);
 
         return superrare.fetchEvents( startTime, limit )
         .then(res => {
