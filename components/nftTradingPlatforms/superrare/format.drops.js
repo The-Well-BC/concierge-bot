@@ -1,5 +1,5 @@
 module.exports = (item) => {
-    let url = `https://superrare.co/artwork-v2/${ item.nonFungibleToken.name.replace(' ', '-') }-${ item.nonFungibleToken.tokenId }`;
+    let url = `https://superrare.co/artwork-v2/${ item.nonFungibleToken.name.replace(/\s/g, '-') }-${ item.nonFungibleToken.tokenId }`;
 
     return {
         creator: {
