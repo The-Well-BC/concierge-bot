@@ -18,7 +18,7 @@ module.exports = function(payload, format) {
 
     let { creator, product, extras } = messageData;
 
-    let text = '💫 FRESH MINT / DROP\n';
+    let text = '💫 NEW DROP\n';
     text += `${ creator } just released ${ product }`;
 
     if(messageData.extras && Array.isArray(messageData.extras) && messageData.extras.length > 0) {
