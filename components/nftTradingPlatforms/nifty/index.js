@@ -12,7 +12,7 @@ module.exports = {
         })
         .then(res => {
             events.push(...res);
-            return events;
+            return events.filter(i => i.url);
         });
     }
 }
