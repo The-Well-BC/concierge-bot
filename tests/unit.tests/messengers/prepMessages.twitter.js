@@ -4,6 +4,22 @@ const chai = require('chai');
 const expect = chai.expect;
 
 describe('Twitter functions: Prepary payload for twitter', function() {
+    describe('Messages', function() {
+        it('Message links', function() {
+            let chatIDs = [ 1234 ];
+
+            let payload = [{
+                text: 'This is sample text',
+                link: 'https://genz.com'
+            }]
+
+            let response =  prepMessage(payload, ['12345', '5678']);
+
+            expect(response).to.all.have.property('text', 'This is sample text\n\nhttps://genz.com');
+            expect(response.map(i => i.chatID)).to.eql(['12345', '5678']);
+        });
+    });
+
     describe('With single message payload', function() {
         it('With regular chatIDs', function() {
             let chatIDs = [ 1234 ];
@@ -30,18 +46,15 @@ describe('Twitter functions: Prepary payload for twitter', function() {
 
             let response =  prepMessage(payload, ['12345', '5678', 'all']);
 
-            console.log('RESPONSE', response);
-
             expect(response).to.have.deep.members([
                 {
                     text: 'This is sample text',
-                    chatID: 'all'
-                }, {
-                    chatID: '12345',
-                    text: 'This is sample text',
+                    chatID: '12345'
                 }, {
                     chatID: '5678',
-                    text: 'This is sample text',
+                    text: 'This is sample text'
+                }, {
+                    text: 'This is sample text'
                 }
             ]);
         });
