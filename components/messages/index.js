@@ -23,21 +23,24 @@ module.exports = {
     help,
 
     alertMessage(payload, format) {
-        let text = '';
+        let text = '', link;
 
         switch(payload.event) {
             case 'drop':
-                text += dropText(payload, format)
+                text += dropText(payload, format).text;
+                link = dropText(payload, format).link;
                 break;
             case 'listing':
-                text += listingText(payload, format)
+                text += listingText(payload, format);
                 break;
             case 'bid':
             case 'offer':
-                text += bidText(payload, format)
+                text += bidText(payload, format).text;
+                link = bidText(payload, format).link;
                 break;
             case 'sale':
-                text += saleText(payload, format);
+                text += saleText(payload, format).text;
+                link = saleText(payload, format).link;
                 break;
             default:
                 return null;
@@ -69,7 +72,7 @@ module.exports = {
         let photo = (payload.img != null || undefined) ?
             payload.img : null;
 
-            console.log('PHOTO URL', photo);
+            // console.log('PHOTO URL', photo);
 
             if(/res\.cloudinary\.com/.test(photo)) {
                 if(/\.gif$/.test(photo))
@@ -85,6 +88,7 @@ module.exports = {
 
         return {
             text,
+            ...(link) && {link},
             ...(photo != null) && { img: photo }
         }
     }

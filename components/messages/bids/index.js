@@ -11,7 +11,7 @@ module.exports = function(payload, format) {
 
     let { date, time } = dateFormatter(dDate);
 
-    let {nft, buyer, seller, txUrl, extras, bidder} = bidFormatting(payload, format);
+    let {nft, link, buyer, seller, txUrl, extras, bidder, links} = bidFormatting(payload, format);
 
     let txPrice;
 
@@ -72,6 +72,6 @@ module.exports = function(payload, format) {
         extras.forEach(o => text += `\n${o}`);
     }
 
-    return text;
+    return {text, ...link && {link}};
 }
 

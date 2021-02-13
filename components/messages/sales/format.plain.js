@@ -10,7 +10,7 @@ module.exports = function(payload, format) {
 
     if(payload.url)
         // text.more.push(`\nView ${ payload.name } - ${ payload.url }`);
-        text.more.push(`MORE →  ${ payload.url }`);
+        text.link = payload.url;
 
     if(payload.creator) {
         if(payload.creator.name) {

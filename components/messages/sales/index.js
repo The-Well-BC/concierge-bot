@@ -22,7 +22,7 @@ module.exports = function(payload, format) {
             break;
     }
 
-    const { nftName, creator, buyer, more } = textParts;
+    const { nftName, creator, buyer, more, link } = textParts;
 
     let text = '⚡ NEW SALE\n'
     text += nftName;
@@ -39,5 +39,5 @@ module.exports = function(payload, format) {
         more.forEach(i => text += `\n${ i }`);
     }
 
-    return text;
+    return { text, ...link && {link} };
 }

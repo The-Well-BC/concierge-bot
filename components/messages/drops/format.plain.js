@@ -1,5 +1,5 @@
 module.exports = function(payload) {
-    let creator = '', product, extras = [];
+    let creator = '', product;
 
     if(payload.creator) {
         if(payload.creator.name) {
@@ -15,7 +15,7 @@ module.exports = function(payload) {
     product = payload.name;
 
     if(payload.url)
-        extras.push(`MORE → ${payload.url}`);
+        link = payload.url;
 
-    return { creator, product, extras };
+    return { creator, product, ...link && {link} };
 }

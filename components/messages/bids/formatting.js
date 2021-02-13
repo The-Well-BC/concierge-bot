@@ -1,6 +1,6 @@
 module.exports = function(payload, format) {
     let text = { extras: []};
-    let buyer, seller, tx, bidder;
+    let buyer, seller, tx, bidder, link;
 
     if(payload.buyer) {
         buyer = payload.buyer;
@@ -34,11 +34,15 @@ module.exports = function(payload, format) {
         case 'plain':
         default:
 
+            text.link = payload.url;
+
+            /*
             if(payload.event === 'bid' && payload.url)
                 text.extras.push(`View ${ text.nft } - ${ payload.url}`);
 
             if(payload.transaction && payload.transaction.url)
                 text.extras.push(`View ${ payload.event } - ${ payload.transaction.url }`);
+            */
             break;
 
         case 'markdown':
