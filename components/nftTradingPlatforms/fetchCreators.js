@@ -6,7 +6,7 @@ const nifty = require('./nifty');
 module.exports = (limit) => {
     let creators;
 
-    return foundation.fetchCreators(limit )
+    return foundation.fetchCreators( limit )
     .then(res => {
         creators = res;
         return creators;

@@ -5,6 +5,7 @@ let bidFormatter = require('./formatters/bids');
 const creators = require('./creators');
 
 module.exports = {
+    fetchCreators: creators,
     fetchEvents: (startTime, limit) => {
         let events = [];
         return fetchAll(startTime, limit)
