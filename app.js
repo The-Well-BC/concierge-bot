@@ -11,6 +11,10 @@ database.initializeDatabase(config.database.connection)
 
 require('./components/alertsCronJob')();
 
+// Update eth price
+const ethPrice = require("./components/ethPrice");
+ethPrice.updatePrice();
+
 const links = require('./config/links');
 
 app.post(links.telegramWebhook, ctrl.receiveBotMessage);
