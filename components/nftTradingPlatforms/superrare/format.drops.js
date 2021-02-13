@@ -8,7 +8,7 @@ module.exports = (item) => {
         },
         event: 'drop',
         date: item.timestamp,
-        img: item.nonFungibleToken.image,
+        ...item.nonFungibleToken.image && {img: item.nonFungibleToken.image},
         platform: 'superrare',
         url,
         name: item.nonFungibleToken.name

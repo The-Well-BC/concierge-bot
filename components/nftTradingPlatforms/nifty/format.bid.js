@@ -2,7 +2,7 @@ module.exports = function(item) {
     let niftyObj = item.NiftyObject || item.UnmintedNiftyObj;
     let nft = {
         name: niftyObj.name || niftyObj.niftyTitle,
-        img: niftyObj.niftyImageURL,
+        ...niftyObj.niftyImageURL && {img: niftyObj.niftyImageURL},
         date: item.Timestamp,
         event: 'bid',
         platform: 'nifty',
