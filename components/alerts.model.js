@@ -8,7 +8,6 @@ const twitter = require('./messenger/twitter');
 const messages = require('./messages');
 
 module.exports = {
-    //sendAlerts: function(messages, startTime) {
     sendAlerts: function(startTime, limit = 10) {
         let payload = [];
         const nfts = nftFn(startTime);
@@ -22,7 +21,6 @@ module.exports = {
             return subdao.fetchSubscription()
         })
         .then(subscriptions => {
-            // Telegram messages
             let sortedMessages = {};
 
             subscriptions.push({ chatID: 'all', messenger: 'twitter' });
@@ -38,9 +36,6 @@ module.exports = {
                 return { message: messages.alertMessage(p.payload, twitter.format), chatIDs: p.chatIDs }
             });
 
-            console.log('TELEGRAM ALERTGS', telegramAlerts);
-            console.log('TWITTER ALERTGS', twitterAlerts);
-
             let promises = telegramAlerts.map(p => telegram.sendMessage(p.message, p.chatIDs));
             promises.push(
                 ...twitterAlerts.map(p => twitter.sendMessage(p.message, p.chatIDs))
@@ -48,7 +43,8 @@ module.exports = {
 
             return Promise.all(promises);
         }).catch(e => {
-            console.log('ERROR', e);
+            console.error('ERROR', e);
+            return;
         });
     }
 }
