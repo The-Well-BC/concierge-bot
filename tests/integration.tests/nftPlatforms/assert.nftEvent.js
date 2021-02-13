@@ -1,10 +1,12 @@
-const keys = [ 'event', 'platform', 'date', 'img', 'url' ];
+const keys = [ 'event', 'platform', 'date', 'url' ];
 const events = ['sale', 'drop', 'bid', 'listing', 'offer']
 
 const dropAssert = require('./assert.drop');
 const bidAssert = require('./assert.bid');
 const listingAssert = require('./assert.listing');
 const transactionAssert = require('./assert.tx');
+
+const expect = require('chai').expect;
 
 module.exports = function(chai, utils) {
     let Assertion = chai.Assertion;
@@ -19,6 +21,11 @@ module.exports = function(chai, utils) {
             throw new Error('No start time');
 
         let assert = this.assert;
+
+        obj.forEach(o => {
+            if(!o.url)
+                console.log('OBJEECT HAS NO URL\n', o);
+        });
 
         expect(obj).to.all.include.keys(...keys);
 
@@ -48,12 +55,15 @@ module.exports = function(chai, utils) {
                 );
             }
 
-            assert( 
-                !item.img.includes('undefined'),
-                'Property "img" should not include string \'undefined\'. Got \'#{act}\'',
-                'String',
-                item.img
-            );
+            // NFT event images are not compulsory anymore
+            if(item.img) {
+                assert( 
+                    !item.img.includes('undefined'),
+                    'Property "img" should not include string \'undefined\'. Got \'#{act}\'',
+                    'String',
+                    item.img
+                );
+            }
 
             assert(
                 !item.url.includes('undefined'),
@@ -66,14 +76,16 @@ module.exports = function(chai, utils) {
             // Price
             if(item.price) {
                 if(/^\$\d/.test(item.price)) {
-                    console.log('ITEM PRICE', item.price);
-                    
+                    expect(item.price).to.not.match(/\$\s?0/);
+
+                    /*
                     assert(/\$\s?0/.test(item.price),
                         'Price should not be $0',
                         '',
                         'Price greater than 0',
                         item.price
                     );
+                    */
                 }
             }
 
