@@ -31,10 +31,10 @@ module.exports = function(startTime, limit = 10) {
                     payload = dropFormatter(item);
                     break;
                 case 'SALE':
+                case 'ACCEPT_BID':
                     payload = saleFormatter(item);
                     break;
                 case 'BID':
-                case 'ACCEPT_BID':
                 case 'AUCTION_BID':
                     payload = bidFormatter(item);
                     break;

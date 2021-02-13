@@ -4,21 +4,6 @@ module.exports = (item) => {
     let price, transaction = {}, buyer, seller, bidder, previousBidder;
 
     switch(item.nftEventType) {
-        case 'ACCEPT_BID':
-            transaction.price = item.acceptBid.amount / 1000000000000000000;
-            transaction.price = transaction.price + ' ETH';
-
-            if(item.acceptBid.bidder) {
-                buyer = {
-                    name: item.acceptBid.bidder.username,
-                    url: `https://superrare.co/${ item.acceptBid.bidder.username }`,
-                }
-            }
-            seller = {
-                name: item.acceptBid.seller.username,
-                url: `https://superrare.co/${ item.acceptBid.seller.username }`
-            }
-            break;
         case 'BID':
             if(item.bid.bidder && item.bid.bidder.username) {
                 bidder = {
@@ -46,7 +31,7 @@ module.exports = (item) => {
 
     return {
         name: item.nonFungibleToken.name,
-        img: item.nonFungibleToken.image,
+        ...item.nonFungibleToken.image && {img: item.nonFungibleToken.image},
         transaction,
         creator: {
             name: item.nonFungibleToken.metadata.createdBy,
