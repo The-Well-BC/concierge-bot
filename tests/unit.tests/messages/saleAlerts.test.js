@@ -39,7 +39,8 @@ describe('Test NFT event alerts: SALE', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain).to.have.property('text', '⚡ NEW SALE\nMystery Box X by Old Frog sold to John Sommet for $80.53\n\nMORE →  https://one.two.three\n\n' + plainEnder);
+        expect(plain).to.have.property('link', payload.url);
+        expect(plain).to.have.property('text', '⚡ NEW SALE\nMystery Box X by Old Frog sold to John Sommet for $80.53\n\n' + plainEnder);
         expect(markdown).to.have.property('text', '⚡ NEW SALE\n[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53\n\n' + markdownEnder);
     });
 
@@ -61,23 +62,6 @@ describe('Test NFT event alerts: SALE', function() {
 
         expect(plain.text).to.match(/^.*\r?\nMystery Box X by Old Frog/);
         expect(markdown.text).to.match(/^.*\r?\n\[Mystery Box X\]\(https:\/\/one.two.three\) by Old Frog/);
-    });
-
-    it('When image is present', function() {
-        let payload = {
-            ...minPayload,
-            url: 'https://one.two.three',
-            img: 'https://123.com',
-            transaction: {
-                price: '$80.53',
-            }
-        }
-
-        let alertMessages = formats.map(format => { 
-            return messages.alertMessage(payload, format);
-        });
-
-        expect(alertMessages).to.all.have.property('img', 'https://123.com');
     });
 
     it('When NFT url is not available', function() {

@@ -8,7 +8,8 @@ const fetchTweet = require('../../../components/messenger/twitter/api/fetchTweet
 describe('Twitter API: Send Tweet', function() {
     it('Send tweet', function() {
         const message = {
-            text: 'Create tweet' + new Date(), 
+            text: 'Send tweet with link attachment\n' + new Date(),
+            link: 'https://superrare.co/artwork-v2/Merchant-19272'
         }
 
         let tweetid;

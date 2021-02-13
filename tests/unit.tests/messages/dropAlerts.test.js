@@ -32,9 +32,10 @@ describe('Test NFT event: DROP/NFT RELEASE', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(markdown).to.have.property('text', '💫 FRESH MINT / DROP\n[Robots X](https://zora.com/u/robots-x) just released [AESII - Technical Cargo Pants](https://zora.com/drops/aes-1337)\n\n' + markdownEnder);
-        expect(markdownV2).to.have.property('text', '💫 FRESH MINT / DROP\n[Robots X](https://zora.com/u/robots-x) just released [AESII - Technical Cargo Pants](https://zora.com/drops/aes-1337)\n\n' + markdownV2Ender);
-        expect(plain).to.have.property('text', '💫 FRESH MINT / DROP\nRobots X just released AESII - Technical Cargo Pants\n\nMORE → https://zora.com/drops/aes-1337\n\n' + plainEnder);
+        expect(markdown).to.have.property('text', '💫 NEW DROP\n[Robots X](https://zora.com/u/robots-x) just released [AESII - Technical Cargo Pants](https://zora.com/drops/aes-1337)\n\n' + markdownEnder);
+        expect(markdownV2).to.have.property('text', '💫 NEW DROP\n[Robots X](https://zora.com/u/robots-x) just released [AESII - Technical Cargo Pants](https://zora.com/drops/aes-1337)\n\n' + markdownV2Ender);
+        expect(plain).to.have.property('link', resourcePayload.url);
+        expect(plain).to.have.property('text', '💫 NEW DROP\nRobots X just released AESII - Technical Cargo Pants\n\n' + plainEnder);
 
     });
 });

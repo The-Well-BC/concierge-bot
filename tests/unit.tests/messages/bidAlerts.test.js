@@ -35,25 +35,8 @@ describe('Test NFT event alerts: BIDS', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain).to.have.property('text', 'John Sommet has bid $80.53 on Mystery Box X\n\nMORE:\n\nView Mystery Box X - https://one.two.three\nView bid - https://tx.com\n\n' + plainEnder);
+        expect(plain).to.have.property('text', 'John Sommet has bid $80.53 on Mystery Box X\n\n' + plainEnder);
         expect(markdown).to.have.property('text', 'John Sommet has bid $80.53 on [Mystery Box X](https://one.two.three)\n\nMORE:\n\n[View bid](https://tx.com)\n\n' + markdownEnder);
-    });
-
-    it('When image is present', function() {
-        let payload = {
-            ...minPayload,
-            url: 'https://one.two.three',
-            img: 'https://123.com',
-            transaction: {
-                price: '$80.53',
-            }
-        }
-
-        let alertMessages = formats.map(format => { 
-            return messages.alertMessage(payload, format);
-        });
-
-        expect(alertMessages).to.all.have.property('img', 'https://123.com');
     });
 
     it('When bidder property is not available', function() {

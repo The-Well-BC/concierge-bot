@@ -8,9 +8,9 @@ const chatID = payload.chatID;
 const chatIDs = [payload.chatID,payload.chatID1];
 
 describe('Twitter methods: Send Text Message', function() {
-    it('#dev Should have link at the end of text if link property is included.', function() {
+    it('Should have link at the end of text if link property is included.', function() {
         const message = {
-            text: 'Succeeded in sending text with link DM for multiple users\n' + new Date(),
+            text: 'Succeeded in sending text with link\n' + new Date(),
             link: 'https://test.xyz'
         }
 
@@ -20,13 +20,14 @@ describe('Twitter methods: Send Text Message', function() {
         .then(res => {
             expect(res).to.not.be.empty;
 
-            expect(res).to.satisfy( arr => {
-                return arr.every(item => {
-                    expect(item.event.message_create.message_data.text).to.contain(message.text);
-                    expect(item.event.message_create.message_data.entities.urls[0].url).to.equal('https://test.xyz');
+            expect(res).to.all.satisfy( item => {
+                let text = (item.event) ? item.event.message_create.message_data.text : item.tweet.text;
+                let url = (item.event) ?  item.event.message_create.message_data.entities.urls[0].expanded_url : item.tweet.entities.urls[0].expanded_url;
 
-                    return true;
-                });
+                expect(text).to.contain(message.text);
+                expect(url).to.equal('https://test.xyz');
+
+                return true;
             });
 
         });
@@ -138,7 +139,7 @@ describe('Twitter methods: Send Text Message', function() {
     });
     it('Should send photos if photo is specified', function() {
         const message = {
-            text: 'PHOTO MESSAGE\nSucceeded in sending text only DM for multiple users and one tweet\n' + new Date(),
+            text: 'PHOTO MESSAGE\nSucceeded in sending text only DM for multiple users and one tweet\n' + new Date().toDateString(),
             img: 'https://ipfs.pixura.io/ipfs/QmfGPaD6kKoKVzjQUcj2KHEL4JWTPikGewREbYz4TywNWg/into-the-ether-verse.mp4'
         }
 
@@ -154,6 +155,8 @@ describe('Twitter methods: Send Text Message', function() {
 
                     assert.propertyVal(item.event, 'type', 'message_create');
                     assert.property(item.event.message_create, 'message_data');
+
+                    console.log('DM MESSAGE TEXT', item.event.message_create.message_data.text);
                     expect(item.event.message_create.message_data.text).to.have.string(message.text);
 
                     return true;
