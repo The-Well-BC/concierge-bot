@@ -8,6 +8,30 @@ const chatID = payload.chatID;
 const chatIDs = [payload.chatID,payload.chatID1];
 
 describe('Twitter methods: Send Text Message', function() {
+    it('#dev Should have link at the end of text if link property is included.', function() {
+        const message = {
+            text: 'Succeeded in sending text with link DM for multiple users\n' + new Date(),
+            link: 'https://test.xyz'
+        }
+
+        let tweetid;
+
+        return twitter.sendMessage(message, [...chatIDs, 'all'])
+        .then(res => {
+            expect(res).to.not.be.empty;
+
+            expect(res).to.satisfy( arr => {
+                return arr.every(item => {
+                    expect(item.event.message_create.message_data.text).to.contain(message.text);
+                    expect(item.event.message_create.message_data.entities.urls[0].url).to.equal('https://test.xyz');
+
+                    return true;
+                });
+            });
+
+        });
+    });
+
     it('Should send private messages if multiple user chatIDs are specified', function() {
         const message = {
             text: 'Succeeded in sending text only DM for multiple users\n' + new Date(),
@@ -20,7 +44,7 @@ describe('Twitter methods: Send Text Message', function() {
             expect(res).to.have.lengthOf(2);
 
             expect(res).to.satisfy( arr => {
-                return arr.every(item => {
+                let c1 = arr.every(item => {
                     assert.property(item, 'event');
                     assert.propertyVal(item.event, 'type', 'message_create');
                     assert.property(item.event.message_create, 'message_data');
@@ -36,7 +60,7 @@ describe('Twitter methods: Send Text Message', function() {
                     return (item.event.message_create.target.recipient_id === chatIDs[1]);
                 });
 
-                return dm1 && dm2;
+                return c1 && dm1 && dm2;
             });
 
         });

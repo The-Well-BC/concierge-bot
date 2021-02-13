@@ -1,28 +1,31 @@
 module.exports = function(payloadArr, chatIDs) {
+    let messages = [];
+
     if( !Array.isArray(payloadArr) )
         payloadArr = [ payloadArr ];
 
-    let messages = [];
+    if(!chatIDs)
+        throw new Error('No chat IDs');
 
-    payloadArr.forEach(payload => {
-        if(!chatIDs)
-            throw new Error('No chat IDs');
+    if( !Array.isArray(chatIDs) ) {
+        if(typeof chatIDs != 'object')
+            chatIDs = { chat_id: chatIDs };
 
-        if( !Array.isArray(chatIDs) ) {
-            if(typeof chatIDs != 'object')
-                chatIDs = { chat_id: chatIDs };
+        chatIDs = [ chatIDs ];
+    }
 
-            chatIDs = [ chatIDs ];
-        }
-
+    return payloadArr.map(payload => {
         let photo = (payload.img != null || undefined) ?
             payload.img : null;
 
         return chatIDs.map(o => {
-            let chatID = o;
-
             if(!o)
                 throw new Error('Chat ID not specified');
+
+            let chatID;
+
+            if(o != 'all')
+                chatID = o;
 
             let quick_reply;
             if(payload.replies) {
@@ -40,20 +43,21 @@ module.exports = function(payloadArr, chatIDs) {
 
             }
 
-            let text = payload.text;
+            let { text, link } = payload;
 
             if(quick_reply)
                 text += '\n\nHint: If you don\'t see the predefined responses, click the hamburger menu beside the text input field (the three horizontal bars) to see them';
 
+            if(link)
+                text+= '\n\n' + link;
 
-            messages.push({
+
+            return {
                 ...chatID && {chatID},
                 text,
                 ...quick_reply && { quick_reply },
                 ...(photo != null) && { photo }
-            });
+            }
         })
-    });
-
-    return messages;
+    }).flat()
 }

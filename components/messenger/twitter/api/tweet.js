@@ -15,6 +15,9 @@ module.exports = (payload) => {
     if(payload.mediaID)
         body.media_ids = payload.mediaID;
 
+    if(payload.link)
+        body.status += '\n\n' + payload.link;
+
     return new Promise(function(resolve, reject) {
         client.post('statuses/update', body, function(error, tweet, response) {
 

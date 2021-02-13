@@ -7,31 +7,24 @@ module.exports = (message, chatIDs) => {
     if( !Array.isArray(chatIDs) )
         chatIDs = [chatIDs];
 
-    let messageObj = {
-        text: message.text,
-    }
-
-    let imageUrl = message.image || message.img || message.photo || message.url;
+    let messages = prepareMessages(message, chatIDs);
 
     let promises = [];
 
-    chatIDs.forEach(item => {
-        if(message.quick_reply)
-            messageObj.quick_reply = message.quick_reply;
+    messages.forEach(item => {
+        console.log('MESSAGE ITEM', item);
+        if(item.photo) {
+            let msg = {...item, image: item.photo};
 
-        if(imageUrl) {
-            let msg = {...messageObj, image: imageUrl};
-
-            if(item != 'all')
-                msg = {...msg, chatID: item, private: true};
+            if(item.chatID)
+                msg = {...msg, chatID: item.chatID, private: true};
 
             promises.push( uploadMedia(msg) );
         } else {
-            if(item == 'all') {
-                promises.push(tweet(messageObj));
+            if(item.chatID) {
+                promises.push(sendDM(item));
             } else {
-                messageObj.chatID = item;
-                promises.push(sendDM(messageObj));
+                promises.push(tweet(item));
             }
         }
     });

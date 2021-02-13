@@ -23,15 +23,14 @@ module.exports = {
             if(res === true)
                 return new Promise.resolve(true);
             else if(res) {
-                let message = messengerFn.prepareMessage(res, [ parsedMessage.chatID ])[0]
-
                 if(messenger == 'twitter') {
-                    return messengerFn.sendMessage(message, [parsedMessage.chatID])
+                    return messengerFn.sendMessage(res, [parsedMessage.chatID])
                     .then(res => {
                         return res[0];
                     });
                 } else
-                    return message;
+                    return messengerFn.prepareMessage(res, [ parsedMessage.chatID ])[0]
+
             }
         })
         .catch(err => {
