@@ -76,16 +76,12 @@ module.exports = function(chai, utils) {
             // Price
             if(item.price) {
                 if(/^\$\d/.test(item.price)) {
-                    expect(item.price).to.not.match(/\$\s?0/);
-
-                    /*
-                    assert(/\$\s?0/.test(item.price),
+                    assert(/\$\s?0$/.test(item.price) === false,
                         'Price should not be $0',
                         '',
-                        'Price greater than 0',
-                        item.price
+                        'Price greater than $0.00',
+                        item
                     );
-                    */
                 }
             }
 

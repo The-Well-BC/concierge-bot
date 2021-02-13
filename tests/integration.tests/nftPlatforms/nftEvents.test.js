@@ -9,20 +9,20 @@ const expect = chai.expect;
 const nifty = require('../../../components/nftTradingPlatforms/nifty');
 const superrare = require('../../../components/nftTradingPlatforms/superrare');
 const foundation = require('../../../components/nftTradingPlatforms/foundation');
+const zora = require('../../../components/nftTradingPlatforms/zora');
 
 const nftFn = require('../../../components/nftTradingPlatforms');
 
-describe('#dev Fetch NFT events', function() {
+describe('Fetch NFT events', function() {
     this.timeout(15000);
 
     const now = new Date();
-    let startTime = new Date().setDate(now.getDate() - 220);
+    let startTime = new Date().setDate(now.getDate() - 75);
 
-    const platformArr = ['nifty', 'superrare'];
+    const platformArr = ['nifty', 'superrare', 'foundation', 'zora'];
 
-    it('Fetch all events', function() {
+    it('#dev Fetch all events', function() {
         const limit = 35;
-        startTime = new Date().setDate(now.getDate() - 1);
 
         return nftFn(startTime).fetchEvents( limit )
         .then(res => {
@@ -30,18 +30,24 @@ describe('#dev Fetch NFT events', function() {
             expect(res, 'Nft Event test').to.all.be.nftEvent(startTime);
 
             expect(res).to.satisfy(arr => {
-                let c1 = arr.some(item => {
-                    return item.platform === 'nifty';
-                });
-                let c2 = arr.some(item => {
-                    return item.platform === 'superrare';
-                });
+                expect(arr.some(i => i.platform === 'nifty'),
+                    'At least one Nifty Gateway i'
+                ).to.be.true;
+                expect(
+                    arr.some(i => i.platform === 'superrare' ),
+                    'At least one SuperRare item'
+                ).to.be.true;
+                expect(
+                    arr.some(i => i.platform === 'foundation'),
+                    'At least one Foundation item'
+                ).to.be.true;
+                expect(
+                    arr.some(i => i.platform === 'zora'),
+                    'At least one Zora item'
+                ).to.be.true;
 
-                expect(c1, 'At least one Nifty Gateway item').to.be.true;
-                expect(c2, 'At least one SuperRare item').to.be.true;
-
-                return arr.every(item => {
-                    expect(platformArr).to.include(item.platform);
+                return arr.every(i => {
+                    expect(platformArr).to.include(i.platform);
                     return true;
                 });
             });
@@ -63,7 +69,7 @@ describe('#dev Fetch NFT events', function() {
         });
     })
 
-    it('Fetch from Foundation', function() {
+    it('#dev Fetch from Foundation', function() {
         const limit = 30;
         startTime = new Date().setDate(now.getDate() - 90);
 
@@ -77,6 +83,26 @@ describe('#dev Fetch NFT events', function() {
 
             expect(res).to.not.have.lengthOf.above(limit);
             expect(res).to.all.have.property('platform', 'foundation');
+
+            expect(res, 'No undefined properties').to.all.have.noUndefinedKeys();
+            expect(res, 'Nft Event test').to.all.be.nftEvent(startTime);
+        });
+    })
+
+    it('Fetch from Zora', function() {
+        const limit = 30;
+        startTime = new Date().setDate(now.getDate() - 75);
+
+        return zora.fetchEvents( startTime, limit )
+        .then(res => {
+            expect(res).to.not.be.empty.and.to.not.have.lengthOf.above(limit);
+
+            expect(res).to.satisfy(arr => {
+                return arr.some(item => item.event === 'drop');
+            });
+
+            expect(res).to.not.have.lengthOf.above(limit);
+            expect(res).to.all.have.property('platform', 'zora');
 
             expect(res, 'No undefined properties').to.all.have.noUndefinedKeys();
             expect(res, 'Nft Event test').to.all.be.nftEvent(startTime);
