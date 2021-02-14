@@ -13,22 +13,31 @@ const subscribe = function(chat_id, messenger, params) {
             let text = 'Your Subscription Filters\nYou will only receive notifications that pass at least one of your filters\n';
             text += `Type ${ filterCommand } delete <number> to delete a filter\n`;
 
-            res[0].filters.forEach((filter, i) => {
-                text += `\n${i + 1}. `;
-                let { events, platforms, creators,
-                    priceGT, priceLT, priceGTE, priceLTE,
-                    txPriceGT, txPriceLT, txPriceGTE, txPriceLTE
-                } = filter;
+            console.log('USER SUBS', res);
+            if(res.length == 0) {
+                text = 'You are not subscribed.';
+                return { text };
+            } else if (res[0].filters.length == 0) {
+                text += '\n\nYou have no filters and are subscribed to the default filters for your messenger';
+                return { text }
+            } else {
+                res[0].filters.forEach((filter, i) => {
+                    text += `\n${i + 1}. `;
+                    let { events, platforms, creators,
+                        priceGT, priceLT, priceGTE, priceLTE,
+                        txPriceGT, txPriceLT, txPriceGTE, txPriceLTE
+                    } = filter;
 
-                text += filterMessage(filter);
-            });
+                    text += filterMessage(filter);
+                });
 
-            return { text };
+                return { text };
 
-            for(key in platformNames) {
-                const name = platformNames[key].name;
+                for(key in platformNames) {
+                    const name = platformNames[key].name;
 
-                const nameRegex = new RegExp(name, 'ig');
+                    const nameRegex = new RegExp(name, 'ig');
+                }
             }
         });
     } else {
