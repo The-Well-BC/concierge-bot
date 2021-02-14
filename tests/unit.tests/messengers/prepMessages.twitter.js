@@ -18,6 +18,22 @@ describe('Twitter functions: Prepary payload for twitter', function() {
             expect(response).to.all.have.property('text', 'This is sample text\n\nhttps://genz.com');
             expect(response.map(i => i.chatID)).to.eql(['12345', '5678']);
         });
+        it('Should delete img if message link', function() {
+            let chatIDs = [ 1234 ];
+
+            let payload = [{
+                text: 'This is sample text',
+                link: 'https://genz.com',
+                img: 'Boon'
+            }]
+
+            let response =  prepMessage(payload, ['12345', '5678']);
+
+            expect(response).to.all.have.property('text', 'This is sample text\n\nhttps://genz.com');
+            console.log('RESPONSE', response);
+            expect(response).to.all.not.include.key('photo');
+            expect(response.map(i => i.chatID)).to.eql(['12345', '5678']);
+        });
     });
 
     describe('With single message payload', function() {

@@ -48,8 +48,10 @@ module.exports = function(payloadArr, chatIDs) {
             if(quick_reply)
                 text += '\n\nHint: If you don\'t see the predefined responses, click the hamburger menu beside the text input field (the three horizontal bars) to see them';
 
-            if(link)
+            if(link) {
                 text+= '\n\n' + link;
+                photo = null;
+            }
 
 
             return {
