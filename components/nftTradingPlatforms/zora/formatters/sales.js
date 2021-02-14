@@ -1,18 +1,17 @@
 module.exports = function(p) {
-    const { name, title, featuredImage, organisation, releaseDate, variants } = p;
-    const img = (featuredImage) ? featuredImage.mediaURL : null;
-    // console.log('PRODUCT', p);
-    let price = p.latestPrice / 1000000;
-    price = '$' + parseFloat(price).toFixed(2);
+    // console.log('SALE PAYLAOD', p);
+    let { date } = p;
+
+    const img = (p.media) ? p.media.contentURI : null;
+
+    let price = p.amount;
 
     return {
-        name: `${ name } - ${ title }`,
-        creator: organisation.name,
+        name: p.media.name,
         img,
         price,
         event: 'sale',
-        service: 'zora',
+        platform: 'zora',
         date: p.date,
-        releaseDate
     }
 }

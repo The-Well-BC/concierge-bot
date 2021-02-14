@@ -7,30 +7,26 @@ module.exports = {
         let events = [];
         return fetchAll(startTime, limit)
         .then(res => {
+            // console.log('ALL ITEMS', res);
             return res.map(item => {
                 let payload;
 
-                let eventType = item.type;
+                let eventType = item.event;
 
                 switch(eventType) {
                     case 'drop':
                         payload = dropFormatter(item);
                         break;
                     case 'sale':
-                    case 'buy':
-                    case 'ACCEPT_BID':
                         payload = saleFormatter(item);
                         break;
-                    case 'BID':
-                    case 'AUCTION_BID':
+                    case 'bid':
                         payload = bidFormatter(item);
                         break;
                     default:
                         payload = false; 
                         break;
                 }
-
-                // console.log('PAYLOAD', payload);
 
                 return payload;
             }).flat()
