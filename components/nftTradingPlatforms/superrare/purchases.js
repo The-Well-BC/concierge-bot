@@ -24,8 +24,6 @@ module.exports = function(startTime, limit = 10) {
             let urlNFT = (item.nonFungibleToken.tokenId < 5000) ? 'https://superrare.co/artwork' : 'https://superrare.co/artwork-v2';
             urlNFT += `/${ item.nonFungibleToken.name.toLowerCase().replace(/\s/g, '-').replace(/[^\da-z]/g, '') }-${ item.nonFungibleToken.tokenId }`;
 
-            console.log('URL', urlNFT);
-
             urlNFT = urlNFT.toLowerCase();
             // let creatorUrl = `https://superrare.co/${ item.creator.username }`
             let buyer, seller, price, transaction = {};
