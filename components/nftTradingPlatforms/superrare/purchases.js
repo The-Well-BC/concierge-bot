@@ -21,11 +21,10 @@ module.exports = function(startTime, limit = 10) {
     .then(res => {
         return res.data.result.eventsWithUsers
         .map(item => {
-            console.log('TOKEN ID', item.nonFungibleToken.tokenId);
-            let url = (item.nonFungibleToken.tokenId < 5000) ? 'https://superrare.co/artwork' : 'https://superrare.co/artwork-v2';
-            url += `/${ item.nonFungibleToken.name.replace(/\s/g, '-') }-${ item.nonFungibleToken.tokenId }`;
+            let urlNFT = (item.nonFungibleToken.tokenId < 5000) ? 'https://superrare.co/artwork' : 'https://superrare.co/artwork-v2';
+            urlNFT += `/${ item.nonFungibleToken.name.replace(/\s/g, '-').replace(/#/g, '') }-${ item.nonFungibleToken.tokenId }`;
 
-            url = url.toLowerCase();
+            urlNFT = urlNFT.toLowerCase();
             // let creatorUrl = `https://superrare.co/${ item.creator.username }`
             let buyer, seller, price, transaction = {};
             let payload;
@@ -47,9 +46,7 @@ module.exports = function(startTime, limit = 10) {
                     break;
             }
 
-            payload.url = url;
-
-            console.log('PAYLAOD', payload);
+            payload.url = urlNFT;
 
             return payload;
         }).filter(item => {
