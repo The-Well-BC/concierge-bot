@@ -71,6 +71,11 @@ module.exports = (filter) => {
 
 
         if( Array.isArray(platforms)) {
+            if(txPrice)
+                text += ' on ';
+            else
+                text += 'NFT EVENTS on ';
+
             let platformStr = platforms.map(p => nftPlatforms[p].name);
             if(platformStr.length > 1 ) {
                 let last = platformStr[platformStr.length - 1];
@@ -79,7 +84,7 @@ module.exports = (filter) => {
 
             platformStr = platformStr.join(', ');
 
-            text = `Successfully added subscription filter: NFT events on ${ platformStr }`;
+            text += platformStr;
         }
     }
 
