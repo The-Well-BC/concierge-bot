@@ -21,8 +21,8 @@ describe('Fetch NFT events', function() {
 
     const platformArr = ['nifty', 'superrare', 'foundation', 'zora'];
 
-    it('#dev Fetch all events', function() {
-        const limit = 35;
+    it('Fetch all events', function() {
+        const limit = 15;
 
         return nftFn(startTime).fetchEvents( limit )
         .then(res => {
@@ -69,7 +69,7 @@ describe('Fetch NFT events', function() {
         });
     })
 
-    it('#dev Fetch from Foundation', function() {
+    it('Fetch from Foundation', function() {
         const limit = 30;
         startTime = new Date().setDate(now.getDate() - 90);
 
@@ -90,8 +90,8 @@ describe('Fetch NFT events', function() {
     })
 
     it('Fetch from Zora', function() {
-        const limit = 30;
-        startTime = new Date().setDate(now.getDate() - 75);
+        const limit = 5;
+        startTime = new Date().setDate(now.getDate() - 1);
 
         return zora.fetchEvents( startTime, limit )
         .then(res => {
