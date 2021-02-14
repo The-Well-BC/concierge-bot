@@ -1,18 +1,14 @@
 module.exports = function(p) {
-    const { id, name, title, slug, featuredImage, creator, variants } = p;
-    const img = (featuredImage) ? featuredImage.mediaURL : null;
-    // console.log('PRODUCT', p);
-    let creatorURL = `https://store.zora.co/${ creator.id }/`;
-    let url = creatorURL + id;
+    const { id, name, title, slug, creator, variants } = p;
+    let url = creator.url + '/' + id;
 
     return {
-        name: `${ name } - ${ title }`,
+        name,
         url,
         ...creator.name && {creator: {
             name: creator.name,
-            url: creatorURL
+            url: creator.url
         }},
-        ...img && {img},
         event: 'drop',
         platform: 'zora',
         date: p.date,
