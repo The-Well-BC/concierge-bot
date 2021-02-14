@@ -50,7 +50,7 @@ module.exports = function(payloadArr, chatIDs) {
 
             if(link) {
                 text+= '\n\n' + link;
-                photo = null;
+                // photo = null;
             }
 
 
