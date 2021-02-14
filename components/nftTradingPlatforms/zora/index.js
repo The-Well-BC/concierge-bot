@@ -28,6 +28,12 @@ module.exports = {
                         break;
                 }
 
+                if(payload) {
+                    let media = (item.media) ? item.media : item;
+                    if(media && media.creator) {
+                        payload.url = media.creator.url + '/' + media.id;
+                    }
+                }
                 return payload;
             }).flat()
             .filter(item => {

@@ -4,7 +4,7 @@ const fetchHistoricalTicks = require('./fetchHistoricalTicks');
 module.exports = function(startTime, limit) {
     let products, bids;
 
-    let max = limit;
+    let max = parseInt(limit/2);
 
     const url = 'https://api.thegraph.com/subgraphs/name/ourzora/zora-v1';
     const query = `{
@@ -21,7 +21,7 @@ module.exports = function(startTime, limit) {
             date: createdAtTimestamp
         }
 
-        inactiveBids {
+        sales: inactiveBids(where:{createdAtTimestamp_gte: ${ parseInt(startTime / 1000)}, type: Finalized }, first: ${max}) {
             id
             currency {
                 symbol id name decimals
@@ -35,6 +35,9 @@ module.exports = function(startTime, limit) {
                 id
                 contentURI
                 metadataURI
+                creator {
+                    id
+                }
             }
             type
         }
@@ -58,7 +61,8 @@ module.exports = function(startTime, limit) {
 
                     return i;
                 });
-            } else if (key == 'inactiveBids') {
+            } else if (key == 'sales') {
+
                 return p.map(i => {
                     if(i.type == 'Finalized')
                         i.event = 'sale';
@@ -81,29 +85,41 @@ module.exports = function(startTime, limit) {
                 p.amount += ' ' + p.currency.symbol;
             }
 
-            if(nft) {
-                return axios.get(nft.metadataURI)
-                .then(res => {
-                    res = res.data;
-                    nft.name = res.name;
+            if(!nft)
+                throw new Error('You need to return an NFT (media) object');
 
-                    if(nft.creator) {
-                        return axios.get(`https://zora.co/_next/data/7eBPLEIZdEQZFfPiy9p4e/${nft.creator.id}.json`)
-                        .then(res => {
+            return axios.get(nft.metadataURI)
+            .then(res => {
+                res = res.data;
+                nft.name = res.name;
 
-                            res = res.data.pageProps;
+                if(!nft.creator)
+                    throw new Error('Return NFT creator object');
 
-                            nft.creator.name = res.user.name;
-                            nft.creator.url = res.seo.url;
+            // Fetch user Data
+                let users = [p.bidder, p.owner, p.buyer];
 
-                            return p;
-                        });
-                    }
+                users.push(nft.creator);
 
-                    return p;
-                });
-            } else
-                return Promise.resolve(p);
+                users = users.filter(u => u != null && u != undefined);
+
+                return Promise.all(users.map(user => {
+
+                    return axios.get(`https://zora.co/_next/data/7eBPLEIZdEQZFfPiy9p4e/${user.id}.json`)
+                    .then(res2 => {
+                        userData = res2.data.pageProps;
+
+                        if(userData.user)
+                            user.name = userData.user.name || userData.user.username;
+                        /*
+                        else if(userData.seo)
+                            user.name = userData.seo.title
+                        */
+
+                        user.url = userData.seo.url;
+                    })
+                })).then(() => p)
+            });
         }));
     }).catch(e => {
         console.error('ERRRO', e);

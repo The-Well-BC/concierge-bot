@@ -90,15 +90,28 @@ describe.only('Fetch NFT events', function() {
     })
 
     it('Fetch from Zora', function() {
-        const limit = 5;
-        startTime = new Date().setDate(now.getDate() - 1);
+        const limit = 9;
+        startTime = new Date().setDate(now.getDate() - 3);
 
         return zora.fetchEvents( startTime, limit )
         .then(res => {
             expect(res).to.not.be.empty.and.to.not.have.lengthOf.above(limit);
 
             expect(res).to.satisfy(arr => {
-                return arr.some(item => item.event === 'drop');
+
+                let c1 = arr.some(item => item.event === 'drop');
+
+                let c2 = arr.some(item => {
+                    // console.log('ITEM EVENT', item.event);
+                    if(item.event === 'sale') {
+                        expect(item).to.have.property('transaction');
+                        expect(item.transaction).to.have.property('price');
+                    }
+
+                    return item.event === 'sale';
+                });
+
+                return c1 && c2;
             });
 
             expect(res).to.not.have.lengthOf.above(limit);

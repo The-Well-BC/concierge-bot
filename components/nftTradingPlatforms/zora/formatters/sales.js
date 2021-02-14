@@ -1,6 +1,13 @@
 module.exports = function(p) {
-    // console.log('SALE PAYLAOD', p);
     let { date } = p;
+
+    let buyer = {
+        id: p.bidder.id,
+        url: p.bidder.url
+    }
+
+    if(p.bidder.name)
+        buyer.name =  p.bidder.name;
 
     const img = (p.media) ? p.media.contentURI : null;
 
@@ -9,6 +16,7 @@ module.exports = function(p) {
     return {
         name: p.media.name,
         img,
+        buyer,
         transaction: {price},
         event: 'sale',
         platform: 'zora',
