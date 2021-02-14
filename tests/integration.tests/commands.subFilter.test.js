@@ -6,6 +6,7 @@ const subdao = require('../../components/daos/subscription.dao');
 
 const formats = ['plain', 'markdown'];
 const messengers = ['twitter', 'telegram']
+const teardown = require('../teardown');
 
 let commandChars = ['!', '/'];
 
@@ -19,7 +20,6 @@ describe('The Subscription Filter Command', function() {
 
     let subPlatformText =  'Successfully added subscription filter: ';
     beforeEach(() => {
-        const teardown = require('../teardown');
         return teardown()
         .then(() => {
             let eventsArr = [['sale', 'bid'], ['drop']];
@@ -74,6 +74,33 @@ describe('The Subscription Filter Command', function() {
                 { chatID, filters: [ {events: ['sale', 'bid'], txPriceGTE: '$325'}, {events: ['drop']} ], messenger: 'twitter' },
                 { chatID, filters: [ {events: ['sale', 'bid'], txPriceGTE: '$325'}, {events: ['drop']} ], messenger: 'telegram' },
             ]);
+        });
+    });
+
+    it('View all filters when user is not subscribed', function() {
+        return teardown()
+        .then(() => {
+            let promises = Array.apply(null, {length: 2}).map((a, i) => {
+                payload.format = formats[i % 2];
+                let messenger = messengers[ i % 2];
+                return command(payload, messenger);
+            });
+
+            return Promise.all(promises)
+            .then(messages => {
+                expect(messages).to.satisfy(arr => {
+                    return arr.every((message, i) => {
+                        let c = commandChars[i];
+                        expect(message).to.have.key('text');
+                        expect(message).to.have.property('text', 'You are not subscribed.');
+
+                        return true;
+                    });
+                });
+                return subdao.fetchSubscription(chatID)
+            }).then(res => {
+                expect(res).to.be.empty;
+            });
         });
     });
 

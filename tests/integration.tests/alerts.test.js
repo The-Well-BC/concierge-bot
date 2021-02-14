@@ -18,7 +18,7 @@ describe('Sending alerts', function() {
         });
     });
 
-    it('Send alerts for 5 day period', function() {
+    it.skip('#dev Send alerts for 5 day period', function() {
         let now = new Date();
         let startTime = new Date(new Date().setDate(now.getDate() - 5));
 

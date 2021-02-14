@@ -10,7 +10,7 @@ const noUndefinedKeys = require('../../utils/noUndefinedKeys');
 
 const properties = ['name', 'url', 'stats', 'platform'];
 
-describe('Fetch NFT creators', function() {
+describe('#dev Fetch NFT creators', function() {
     describe('Sort by product count', function() {
         it('Foundation', function() {
             return foundation.fetchCreators(3)

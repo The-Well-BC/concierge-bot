@@ -80,6 +80,8 @@ describe('Test Help commands: Subscribe help', function() {
                     expect(message.replies).to.have.deep.members([
                         {text: `${c}subscribe nifty`},
                         {text: `${c}subscribe superrare`},
+                        {text: `${c}subscribe zora`},
+                        {text: `${c}subscribe foundation`},
                     ]);
 
                     expect(message.text).to.match(/You can choose to subscribe to alerts from only certain platforms.\nTo subscribe to all platforms, simply type \*?[\!\/]subscribe\*?\.\nTo subscribe to alerts from a particular platform, just type \*?[!\/]subscribe <platform>\*?.\nFor example, if you would like to receive updates from SuperRare, type \*?[!\/]subscribe SuperRare/);
@@ -118,6 +120,8 @@ describe('Test Help commands: Subscribe help', function() {
                     expect(message.replies).to.have.deep.members([
                         {text: `${c}subscribe nifty`},
                         {text: `${c}subscribe superrare`},
+                        {text: `${c}subscribe zora`},
+                        {text: `${c}subscribe foundation`},
                     ]);
 
                     return true;

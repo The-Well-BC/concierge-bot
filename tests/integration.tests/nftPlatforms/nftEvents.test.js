@@ -13,7 +13,7 @@ const zora = require('../../../components/nftTradingPlatforms/zora');
 
 const nftFn = require('../../../components/nftTradingPlatforms');
 
-describe('Fetch NFT events', function() {
+describe.only('Fetch NFT events', function() {
     this.timeout(15000);
 
     const now = new Date();

@@ -1,5 +1,5 @@
 // const keys = [ 'url', 'date', 'name', 'type', 'price', 'buyer', 'seller', 'platform', 'creator', 'img', 'tokensLeft', 'transaction' ];
-const keys = [ 'url', 'date', 'name', 'platform', 'event', 'img' ];
+const keys = [ 'url', 'date', 'name', 'platform', 'event' ];
 
 module.exports = function(item, assert, chai) {
     let expect = chai.expect;
