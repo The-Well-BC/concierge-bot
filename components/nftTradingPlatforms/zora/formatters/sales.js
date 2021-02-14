@@ -9,7 +9,7 @@ module.exports = function(p) {
     return {
         name: p.media.name,
         img,
-        price,
+        transaction: {price},
         event: 'sale',
         platform: 'zora',
         date: p.date,
