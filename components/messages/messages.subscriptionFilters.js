@@ -71,10 +71,7 @@ module.exports = (filter) => {
 
 
         if( Array.isArray(platforms)) {
-            if(txPrice)
-                text += ' on ';
-            else
-                text += 'NFT EVENTS on ';
+            text += ' on ';
 
             let platformStr = platforms.map(p => nftPlatforms[p].name);
             if(platformStr.length > 1 ) {
