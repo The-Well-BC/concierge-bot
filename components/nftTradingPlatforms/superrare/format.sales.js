@@ -1,5 +1,4 @@
 module.exports = (item) => {
-    let url = `https://superrare.co/artwork-v2/${ item.nonFungibleToken.name.replace(/\s/g, '-') }-${ item.nonFungibleToken.tokenId }`;
     let price, transaction = {};
 
     let buyer = { }, seller = {};
@@ -57,7 +56,6 @@ module.exports = (item) => {
         date: item.timestamp,
         event: 'sale',
         platform: 'superrare',
-        url,
         ...buyer && {buyer},
         seller
     }

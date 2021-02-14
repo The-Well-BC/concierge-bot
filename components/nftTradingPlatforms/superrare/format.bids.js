@@ -1,6 +1,4 @@
 module.exports = (item) => {
-    let url = `https://superrare.co/artwork-v2/${ item.nonFungibleToken.name.replace(/\s/g, '-') }-${ item.nonFungibleToken.tokenId }`;
-
     let price, transaction = {}, buyer, seller, bidder, previousBidder;
 
     switch(item.nftEventType) {
@@ -39,7 +37,6 @@ module.exports = (item) => {
         date: item.timestamp,
         event: 'bid',
         platform: 'superrare',
-        url,
         ...bidder && {bidder},
         ...previousBidder && {previousBidder},
         ...buyer && {buyer},

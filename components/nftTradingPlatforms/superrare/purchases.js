@@ -21,7 +21,11 @@ module.exports = function(startTime, limit = 10) {
     .then(res => {
         return res.data.result.eventsWithUsers
         .map(item => {
-            let url = `https://superrare.co/artwork-v2/${ item.nonFungibleToken.name.replace(/\s/g, '-') }-${ item.nonFungibleToken.tokenId }`;
+            console.log('TOKEN ID', item.nonFungibleToken.tokenId);
+            let url = (item.nonFungibleToken.tokenId < 5000) ? 'https://superrare.co/artwork' : 'https://superrare.co/artwork-v2';
+            url += `/${ item.nonFungibleToken.name.replace(/\s/g, '-') }-${ item.nonFungibleToken.tokenId }`;
+
+            url = url.toLowerCase();
             // let creatorUrl = `https://superrare.co/${ item.creator.username }`
             let buyer, seller, price, transaction = {};
             let payload;
@@ -42,6 +46,10 @@ module.exports = function(startTime, limit = 10) {
                     payload = {}
                     break;
             }
+
+            payload.url = url;
+
+            console.log('PAYLAOD', payload);
 
             return payload;
         }).filter(item => {
