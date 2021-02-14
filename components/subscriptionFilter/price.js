@@ -5,16 +5,30 @@ const extractPriceFromCurrencyString = function(priceString) {
     // Remove commas
     priceString = priceString.replace(/,/g, '');
 
+    let prices = ethConverter.getPrices();
+
     if( /^\$/.test(priceString)) {
         currency = 'USD'
         number = priceString.replace('$', '');
-    } else if( /eth$/i.test(priceString)) {
+    } else if( /(?<=\d|\s)eth$/i.test(priceString)) {
         currency = 'ETH';
         number = priceString.replace(/eth/i, '');
 
         number = number / ethConverter.getEth();
     } else {
-        throw new Error('Price should be USD or ETH, not:', priceString);
+        let token = priceString.match(/(?<=\d+)\s?[a-zA-Z]+$/);
+        token = token[0].trim().toLowerCase();
+
+        if(token) {
+            if(prices[token]) {
+                let divider =  prices[token];
+                let tokenRegex = new RegExp(token, 'i');
+                number = priceString.replace(tokenRegex, '');
+
+                number = number / divider;
+            }
+        } else
+            throw new Error('Price should be USD or ETH or another ERC20 token. Got: ' + priceString);
     }
 
     if( priceString.match(/^\$\d+$/))
