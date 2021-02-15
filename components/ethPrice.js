@@ -2,7 +2,9 @@ const axios = require('axios');
 
 let dai = weth = fwb = rac = socks = fame = uni = audio = eth = 5;
 
-let prices = { weth, fwb, rac, socks, fame, uni, audio, eth, dai };
+const usdc = 1;
+
+let prices = { usdc, weth, fwb, rac, socks, fame, uni, audio, eth, dai };
 
 const updatePrices = function() {
     let url = 'https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=DAI,ETH,WETH,FWB,RAC,SOCKS,FAME,UNI,AUDIO';
@@ -16,7 +18,7 @@ const updatePrices = function() {
             audio = res.data.AUDIO,
             fwb = res.data.FWB || null;
 
-        prices = { weth, fwb, rac, socks, fame, uni, audio, eth, dai };
+        prices = { usdc, weth, fwb, rac, socks, fame, uni, audio, eth, dai };
 
         url = 'https://api.coingecko.com/api/v3/simple/price?ids=unisocks%2Cfame%2Cfriends-with-benefits&vs_currencies=usd';
         return axios.get(url)
