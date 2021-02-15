@@ -32,7 +32,7 @@ module.exports = function(payload, format) {
 
                     number = number / divider;
 
-                    txPrice += ` ($${number})`;
+                    txPrice += ` ($${number.toFixed()})`;
                 }
             }
         }
