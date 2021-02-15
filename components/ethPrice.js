@@ -5,11 +5,11 @@ let dai = weth = fwb = rac = socks = fame = uni = audio = eth = 5;
 let prices = { weth, fwb, rac, socks, fame, uni, audio, eth, dai };
 
 const updatePrices = function() {
-    const url = 'https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=DAI,ETH,WETH,FWB,RAC,SOCKS,FAME,UNI,AUDIO';
+    let url = 'https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=DAI,ETH,WETH,FWB,RAC,SOCKS,FAME,UNI,AUDIO';
 
     return axios.get(url)
     .then(res => {
-        eth = res.data.ETH, weth = res.data.weth,
+        eth = res.data.ETH, weth = res.data.WETH,
             rac = res.data.RAC, socks = res.data.SOCKS,
             fame = res.data.FAME, uni = res.data.UNI,
             dai = res.data.DAI,
@@ -17,6 +17,16 @@ const updatePrices = function() {
             fwb = res.data.FWB || null;
 
         prices = { weth, fwb, rac, socks, fame, uni, audio, eth, dai };
+
+        url = 'https://api.coingecko.com/api/v3/simple/price?ids=unisocks%2Cfame%2Cfriends-with-benefits&vs_currencies=usd';
+        return axios.get(url)
+    }).then(res => {
+        res = res.data;
+
+        socks = 1 / res.unisocks.usd, fame = 1 / res.fame.usd, 
+            fwb = 1 / res['friends-with-benefits'].usd;
+
+        prices = { ...prices, fwb, socks, fame };
 
         return prices;
     });
