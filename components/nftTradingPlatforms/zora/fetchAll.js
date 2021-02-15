@@ -21,13 +21,13 @@ module.exports = function(startTime, limit) {
             date: createdAtTimestamp
         }
 
-        sales: inactiveBids(where:{createdAtTimestamp_gte: ${ parseInt(startTime / 1000)}, type: Finalized }, first: ${max}) {
+        sales: inactiveBids(where:{inactivatedAtTimestamp_gte: ${ parseInt(startTime / 1000)}, type: Finalized }, first: ${max}) {
             id
             currency {
                 symbol id name decimals
             }
             amount
-            date: createdAtTimestamp
+            date: inactivatedAtTimestamp
             bidder {
                 id
             }
