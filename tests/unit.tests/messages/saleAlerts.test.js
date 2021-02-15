@@ -44,6 +44,43 @@ describe('Test NFT event alerts: SALE', function() {
         expect(markdown).to.have.property('text', '⚡ NEW SALE\n[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53\n\n' + markdownEnder);
     });
 
+    it('Test messages when all fields are present', function() {
+        let payload = {
+            ...minPayload,
+            url: 'https://one.two.three',
+            buyer: {
+                name: 'John Sommet',
+                url: 'https://moon.jpeg.com/u/john-sommet'
+            },
+            transaction: {
+                price: '42.93',
+            }
+        }
+
+        let coins = ['WETH', 'UNI', 'SOCKS', 'DAI', 'AUDIO'];
+
+        let alertMessages = formats.map(format => { 
+            return coins.map(coin => {
+                let p = {...payload};
+                p.transaction.price = '42.93 ' + coin;
+                return messages.alertMessage(p, format);
+            });
+        }).flat();
+
+        const [plain, markdown, markdownV2] = alertMessages;
+
+        expect(alertMessages).to.all.satisfy(i => {
+            expect(i.text).to.match(/for 42.93 (WETH|ETH|DAI|SOCKS|UNI|FWB|AUDIO) \(\$\d+(\.\d+)?\)/);
+            return true;
+        });
+
+        /*
+        expect(plain).to.have.property('link', payload.url);
+        expect(plain).to.have.property('text', '⚡ NEW SALE\nMystery Box X by Old Frog sold to John Sommet for $80.53\n\n' + plainEnder);
+        expect(markdown).to.have.property('text', '⚡ NEW SALE\n[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53\n\n' + markdownEnder);
+        */
+    });
+
     it('When NFT url is present', function() {
         let payload = {
             ...minPayload,

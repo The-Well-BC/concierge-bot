@@ -3,13 +3,40 @@ const plain = require('./format.plain');
 const markdown = require('./format.markdown');
 const markdownV2 = require('./format.markdownV2');
 
+const ethConverter = require('../../ethPrice');
+
 module.exports = function(payload, format) {
     let textParts;
     let { date, time } = dateFormatter(payload.date);
     let dateStr = `${ date } (${time})`, price, txPrice;
 
-    if(payload.transaction && payload.transaction.price)
+    if(payload.transaction && payload.transaction.price) {
+        let prices = ethConverter.getPrices();
         txPrice = payload.transaction.price;
+
+        let tokensRegex = new RegExp( Object.keys(prices).join('|'), 'ig' );
+        // let token = txPrice.match(/(?<=\d+)\s?[a-zA-Z]+$/);
+        let token = txPrice.match(tokensRegex);
+
+        if(token != null) {
+            console.log('TOKEN', token);
+
+            token = token[0].trim().toLowerCase();
+
+            if(token) {
+                if(prices[token]) {
+                    let divider =  prices[token];
+                    console.log('DIVIDER', divider);
+                    let tokenRegex = new RegExp(token, 'i');
+                    number = txPrice.replace(tokenRegex, '');
+
+                    number = number / divider;
+
+                    txPrice += ` ($${number})`;
+                }
+            }
+        }
+    }
 
     switch(format) {
         case 'plain':
