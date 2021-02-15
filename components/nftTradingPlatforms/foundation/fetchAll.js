@@ -2,7 +2,7 @@ const axios = require('axios');
 const fetchNftDetails = require('./fetchNftDetails');
 
 module.exports = function(startTime, limit) {
-    let url = 'https://api.thegraph.com/subgraphs/name/f8n/f8n-xdai';
+    let url = 'https://api.thegraph.com/subgraphs/name/f8n/f8n-mainnet';
 
     let date = parseInt(startTime / 1000);
 
@@ -17,117 +17,85 @@ module.exports = function(startTime, limit) {
     }
 
     const query = `{
-        drops: nft721S ( where: { goLiveDate_gt: ${ date }} ${ additionalQuery }) {
+        drops: nfts ( where: { dateMinted_gte: ${ date }} ${ additionalQuery }) {
             id
             tokenId
-            goLiveDate
-            brand {
-                name
-                symbol
+            nftContract {
+                baseURI
             }
+            tokenIPFSPath
+            date: dateMinted
         }
 
-        drops2: xykmarkets (where: { goLiveDate_gt: ${ date }} ${ additionalQuery }) {
-            goLiveDate
-            name
-            symbol
-
-            brand {
-                name
-                symbol
-            }
-        }
-
-        transactions: marketActions (where: { timestamp_gt: ${ date }} ${ additionalQuery }){
+        sales: nftMarketAuctions(where: { status: Finalized, dateFinalized_gte: ${ date }} ${ additionalQuery }){
             nft {
                 id
                 tokenId
-                createdBy
-                tokenId
-                goLiveDate
-                minBidPrice
-                marketListing {
-                    listedOn
+                nftContract {
+                    baseURI
                 }
+                tokenIPFSPath
+                date: dateMinted
             }
-            brand {
-                name
-                symbol
+            seller {
+                id
             }
-            timestamp
-            gateway
-            network
-            tokenAmount
-            transactionHash
-            actionType
-            market {
-                name
-                symbol
-                totalSupply
-                totalBuyPrice
+            bids (where: {status:FinalizedWinner}) {
+                id
+                amountInETH
+                bidder {
+                    id
+                }
+                status
+                date: dateLeftActiveStatus
+                datePlaced
             }
-        }
-
-        bids: nftmarketBids(where: { placedOn_gt: ${ date }} ${ additionalQuery }) {
-            value
+            date: dateFinalized
             status
-            placedOn
-            nft {
-                id
-                tokenId
-                createdBy
-                tokenURI
-                tokenId
-                goLiveDate
-                minBidPrice
-                marketListing {
-                    listedOn
-                }
-                brand {
-                    name
-                    symbol
-                }
-
-                nft721Base {
-                    name
-                    symbol
-                }
-            }
         }
     }`;
 
     return axios.post(url, { query })
     .then(res => {
 
-        drops = [...res.data.data.drops, ...res.data.data.drops2];
-        transactions = res.data.data.transactions;
-        transactions = res.data.data.marketActions;
+        res = res.data.data;
 
-        let counter = 0;
+        drops = res.drops.map(i => {
+            i.nftEventType = 'drop';
+            return i;
+        });
 
-        let promises = Object.keys(res.data.data).map(key => {
-            return res.data.data[key].map(item => {
-                if(item.actionType)
-                    item.nftEventType = item.actionType;
-                else if(item.goLiveDate)
-                    item.nftEventType = 'drop';
+        sales = res.sales.map(i => {
+            i.nftEventType = 'sale';
+            return i;
+        });
 
-                // console.log('NFE TVET THYPE', item.nftEventType);
+        let events = [sales, drops].flat();
 
-                let nft = (item.tokenId) ? item : 
-                            (item.nft) ? item.nft : null;
+        let tokenIds = events.map(item => {
+            let nft = (item.tokenId) ? item : 
+                        (item.nft) ? item.nft : null;
 
-                if(nft) {
-                    return fetchNftDetails(nft)
-                    .then(res => {
-                        nft.name = res.name;
-                        nft.image = res.image;
+            return nft.tokenId;
+        });
 
-                        return item;
-                    });
-                } else return item;
-            })
-        }).flat().filter(item => item != false);
+        return fetchNftDetails(tokenIds)
+        .then(res => {
+            return events.map(i => {
+                let nft = (i.tokenId) ? i : 
+                          (i.nft) ? i.nft : null;
+
+                let nftData = res[nft.tokenId]
+                nft.name = nftData.name;
+                nft.image = nftData.image;
+                nft.creator = nftData.creator;
+
+                nft.creator.url = `https://foundation.app/${nft.creator.username}/`;
+                i.url = nft.creator.url + `${nft.name.toLowerCase().replace(/\s/g, '-').replace(/[\(\)]/, '')}-${ nft.tokenId }`;
+
+                return i;
+            }).flat().filter(item => item != false);
+        });
 
         return Promise.all(promises)
     });

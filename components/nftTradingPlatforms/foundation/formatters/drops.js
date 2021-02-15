@@ -1,9 +1,10 @@
 module.exports = function(payload) {
-    const creator = payload.brand;
-    let date = new Date(payload.goLiveDate * 1000);
+    const { url, date } = payload;
 
-    const url = (payload.symbol) ?  `https://foundation.app/${ payload.brand.symbol }/$${ payload.symbol }`
-        : `https://foundation.app/${ payload.brand.symbol }/${ payload.name.replace(/\s/g, '-') }-${ payload.tokenId }`;
+    let creator = {
+        name: payload.creator.name,
+        url: payload.creator.url
+    }
 
     return {
         name: payload.name,
@@ -11,7 +12,7 @@ module.exports = function(payload) {
         date,
         platform: 'foundation',
         event: 'drop',
-        creator,
+        ...creator && {creator},
         ...(payload.image) && {img: payload.image}
     }
 }

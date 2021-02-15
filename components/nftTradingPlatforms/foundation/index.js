@@ -13,26 +13,23 @@ module.exports = {
             return res.map(item => {
                 let payload;
 
-                let eventType = (item.nftEventType) ? item.nftEventType.toLowerCase() : null;
+                let eventType = item.nftEventType;
+
                 switch(eventType) {
                     case 'drop':
                         payload = dropFormatter(item);
                         break;
-                    case 'sell':
-                    case 'buy':
-                    case 'ACCEPT_BID':
+                    case 'sale':
                         payload = saleFormatter(item);
                         break;
-                    case 'BID':
-                    case 'AUCTION_BID':
+                    case 'bid':
                         payload = bidFormatter(item);
                         break;
                     default:
                         payload = false; 
                         break;
                 }
-
-                // console.log('PAYLOAD', payload);
+                payload.date = new Date(payload.date * 1000);
 
                 return payload;
             }).flat()
