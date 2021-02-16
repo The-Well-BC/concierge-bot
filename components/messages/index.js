@@ -63,6 +63,8 @@ module.exports = {
                 break;
             case 'markdownV2':
                 text += '\n\n';
+                text = text.replace(/\./g, '\\.');
+
                 platform = `[${nftPlatforms[payload.platform].name}](${nftPlatforms[payload.platform].url})`;
                 text += `_via: ${ platform }_`;
                 break;

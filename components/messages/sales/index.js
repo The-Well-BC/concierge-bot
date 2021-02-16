@@ -48,8 +48,10 @@ module.exports = function(payload, format) {
         case 'markdownV2':
         case 'markdownv2':
             textParts = markdownV2(payload, format);
+            /*
             if(txPrice)
                 txPrice = txPrice.replace(/\./g, '\\.');
+            */
             break;
     }
 

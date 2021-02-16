@@ -26,13 +26,6 @@ module.exports = function(payload) {
             text.creator = payload.creator.name;
     }
 
-    for(key in text) {
-        let i = text[key];
-        // console.log('II', i);
-        if(typeof i === 'string')
-            text[key] = i.replace(/\./g, '\\.');
-    }
-
     console.log('TEXT', text);
 
     return text;
