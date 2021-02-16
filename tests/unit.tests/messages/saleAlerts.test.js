@@ -43,7 +43,31 @@ describe('Test NFT event alerts: SALE', function() {
         expect(plain).to.have.property('link', payload.url);
         expect(plain).to.have.property('text', '⚡ NEW SALE\n"Mystery Box X" by Old Frog sold to John Sommet for $80.53 ' + plainEnder);
         expect(markdown).to.have.property('text', '⚡ NEW SALE\n[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53' + markdownEnder);
-        expect(markdownV2).to.have.property('text', '⚡ NEW SALE\n*[Mystery Box X](https://one\\.two\\.three)* by [Old Frog](https://moon\\.jpeg\\.com/u/neue-goods) sold to [John Sommet](https://moon\\.jpeg\\.com/u/john-sommet) for $80\\.53' + markdownV2Ender);
+        expect(markdownV2).to.have.property('text', '⚡ NEW SALE\n*[Mystery Box X](https://one\\.two\\.three) * by [Old Frog](https://moon\\.jpeg\\.com/u/neue-goods) sold to [John Sommet](https://moon\\.jpeg\\.com/u/john-sommet) for $80\\.53' + markdownV2Ender);
+    });
+
+    it('Test price thousands separator', function() {
+        let payload = {
+            ...minPayload,
+            url: 'https://one.two.three',
+            transaction: { }
+        }
+
+        let txPrices = ['2261609.4 eth', '$452321.88', '$452,321.88'];
+
+        let alertMessages = formats.map(format => { 
+            return txPrices.map(price => {
+                let p = { ...payload, transaction: { price }};
+
+                return messages.alertMessage(p, format);
+            });
+        }).flat();
+
+        expect(alertMessages).to.all.satisfy(e => {
+            console.log('ASLERT MESGAJDGEAG', e);
+            expect(e.text).to.match(/\$452,321(\\)?\.?88/)
+            return true;
+        });
     });
 
     it('Test messages when all fields are present', function() {
@@ -77,7 +101,7 @@ describe('Test NFT event alerts: SALE', function() {
         });
 
         expect(markdownV2).to.all.satisfy(i => {
-            expect(i.text).to.match(/for 42\\.93 (WETH|ETH|DAI|SOCKS|UNI|FWB|AUDIO) \(\$\d+(\.\d{0,2})?\)/);
+            expect(i.text).to.match(/for 42\\.93 (WETH|ETH|DAI|SOCKS|UNI|FWB|AUDIO) \(\$8\\.59\)/);
             return true;
         });
     });
