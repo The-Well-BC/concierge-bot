@@ -14,6 +14,8 @@ module.exports = function(payload) {
 
     product = payload.name;
 
+    product = `"${product}"`;
+
     if(payload.url)
         link = payload.url;
 
