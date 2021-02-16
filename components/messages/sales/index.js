@@ -14,31 +14,36 @@ module.exports = function(payload, format) {
         let prices = ethConverter.getPrices();
         txPrice = payload.transaction.price;
 
-        let tokensRegex = new RegExp( Object.keys(prices).join('|'), 'ig' );
-        // let token = txPrice.match(/(?<=\d+)\s?[a-zA-Z]+$/);
-        let token = txPrice.match(tokensRegex);
+        if(/^\$/.test(txPrice) && !txPrice.includes(',')) {
+            let number = txPrice.match(/(?<=\$)\d+\.?\d+$/)[0];
+            console.log('NUMERRRR\n**********************\n', number);
 
-        if(token != null) {
-            console.log('TOKEN', token);
+            number = new Intl.NumberFormat().format(number);
 
-            token = token[0].trim().toLowerCase();
+            txPrice = `$${number}`;
+        } else {
 
-            if(token) {
-                if(prices[token]) {
-                    let divider =  prices[token];
-                    console.log('DIVIDER', divider);
-                    let tokenRegex = new RegExp(token, 'i');
-                    number = txPrice.replace(tokenRegex, '');
+            let tokensRegex = new RegExp( Object.keys(prices).join('|'), 'ig' );
+            // let token = txPrice.match(/(?<=\d+)\s?[a-zA-Z]+$/);
+            let token = txPrice.match(tokensRegex);
 
-                    number = number / divider;
+            if(token != null) {
+                token = token[0].trim().toLowerCase();
 
-                    number = number.toFixed(2)
+                if(token) {
+                    if(prices[token]) {
+                        let divider =  prices[token];
+                        let tokenRegex = new RegExp(token, 'i');
+                        number = txPrice.replace(tokenRegex, '');
 
-                    console.log('NUMBER', number);
+                        number = number / divider;
 
-                    number = new Intl.NumberFormat().format(number);
+                        number = number.toFixed(2)
 
-                    txPrice += ` ($${number})`;
+                        number = new Intl.NumberFormat().format(number);
+
+                        txPrice += ` ($${number})`;
+                    }
                 }
             }
         }
