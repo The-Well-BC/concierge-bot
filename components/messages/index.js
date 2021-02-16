@@ -46,28 +46,29 @@ module.exports = {
                 return null;
         }
 
-        text += '\n\n';
-
         let platform;
 
         switch(format) {
             case 'plain':
             default:
+                text += ' ';
                 platform = nftPlatforms[payload.platform].name;
                 // text += `via: ${ platform }`;
-                text += `#${platform.replace(/\s+/, '')} `
+                text += `#${platform.replace(/\s+/, '')}`
                 break;
             case 'markdown':
+                text += '\n\n';
                 platform = `[${nftPlatforms[payload.platform].name}](${nftPlatforms[payload.platform].url})`;
-                text += `via: ${ platform }\n`;
+                text += `via: ${ platform }`;
                 break;
             case 'markdownV2':
+                text += '\n\n';
                 platform = `[${nftPlatforms[payload.platform].name}](${nftPlatforms[payload.platform].url})`;
-                text += `_via: ${ platform }_\n`;
+                text += `_via: ${ platform }_`;
                 break;
         }
 
-        text += '#NFT';
+        // text += '#NFT';
 
         let photo = (payload.img != null || undefined) ?
             payload.img : null;
