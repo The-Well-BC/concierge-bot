@@ -1,7 +1,11 @@
 module.exports = function(payload, format) {
     let action = 'bought';
 
-    let text = {nftName: payload.name, more:[]};
+    let text = {more:[]};
+
+    let nftName = `"${payload.name}"`;
+
+    text = {...text, nftName};
 
     if(payload.buyer && payload.buyer.name) {
         text.buyer = payload.buyer.name;

@@ -1,39 +1,40 @@
-const dateFormatter = require('../../utils/dateFormatter');
-
 module.exports = function(payload) {
-    let { date, time } = dateFormatter(payload.date);
-    let action = 'bought';
-    let text = '';
+    let text = { extras: []};
 
-    let nameStr;
     if(payload.buyer && payload.buyer.name) {
         if(payload.buyer.url) 
-            nameStr = `[${ payload.buyer.name }](${ payload.buyer.url })`;
+            text.buyer = `[${ payload.buyer.name }](${ payload.buyer.url })`;
         else
-            nameStr = payload.buyer.name;
+            text.buyer = payload.buyer.name;
 
     } else 
-        nameStr = 'An anonymous user';
+        text.buyer = 'an anonymous user';
 
-    let nftName = (payload.url) ? `[${ payload.name }](${ payload.url })` : payload.name;
-    text += `${ nameStr } ${ action }`;
+    text.nftName = (payload.url) ? `[${ payload.name }](${ payload.url })` : payload.name;
 
-    if(payload.transaction && payload.transaction.price)
-        text += ` ${ nftName } for ${ payload.transaction.price } on ${ date } (${ time })`;
-    else
-        text += ` a ${ nftName } token on ${ date } (${ time })`;
+    text.nftName = '*' + text.nftName + '*';
 
-    if(payload.price)
-        text += `\n${ payload.name } is currently trading at ${ payload.price }`;
 
     if(payload.creator) {
         if(payload.creator.url && payload.creator.name) {
+            text.creator = `[${payload.creator.name}](${payload.creator.url})`;
             if(payload.creator.name.slice(-1) == 's')
-                text += `\n[View ${ payload.creator.name }' other creations](${ payload.creator.url })`;
+                text.extras.push(`\n[View ${ payload.creator.name }' other creations](${ payload.creator.url })`);
             else
-                text += `\n[View ${ payload.creator.name }'s other creations](${ payload.creator.url })`;
-        }
+                text.extras.push(`\n[View ${ payload.creator.name }'s other creations](${ payload.creator.url })`);
+        } else if (payload.creator.name)
+            text.creator = payload.creator.name;
     }
+
+    for(key in text) {
+        let i = text[key];
+        // console.log('II', i);
+        if(typeof i === 'string')
+            text[key] = i.replace(/\./g, '\\.');
+    }
+
+    console.log('TEXT', text);
 
     return text;
 }
+
