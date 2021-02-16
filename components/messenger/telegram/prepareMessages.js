@@ -34,7 +34,7 @@ module.exports = function(payloadArr, chatIDs) {
                 text: payload.text,
                 method,
                 ...reply_markup && { reply_markup },
-                parse_mode: 'Markdown',
+                parse_mode: 'MarkdownV2',
                 ...(photo != null) && { photo }
             });
         });
