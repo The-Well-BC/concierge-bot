@@ -29,9 +29,13 @@ module.exports = function(payloadArr, chatIDs) {
                 };
             }
 
+            let text = payload.text;
+
+            text = text.replace(/(?<!\\)\./g, '\\.');
+
             messages.push({
                 chat_id: o,
-                text: payload.text,
+                text,
                 method,
                 ...reply_markup && { reply_markup },
                 parse_mode: 'MarkdownV2',
