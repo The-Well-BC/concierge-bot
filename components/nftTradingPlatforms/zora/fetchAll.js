@@ -97,26 +97,37 @@ module.exports = function(startTime, limit) {
                     throw new Error('Return NFT creator object');
 
             // Fetch user Data
-                let users = [p.bidder, p.owner, p.buyer];
+                // let users = [p.bidder, p.owner, p.buyer];
+                console.log('NFT', nft);
+                let users = [nft.creator];
 
-                users.push(nft.creator);
+                //users.push(nft.creator);
 
                 users = users.filter(u => u != null && u != undefined);
 
+                console.log('USERS', users);
+
                 return Promise.all(users.map(user => {
 
-                    return axios.get(`https://zora.co/_next/data/7eBPLEIZdEQZFfPiy9p4e/${user.id}.json`)
+                    return axios.get(`https://zora.co/_next/data/ufJ1kc7kK3VnxS4-OZM53/${user.id}.json`)
+                    .catch(e => {
+                        return { data: { userData: {} } };
+                    })
                     .then(res2 => {
+                        console.log('RES W2', res2.data);
                         userData = res2.data.pageProps;
 
-                        if(userData.user)
-                            user.name = userData.user.name || userData.user.username;
-                        /*
-                        else if(userData.seo)
-                            user.name = userData.seo.title
-                        */
+                        if(userData) {
+                            console.log('USERDATA', userData);
+                            if(userData.user)
+                                user.name = userData.user.name || userData.user.username;
+                            /*
+                            else if(userData.seo)
+                                user.name = userData.seo.title
+                            */
 
-                        user.url = userData.seo.url;
+                            user.url = userData.seo.url;
+                        } else return false;
                     })
                 })).then(() => p)
             });
