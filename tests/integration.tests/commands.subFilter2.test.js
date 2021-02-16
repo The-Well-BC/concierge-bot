@@ -10,7 +10,7 @@ const teardown = require('../teardown');
 
 let commandChars = ['!', '/'];
 
-describe.only('#dev The Subscription Filter Command', function() {
+describe('The Subscription Filter Command', function() {
     const chatID = '1234';
 
     const payload = {

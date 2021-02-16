@@ -1,4 +1,4 @@
-const keys = [ 'url', 'date', 'name', 'platform', 'event', 'seller' ];
+const keys = [ 'url', 'date', 'name', 'platform', 'event' ];
 
 module.exports = function(item, assert, chai) {
     let expect = chai.expect;
@@ -34,11 +34,6 @@ module.exports = function(item, assert, chai) {
         );
 
         price = item.transaction.price;
-    }
-
-    if(price) {
-        let assertChai = chai.assert;
-        assertChai.match(price, /(^\$\d+)|(\d\sETH)|(\dETH)/i);
     }
 
     if(item.creator) {

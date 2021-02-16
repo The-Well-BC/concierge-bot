@@ -3,7 +3,7 @@ const chai = require('chai');
 const expect = chai.expect;
 const formats = ['messages', 'markdown', 'markdownV2'];
 
-describe('Test listing texts', function() {
+describe.skip('Test listing texts', function() {
     let markdownEnder = 'via: [SuperRare](https://superrare.co)\n#NFT';
     let plainEnder = '#SuperRare #NFT';
 

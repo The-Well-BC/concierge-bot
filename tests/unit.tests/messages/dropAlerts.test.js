@@ -21,9 +21,9 @@ describe('Test NFT event: DROP/NFT RELEASE', function() {
         date: '2020-07-31T16:00:00.000Z'
     }
 
-    let markdownEnder = 'via: [Nifty Gateway](https://niftygateway.com)\n#NFT';
-    let markdownV2Ender = '_via: [Nifty Gateway](https://niftygateway.com)_\n#NFT';
-    let plainEnder = '#NiftyGateway #NFT';
+    let markdownEnder = 'via: [Nifty Gateway](https://niftygateway.com)';
+    let markdownV2Ender = '_via: [Nifty Gateway](https://niftygateway.com)_';
+    let plainEnder = '#NiftyGateway';
 
     it('Check drops', function() {
         let alertMessages = formats.map(format => { 
@@ -33,9 +33,9 @@ describe('Test NFT event: DROP/NFT RELEASE', function() {
         const [plain, markdown, markdownV2] = alertMessages;
 
         expect(markdown).to.have.property('text', '💫 NEW DROP\n[Robots X](https://zora.com/u/robots-x) just released [AESII - Technical Cargo Pants](https://zora.com/drops/aes-1337)\n\n' + markdownEnder);
-        expect(markdownV2).to.have.property('text', '💫 NEW DROP\n[Robots X](https://zora.com/u/robots-x) just released [AESII - Technical Cargo Pants](https://zora.com/drops/aes-1337)\n\n' + markdownV2Ender);
+        expect(markdownV2).to.have.property('text', '💫 NEW DROP\n[Robots X](https://zora\\.com/u/robots-x) just released [AESII - Technical Cargo Pants](https://zora\\.com/drops/aes-1337)\n\n' + markdownV2Ender);
         expect(plain).to.have.property('link', resourcePayload.url);
-        expect(plain).to.have.property('text', '💫 NEW DROP\nRobots X just released AESII - Technical Cargo Pants\n\n' + plainEnder);
+        expect(plain).to.have.property('text', '💫 NEW DROP\nRobots X just released "AESII - Technical Cargo Pants" ' + plainEnder);
 
     });
 });

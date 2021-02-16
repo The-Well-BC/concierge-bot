@@ -33,7 +33,7 @@ describe('Test Subscription filter: Transaction Price and NFT Price:', function(
         ]);
     });
 
-    it.only('Filter by NFT price: USD, ETH AND ERC20 tokens', function() {
+    it('Filter by NFT price: USD, ETH AND ERC20 tokens', function() {
         let events = [
             { name: 'bronn', price: '$524.22' },
             { name: 'Broken Broom', price: '$1,000' },

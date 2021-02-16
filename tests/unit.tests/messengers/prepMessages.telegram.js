@@ -28,22 +28,22 @@ describe('Telegram functions: Prepary payload for telegram', function() {
 
         expect(response).to.have.deep.members([{
                 chat_id: 1234,
-                parse_mode: 'Markdown',
+                parse_mode: 'MarkdownV2',
                 method: 'sendMessage',
                 text: 'This is sample text'
             }, {
                 chat_id: 5678,
-                parse_mode: 'Markdown',
+                parse_mode: 'MarkdownV2',
                 method: 'sendMessage',
                 text: 'This is sample text'
             }, {
                 chat_id: 1234,
-                parse_mode: 'Markdown',
+                parse_mode: 'MarkdownV2',
                 method: 'sendMessage',
                 text: 'This is sample text 2'
             }, {
                 chat_id: 5678,
-                parse_mode: 'Markdown',
+                parse_mode: 'MarkdownV2',
                 method: 'sendMessage',
                 text: 'This is sample text 2'
         }]);
@@ -70,7 +70,7 @@ describe('Telegram functions: Prepary payload for telegram', function() {
         expect(response).to.have.deep.members([{
                 chat_id: 1234,
                 text: 'This is sample text',
-                parse_mode: 'Markdown', method: 'sendMessage',
+                parse_mode: 'MarkdownV2', method: 'sendMessage',
 
                 reply_markup: {
                     one_time_keyboard: true,
@@ -79,7 +79,7 @@ describe('Telegram functions: Prepary payload for telegram', function() {
             }, {
                 chat_id: 5678,
                 text: 'This is sample text',
-                parse_mode: 'Markdown', method: 'sendMessage',
+                parse_mode: 'MarkdownV2', method: 'sendMessage',
 
                 reply_markup: {
                     one_time_keyboard: true,
@@ -91,7 +91,7 @@ describe('Telegram functions: Prepary payload for telegram', function() {
             }, {
                 chat_id: 1234,
                 text: 'This is sample text 2',
-                parse_mode: 'Markdown', method: 'sendMessage',
+                parse_mode: 'MarkdownV2', method: 'sendMessage',
 
                 reply_markup: {
                     one_time_keyboard: true,
@@ -100,7 +100,7 @@ describe('Telegram functions: Prepary payload for telegram', function() {
             }, {
                 chat_id: 5678,
                 text: 'This is sample text 2',
-                parse_mode: 'Markdown', method: 'sendMessage',
+                parse_mode: 'MarkdownV2', method: 'sendMessage',
 
                 reply_markup: {
                     one_time_keyboard: true,

@@ -13,11 +13,11 @@ const zora = require('../../../components/nftTradingPlatforms/zora');
 
 const nftFn = require('../../../components/nftTradingPlatforms');
 
-describe.only('Fetch NFT events', function() {
+describe('Fetch NFT events', function() {
     this.timeout(15000);
 
     const now = new Date();
-    let startTime = new Date().setDate(now.getDate() - 75);
+    let startTime = new Date().setDate(now.getDate() - 1);
 
     const platformArr = ['nifty', 'superrare', 'foundation', 'zora'];
 
@@ -42,8 +42,8 @@ describe.only('Fetch NFT events', function() {
                     'At least one Foundation item'
                 ).to.be.true;
                 expect(
-                    arr.some(i => i.platform === 'zora'),
-                    'At least one Zora item'
+                    arr.some(i => i.platform === 'zora' && i.event === 'sale'),
+                    'At least one Zora sale item'
                 ).to.be.true;
 
                 return arr.every(i => {
@@ -69,7 +69,7 @@ describe.only('Fetch NFT events', function() {
         });
     })
 
-    it('Fetch from Foundation', function() {
+    it('#dev Fetch from Foundation', function() {
         const limit = 30;
         startTime = new Date().setDate(now.getDate() - 90);
 
@@ -89,12 +89,13 @@ describe.only('Fetch NFT events', function() {
         });
     })
 
-    it('Fetch from Zora', function() {
+    it.only('#dev Fetch from Zora', function() {
         const limit = 9;
-        startTime = new Date().setDate(now.getDate() - 3);
+        startTime = new Date().setHours(now.getHours() - 3);
 
         return zora.fetchEvents( startTime, limit )
         .then(res => {
+            console.log('EVENTS', res);
             expect(res).to.not.be.empty.and.to.not.have.lengthOf.above(limit);
 
             expect(res).to.satisfy(arr => {
@@ -102,7 +103,7 @@ describe.only('Fetch NFT events', function() {
                 let c1 = arr.some(item => item.event === 'drop');
 
                 let c2 = arr.some(item => {
-                    // console.log('ITEM EVENT', item.event);
+                    console.log('ITEM EVENT', item.event);
                     if(item.event === 'sale') {
                         expect(item).to.have.property('transaction');
                         expect(item.transaction).to.have.property('price');

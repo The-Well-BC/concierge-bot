@@ -4,7 +4,7 @@ const expect = chai.expect;
 
 const formats = ['plain', 'markdown', 'markdownV2'];
 
-describe('Test NFT event alerts: OFFER', function() {
+describe.skip('Test NFT event alerts: OFFER', function() {
     let minPayload = {
         date: '2020-11-01T19:42:45.000Z',
         name: 'Mystery Box X',

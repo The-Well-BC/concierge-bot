@@ -18,9 +18,9 @@ describe('Sending alerts', function() {
         });
     });
 
-    it.skip('#dev Send alerts for 5 day period', function() {
+    it('Send alerts for 1 day period', function() {
         let now = new Date();
-        let startTime = new Date(new Date().setDate(now.getDate() - 5));
+        let startTime = new Date(new Date().setDate(now.getDate() - 1));
 
         return alertsModel.sendAlerts(startTime)
         .then(res => {
@@ -62,6 +62,7 @@ describe('Sending alerts', function() {
 
         return alertsModel.sendAlerts(startTime)
         .then(res => {
+            console.log('ARR', res);
             expect(res).to.satisfy( arr => {
                 if(arr.length > 1) {
                     let oneTwitter = arr.some(item => {

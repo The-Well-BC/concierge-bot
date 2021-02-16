@@ -16,8 +16,9 @@ describe('Test NFT event alerts: SALE', function() {
         }
     }
 
-    let markdownEnder = 'via: [Nifty Gateway](https://niftygateway.com)\n#NFT';
-    let plainEnder = '#NiftyGateway #NFT';
+    let markdownEnder = '\n\nvia: [Nifty Gateway](https://niftygateway.com)';
+    let markdownV2Ender = '\n\n_via: [Nifty Gateway](https://niftygateway.com)_';
+    let plainEnder = '#NiftyGateway';
 
     it('Test messages when all fields are present', function() {
         let payload = {
@@ -40,8 +41,9 @@ describe('Test NFT event alerts: SALE', function() {
         const [plain, markdown, markdownV2] = alertMessages;
 
         expect(plain).to.have.property('link', payload.url);
-        expect(plain).to.have.property('text', '⚡ NEW SALE\nMystery Box X by Old Frog sold to John Sommet for $80.53\n\n' + plainEnder);
-        expect(markdown).to.have.property('text', '⚡ NEW SALE\n[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53\n\n' + markdownEnder);
+        expect(plain).to.have.property('text', '⚡ NEW SALE\n"Mystery Box X" by Old Frog sold to John Sommet for $80.53 ' + plainEnder);
+        expect(markdown).to.have.property('text', '⚡ NEW SALE\n[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53' + markdownEnder);
+        expect(markdownV2).to.have.property('text', '⚡ NEW SALE\n*[Mystery Box X](https://one\\.two\\.three)* by [Old Frog](https://moon\\.jpeg\\.com/u/neue-goods) sold to [John Sommet](https://moon\\.jpeg\\.com/u/john-sommet) for $80\\.53' + markdownV2Ender);
     });
 
     it('Test messages when all fields are present', function() {
@@ -57,7 +59,7 @@ describe('Test NFT event alerts: SALE', function() {
             }
         }
 
-        let coins = ['WETH', 'UNI', 'SOCKS', 'DAI', 'AUDIO'];
+        let coins = ['ETH', 'WETH', 'UNI', 'SOCKS', 'DAI', 'AUDIO'];
 
         let alertMessages = formats.map(format => { 
             return coins.map(coin => {
@@ -65,20 +67,19 @@ describe('Test NFT event alerts: SALE', function() {
                 p.transaction.price = '42.93 ' + coin;
                 return messages.alertMessage(p, format);
             });
-        }).flat();
+        });
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(alertMessages).to.all.satisfy(i => {
-            expect(i.text).to.match(/for 42.93 (WETH|ETH|DAI|SOCKS|UNI|FWB|AUDIO) \(\$\d+(\.\d+)?\)/);
+        expect([plain, markdown].flat()).to.all.satisfy(i => {
+            expect(i.text).to.match(/for 42.93 (WETH|ETH|DAI|SOCKS|UNI|FWB|AUDIO) \(\$\d+(\.\d{0,2})?\)/);
             return true;
         });
 
-        /*
-        expect(plain).to.have.property('link', payload.url);
-        expect(plain).to.have.property('text', '⚡ NEW SALE\nMystery Box X by Old Frog sold to John Sommet for $80.53\n\n' + plainEnder);
-        expect(markdown).to.have.property('text', '⚡ NEW SALE\n[Mystery Box X](https://one.two.three) by [Old Frog](https://moon.jpeg.com/u/neue-goods) sold to [John Sommet](https://moon.jpeg.com/u/john-sommet) for $80.53\n\n' + markdownEnder);
-        */
+        expect(markdownV2).to.all.satisfy(i => {
+            expect(i.text).to.match(/for 42\\.93 (WETH|ETH|DAI|SOCKS|UNI|FWB|AUDIO) \(\$\d+(\.\d{0,2})?\)/);
+            return true;
+        });
     });
 
     it('When NFT url is present', function() {
@@ -97,8 +98,9 @@ describe('Test NFT event alerts: SALE', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain.text).to.match(/^.*\r?\nMystery Box X by Old Frog/);
+        expect(plain.text).to.match(/^.*\r?\n\"Mystery Box X\" by Old Frog/);
         expect(markdown.text).to.match(/^.*\r?\n\[Mystery Box X\]\(https:\/\/one.two.three\) by Old Frog/);
+        expect(markdownV2.text).to.match(/^.*\r?\n\*\[Mystery Box X\]\(https:\/\/one\\.two\\.three\)\* by Old Frog/);
     });
 
     it('When NFT url is not available', function() {
@@ -115,7 +117,7 @@ describe('Test NFT event alerts: SALE', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(plain.text).to.match(/^.*\r?\nMystery Box X/);
+        expect(plain.text).to.match(/^.*\r?\n\"Mystery Box X\"/);
         expect(markdown.text).to.match(/^.*\r?\nMystery Box X /);
     });
 
@@ -182,10 +184,12 @@ describe('Test NFT event alerts: SALE', function() {
 
         const [plain, markdown, markdownV2] = alertMessages;
 
-        expect(alertMessages).to.all.satisfy(message => {
-            expect(message.text).to.match(/^.*\r?\nMystery Box X by Old Frog sold to John Sommet/);
+        expect([plain, markdown]).to.all.satisfy(message => {
+            expect(message.text).to.match(/^.*\r?\n\"?Mystery Box X\"? by Old Frog sold to John Sommet/);
             return true;
         });
+
+        expect(markdownV2.text).to.match(/^.*\r?\n\*Mystery Box X\* by Old Frog sold to John Sommet/);
     });
 });
 
