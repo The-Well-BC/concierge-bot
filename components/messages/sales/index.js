@@ -32,7 +32,13 @@ module.exports = function(payload, format) {
 
                     number = number / divider;
 
-                    txPrice += ` ($${number.toFixed()})`;
+                    number = number.toFixed(2)
+
+                    console.log('NUMBER', number);
+
+                    number = new Intl.NumberFormat().format(number);
+
+                    txPrice += ` ($${number})`;
                 }
             }
         }
