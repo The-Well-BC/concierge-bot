@@ -109,7 +109,7 @@ module.exports = function(startTime, limit) {
 
                 return Promise.all(users.map(user => {
 
-                    return axios.get(`https://zora.co/_next/data/ufJ1kc7kK3VnxS4-OZM53/${user.id}.json`)
+                    return axios.get(`https://zora.co/_next/data/_rVbd2OsiDpN8fEHJdRQJ/${user.id}.json`)
                     .catch(e => {
                         return { data: { userData: {} } };
                     })
