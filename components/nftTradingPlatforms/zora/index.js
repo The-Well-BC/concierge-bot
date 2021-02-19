@@ -31,7 +31,12 @@ module.exports = {
                 if(payload) {
                     let media = (item.media) ? item.media : item;
                     if(media && media.creator) {
-                        payload.url = media.creator.url + '/' + media.id;
+                        if(media.creator.url)
+                            payload.url = media.creator.url;
+                        else
+                            payload.url = 'https://zora.co/' + media.creator.id;
+
+                        payload.url += '/' + media.id;
                     }
                 }
                 return payload;

@@ -111,7 +111,7 @@ module.exports = function(startTime, limit) {
 
                     return axios.get(`https://zora.co/_next/data/lOaHd2a1dQOshnEFWCX-2/${user.id}.json`)
                     .catch(e => {
-                        return { data: { userData: {} } };
+                        return { data: { } };
                     })
                     .then(res2 => {
                         console.log('RES W2', res2.data);
