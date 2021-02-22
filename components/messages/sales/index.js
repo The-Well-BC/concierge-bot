@@ -16,7 +16,6 @@ module.exports = function(payload, format) {
 
         if(/^\$/.test(txPrice) && !txPrice.includes(',')) {
             let number = txPrice.match(/(?<=\$)\d+\.?\d+$/)[0];
-            console.log('NUMERRRR\n**********************\n', number);
 
             number = new Intl.NumberFormat().format(number);
 
@@ -73,7 +72,19 @@ module.exports = function(payload, format) {
     if(creator)
         text += ` by ${ creator }`;
 
-    text += ` sold to ${ buyer }`;
+    text += ` sold to `;
+
+    if(buyer) {
+        text += buyer;
+    } else if(payload.buyer) {
+        if(payload.buyer.wallet && payload.buyer.wallet.address) {
+            let addr = payload.buyer.wallet.address
+
+            text += addr.substring(0,5) + '...' + addr.slice(-3);
+        }
+    } else {
+        text += 'an anonymous user';
+    }
 
     if(txPrice)
         text += ` for ${ txPrice }`

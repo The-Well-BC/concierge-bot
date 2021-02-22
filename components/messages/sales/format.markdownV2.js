@@ -7,8 +7,7 @@ module.exports = function(payload) {
         else
             text.buyer = payload.buyer.name;
 
-    } else 
-        text.buyer = 'an anonymous user';
+    }
 
     text.nftName = (payload.url) ? `[${ payload.name }](${ payload.url })` : payload.name;
 
@@ -25,8 +24,6 @@ module.exports = function(payload) {
         } else if (payload.creator.name)
             text.creator = payload.creator.name;
     }
-
-    console.log('TEXT', text);
 
     return text;
 }

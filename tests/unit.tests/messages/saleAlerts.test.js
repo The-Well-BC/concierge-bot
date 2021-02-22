@@ -64,7 +64,6 @@ describe('Test NFT event alerts: SALE', function() {
         }).flat();
 
         expect(alertMessages).to.all.satisfy(e => {
-            console.log('ASLERT MESGAJDGEAG', e);
             expect(e.text).to.match(/\$452,321(\\)?\.?88/)
             return true;
         });
@@ -166,7 +165,33 @@ describe('Test NFT event alerts: SALE', function() {
         });
     });
 
-    it('When buyer profile url is available', function() {
+    it('When buyer name is not available but wallet address is available', function() {
+        let payload = {
+            ...minPayload,
+            transaction: {
+                price: '$80.53',
+            },
+            buyer: {
+                wallet: {
+                    address: '0xabcdefgh12345678abcde567',
+                }
+            },
+        }
+
+        let alertMessages = formats.map(format => { 
+            return messages.alertMessage(payload, format);
+        });
+
+        const [plain, markdown, markdownV2] = alertMessages;
+
+        expect([plain, markdown]).to.all.satisfy(message => {
+            expect(message.text).to.have.string('sold to 0xabc...567 for $80.53');
+            return true;
+        });
+        expect( markdownV2.text).to.have.string('sold to 0xabc\\.\\.\\.567 for $80\\.53');
+    });
+
+    it('When buyer username is not available', function() {
         let payload = {
             ...minPayload,
             transaction: {

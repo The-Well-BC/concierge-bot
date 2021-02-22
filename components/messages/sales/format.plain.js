@@ -9,8 +9,7 @@ module.exports = function(payload, format) {
 
     if(payload.buyer && payload.buyer.name) {
         text.buyer = payload.buyer.name;
-    } else
-        text.buyer = 'an anonymous user';
+    }
 
     if(payload.url)
         // text.more.push(`\nView ${ payload.name } - ${ payload.url }`);
