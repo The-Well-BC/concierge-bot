@@ -5,9 +5,12 @@ module.exports = function(p) {
     return {
         name,
         url,
-        ...creator.name && {creator: {
+        ...creator.id && {creator: {
             name: creator.name,
-            url: creator.url
+            url: creator.url,
+            wallet: {
+                address: creator.id
+            }
         }},
         event: 'drop',
         platform: 'zora',
