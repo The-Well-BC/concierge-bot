@@ -15,7 +15,10 @@ module.exports = function(item) {
         creator,
         date: bid.date,
         buyer: {
-            id: bid.bidder.id
+            id: bid.bidder.id,
+            wallet: {
+                address: bid.bidder.id,
+            }
         },
         seller: {
             id: item.seller.id
