@@ -45,14 +45,6 @@ module.exports = function(chai, utils) {
                     'Object',
                     item
                 );
-
-                assert(
-                    item.creator.name && typeof item.creator.name === 'string',
-                    'Property "creator" should have property "name" of type #{exp}. Got #{act} instead',
-                    '',
-                    'String',
-                    item.creator.name
-                );
             }
 
             // NFT event images are not compulsory anymore

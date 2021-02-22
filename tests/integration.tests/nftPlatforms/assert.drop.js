@@ -22,13 +22,23 @@ module.exports = function(item, assert, chai) {
         item
     );
 
-    assert(
-        item.creator.name && typeof item.creator.name === 'string',
-        'Property "creator" should have property "name" of type #{exp}. Got #{act} instead',
-        '',
-        'String',
-        item.creator.name
-    );
+    if(!item.creator.wallet) {
+        assert(
+            item.creator.name && typeof item.creator.name === 'string',
+            'Property "creator" should have property "name" of type #{exp}. Got #{act} instead',
+            '',
+            'String',
+            item.creator.name
+        );
+    } else {
+        assert(
+            item.creator.wallet && typeof item.creator.wallet.address === 'string',
+            'Property "creator" should have property "wallet.address" of type #{exp}. Got #{act} instead',
+            '',
+            'String',
+            item.creator.name
+        );
+    }
 
     assert(
         !item.url.includes('undefined'),

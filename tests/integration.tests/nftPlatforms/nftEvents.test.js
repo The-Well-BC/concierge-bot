@@ -13,7 +13,7 @@ const zora = require('../../../components/nftTradingPlatforms/zora');
 
 const nftFn = require('../../../components/nftTradingPlatforms');
 
-describe('Fetch NFT events', function() {
+describe.only('Fetch NFT events', function() {
     this.timeout(15000);
 
     const now = new Date();
@@ -69,7 +69,7 @@ describe('Fetch NFT events', function() {
         });
     })
 
-    it('#dev Fetch from Foundation', function() {
+    it('Fetch from Foundation', function() {
         const limit = 30;
         startTime = new Date().setDate(now.getDate() - 90);
 
@@ -89,7 +89,7 @@ describe('Fetch NFT events', function() {
         });
     })
 
-    it.only('#dev Fetch from Zora', function() {
+    it('#dev Fetch from Zora', function() {
         const limit = 9;
         startTime = new Date().setHours(now.getHours() - 3);
 
