@@ -117,10 +117,6 @@ module.exports = function(startTime, limit) {
                         console.log('RES W2', res2.data);
                         userData = res2.data.pageProps;
 
-                        user.wallet = {
-                            address: user.id
-                        }
-
                         if(userData) {
                             console.log('USERDATA', userData);
                             if(userData.user)

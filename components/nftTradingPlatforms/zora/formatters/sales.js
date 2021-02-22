@@ -1,9 +1,14 @@
 module.exports = function(p) {
+    console.log('SALE PAYLOAD\n', p);
+
     let { date } = p;
 
     let buyer = {
         id: p.bidder.id,
-        url: p.bidder.url
+        url: p.bidder.url,
+        wallet: {
+            address: p.bidder.id
+        }
     }
 
     if(p.bidder.name)
