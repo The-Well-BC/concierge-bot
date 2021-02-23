@@ -21,7 +21,10 @@ module.exports = function(item) {
             }
         },
         seller: {
-            id: item.seller.id
+            id: item.seller.id,
+            wallet: {
+                address: item.seller.id,
+            }
         },
         platform: 'foundation',
         transaction: {
