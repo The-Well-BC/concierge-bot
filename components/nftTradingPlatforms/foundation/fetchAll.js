@@ -91,7 +91,9 @@ module.exports = function(startTime, limit) {
                 nft.creator = nftData.creator;
 
                 nft.creator.url = `https://foundation.app/${nft.creator.username}/`;
-                i.url = nft.creator.url + `${nft.name.toLowerCase().replace(/\s/g, '-').replace(/[\(\)]/, '')}-${ nft.tokenId }`;
+                i.url = nft.creator.url + `nft-${ nft.tokenId }`;
+
+                console.log('URL', i.url);
 
                 return i;
             }).flat().filter(item => item != false);
