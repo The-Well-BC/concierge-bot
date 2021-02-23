@@ -19,7 +19,20 @@ module.exports = function(payload, format) {
     let { creator, product, extras } = messageData;
 
     let text = '💫 NEW DROP\n', link;
-    text += `${ creator } just released ${ product }`;
+    if(creator || payload.creator) {
+        if(creator)
+            text += creator;
+        else if (payload.creator && payload.creator.wallet) {
+            let addr = payload.creator.wallet.address;
+
+            if(addr) 
+                text += addr.substring(0, 5) + '...' + addr.slice(-3);
+        }
+
+        text += ` just released ${ product }`;
+
+    } else
+        text += `${ product } was just released`;
 
     /*
     if(messageData.extras && Array.isArray(messageData.extras) && messageData.extras.length > 0) {
