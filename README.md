@@ -1,21 +1,15 @@
-# Trading Drops Telegram Bot
-### Team
-Telegram: @littlezigy
+# Concierge Bot by The Well
 
 ### About The Project
-It's a telegram bot that alerts users of product and artwork releases (drops) on [Zora](https://ourzora.com/) and [Foundation](https://foundation.app/).
+The Well gives collectors the ability to purchase a platform wide subscription to purchase NFTs of any artist on the platform OR the direct subscription to the artists you want to support.
 
-### Link to a live demo or working project
-
-[![Video](https://i9.ytimg.com/vi/-4K-OTvkvtc/mq2.jpg?sqp=COi09vwF&rs=AOn4CLBXFNrRfaVapC36zdmg6ZTYaE4PMA)](https://www.youtube.com/watch?v=-4K-OTvkvtc)
-<br />
-Add @tradedrops_bot on Telegram or click https://t.me/tradedrops_bot to open Telegram automatically
+Add @concierge-thewell on Telegram or click https://t.me/concierge-thewell to open Telegram automatically
 
 ![Screenshot 1](https://raw.githubusercontent.com/littlezigy/traddropbot/main/docResources/images/Screenshot_2020-10-30-20-30-23-696_org.telegram.messenger.jpg)
 
 ## How to Use
-https://t.me/tradedrops_bot
-Or add @tradedrops_bot on Telegram
+https://t.me/concierge-thewell
+Or add @concierge-thewell on Telegram
 
 ### Commands
 - `/start`
@@ -28,9 +22,11 @@ Or add @tradedrops_bot on Telegram
 ```
 npm i
 ```
-
 - Make sure you create a .env file. Use the .env.sample file as reference.
+
 - To run, type `npm start` into your terminal
 
 ### Tests
+`npm run test` will run all tests, while `npm run test:dev` will run only tests with #dev in the test title.
+
 Mocha and chai are used in the testing suites.
