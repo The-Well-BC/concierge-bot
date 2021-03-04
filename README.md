@@ -5,8 +5,6 @@ The Well gives collectors the ability to purchase a platform wide subscription t
 
 Add @concierge-thewell on Telegram or click https://t.me/concierge-thewell to open Telegram automatically
 
-![Screenshot 1](https://raw.githubusercontent.com/littlezigy/traddropbot/main/docResources/images/Screenshot_2020-10-30-20-30-23-696_org.telegram.messenger.jpg)
-
 ## How to Use
 https://t.me/concierge-thewell
 Or add @concierge-thewell on Telegram
