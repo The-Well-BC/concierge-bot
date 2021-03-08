@@ -36,7 +36,7 @@ module.exports = function(item, assert, chai) {
             'Property "creator" should have property "wallet.address" of type #{exp}. Got #{act} instead',
             '',
             'String',
-            item.creator.name
+            item.creator.wallet.address
         );
     }
 

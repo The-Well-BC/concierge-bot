@@ -1,7 +1,7 @@
 const axios = require('axios');
 const fetchNftDetails = require('./fetchNftDetails');
 
-module.exports = function(startTime, limit) {
+module.exports = function(startTime, limit, creators) {
     let url = 'https://api.thegraph.com/subgraphs/name/f8n/f8n-mainnet';
 
     let date = parseInt(startTime / 1000);
@@ -16,12 +16,17 @@ module.exports = function(startTime, limit) {
          additionalQuery += `, first: ${ parseInt(limit/4) }`;
     }
 
+    let creatorStr = creators.join('","');
+
     const query = `{
-        drops: nfts ( where: { dateMinted_gte: ${ date }} ${ additionalQuery }) {
+        drops: nfts ( where: { dateMinted_gte: ${ date }, creator_in: ["${ creatorStr }"]} ${ additionalQuery }) {
             id
             tokenId
             nftContract {
                 baseURI
+            }
+            creator {
+                id
             }
             tokenIPFSPath
             date: dateMinted
@@ -31,6 +36,9 @@ module.exports = function(startTime, limit) {
             nft {
                 id
                 tokenId
+                creator {
+                    id
+                }
                 nftContract {
                     baseURI
                 }
@@ -76,10 +84,10 @@ module.exports = function(startTime, limit) {
             let nft = (item.tokenId) ? item : 
                         (item.nft) ? item.nft : null;
 
-            return nft.tokenId;
+            return { id: nft.tokenId, creatorAddr: nft.creator.id };
         });
 
-        return fetchNftDetails(tokenIds)
+        return fetchNftDetails(tokenIds.map(i => i.id))
         .then(res => {
             return events.map(i => {
                 let nft = (i.tokenId) ? i : 
@@ -89,14 +97,26 @@ module.exports = function(startTime, limit) {
                 nft.name = nftData.name;
                 nft.image = nftData.image;
                 nft.creator = nftData.creator;
+                let address;
+
+                if(i.nft && i.nft.creator) {
+                    address = i.nft.creator.publicKey
+                } else if(i.creator)
+                    address= i.creator.publicKey
+
+                nft.creator.wallet = {
+                    address
+                }
 
                 nft.creator.url = `https://foundation.app/${nft.creator.username}/`;
                 i.url = nft.creator.url + `nft-${ nft.tokenId }`;
 
-                console.log('URL', i.url);
-
                 return i;
-            }).flat().filter(item => item != false);
+            }).flat().filter(item => item != false)
+            .filter(i => {
+                let creatorAddr = (i.nft) ? i.nft.creator.publicKey : i.creator.publicKey;
+                return creators.includes(creatorAddr.toLowerCase())
+            });
         });
 
         return Promise.all(promises)

@@ -5,7 +5,7 @@ const tweet = require('../../../components/messenger/twitter/api/tweet');
 const deleteTweet = require('../../../components/messenger/twitter/api/deleteTweet');
 const fetchTweet = require('../../../components/messenger/twitter/api/fetchTweet');
 
-describe('#dev Twitter API: Send Tweet', function() {
+describe('Twitter API: Send Tweet', function() {
     it('Send tweet', function() {
         const message = {
             text: 'Send tweet with link attachment\n' + new Date(),

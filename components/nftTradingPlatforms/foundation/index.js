@@ -6,9 +6,9 @@ const creators = require('./creators');
 
 module.exports = {
     fetchCreators: creators,
-    fetchEvents: (startTime, limit) => {
+    fetchEvents: (startTime, limit, creatorArr) => {
         let events = [];
-        return fetchAll(startTime, limit)
+        return fetchAll(startTime, limit, creatorArr)
         .then(res => {
             return res.map(item => {
                 let payload;

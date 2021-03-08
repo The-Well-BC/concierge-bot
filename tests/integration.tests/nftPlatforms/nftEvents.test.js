@@ -13,13 +13,26 @@ const zora = require('../../../components/nftTradingPlatforms/zora');
 
 const nftFn = require('../../../components/nftTradingPlatforms');
 
-describe.only('Fetch NFT events', function() {
+const artistDAO = require('../../../components/daos/artists.dao');
+let creators = {};
+
+describe('Fetch NFT events', function() {
     this.timeout(15000);
 
     const now = new Date();
     let startTime = new Date().setDate(now.getDate() - 1);
 
     const platformArr = ['nifty', 'superrare', 'foundation', 'zora'];
+
+    before(() => {
+        return artistDAO.fetchArtists()
+        .then(res => {
+            creators.foundation = res.map(i => i.platforms.foundation).filter(i => i != null);
+            creators.superrare = res.map(i => i.platforms.superrare).filter(i => i != null);
+            creators.zora = res.map(i => i.platforms.zora).filter(i => i != null);
+            creators.rarible = res.map(i => i.platforms.rarible).filter(i => i != null);
+        });
+    });
 
     it('Fetch all events', function() {
         const limit = 15;
@@ -69,16 +82,24 @@ describe.only('Fetch NFT events', function() {
         });
     })
 
-    it('Fetch from Foundation', function() {
+    it('#dev Fetch from Foundation', function() {
         const limit = 30;
         startTime = new Date().setDate(now.getDate() - 90);
 
-        return foundation.fetchEvents( startTime, limit )
+        return foundation.fetchEvents( startTime, limit, creators.foundation)
         .then(res => {
             expect(res).to.not.be.empty.and.to.not.have.lengthOf.above(limit);
 
+            console.log('RES', res);
+
             expect(res).to.satisfy(arr => {
-                return arr.some(item => item.event === 'drop');
+                let c1 = arr.every(i => {
+                    expect(i.creator).to.have.property('wallet');
+                    expect(creators.foundation).to.include(i.creator.wallet.address.toLowerCase());
+                    return true;
+                })
+
+                return c1 && arr.some(item => item.event === 'drop');
             });
 
             expect(res).to.not.have.lengthOf.above(limit);
@@ -89,7 +110,7 @@ describe.only('Fetch NFT events', function() {
         });
     })
 
-    it('#dev Fetch from Zora', function() {
+    it('Fetch from Zora', function() {
         const limit = 9;
         startTime = new Date().setHours(now.getHours() - 3);
 

@@ -3,7 +3,7 @@ const expect = chai.expect;
 
 const sendMessage = require('../../../components/messenger/telegram/api/sendText');
 
-describe.only('Telegram API: Send Message', function() {
+describe('Telegram API: Send Message', function() {
     it('Send text message', function() {
         const message = {
             text: 'Testing... testing...', 
@@ -24,7 +24,7 @@ describe.only('Telegram API: Send Message', function() {
             expect(res.result.from).to.have.property('is_bot', true);
         });
     });
-    it('#dev Test Markdown V2 format', function() {
+    it('Test Markdown V2 format', function() {
         const message = {
             text: '⚡\n_Testing\\.\\.\\.: *Testing*\\.\\.\\.[Google](https://www\\.google\\.com) for $80\\.53_',
             chat_id: 641574672,

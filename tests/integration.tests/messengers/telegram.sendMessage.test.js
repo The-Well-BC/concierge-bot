@@ -94,7 +94,7 @@ describe('Send Telegram Messsage', function() {
             });
         });
     });
-    it('#dev Send gif message to multiple chat IDs', function() {
+    it('Send gif message to multiple chat IDs', function() {
         const messages = [{
             img: 'https://res.cloudinary.com/nifty-gateway/image/upload/v1592327375/Twisted%20Vacancy/Kikai_Ningyou_btgdos.gif',
             text: `Test: Send message api here blah blah`

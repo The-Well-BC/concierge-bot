@@ -3,7 +3,10 @@ module.exports = function(payload) {
 
     let creator = {
         name: payload.creator.name,
-        url: payload.creator.url
+        url: payload.creator.url,
+        wallet: {
+            address: payload.creator.wallet.address
+        }
     }
 
     return {

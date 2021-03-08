@@ -3,7 +3,10 @@ module.exports = function(item) {
 
     let creator = {
         name: item.nft.creator.name,
-        url: item.nft.creator.url
+        url: item.nft.creator.url,
+        wallet: {
+            address: item.nft.creator.wallet.address
+        }
     }
 
     let bid = item.bids[0];
