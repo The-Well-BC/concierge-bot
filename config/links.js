@@ -1,4 +1,4 @@
 module.exports = {
-    telegramWebhook: `/${ process.env.TELEGRAM_BOT_TOKEN }`,
+    telegramWebhook: `/telegram/webhook/${ process.env.RANDOM_STRING}`,
     twitterWebhook: `/twitter/webhook/${ process.env.RANDOM_STRING }`,
 }
