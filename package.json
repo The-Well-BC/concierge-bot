@@ -1,11 +1,11 @@
 {
   "name": "dropbot",
   "version": "1.0.0",
-  "description": "A telegram bot that broadcasts trading drops on Foundation and Zora",
+  "description": "NFT curator bot for The Well",
   "main": "index.js",
   "scripts": {
-    "start": ". ./.env && NODE_ENV=production pm2 start ./index.js --name tradedrop_bot --time && pm2 save",
-    "stop": "pm2 stop tradedrop_bot && pm2 delete tradedrop_bot",
+    "start": ". ./.env && NODE_ENV=production pm2 start ./index.js --name concierge-bot --time && pm2 save",
+    "stop": "pm2 stop concierge-bot && pm2 delete concierge-bot",
     "dev": ". ./.env && NODE_ENV=development nodemon index.js",
     "test": ". ./.env && NODE_ENV=test mocha --timeout 10000 --recursive tests/ --require tests/hooks.js",
     "test:dev": ". ./.env && NODE_ENV=test mocha --timeout 30000 --recursive tests/ --grep '#dev' --require tests/hooks.js --watch",
