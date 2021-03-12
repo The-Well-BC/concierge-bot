@@ -1,14 +1,16 @@
 const axios = require('axios');
 const fetchHistoricalTicks = require('./fetchHistoricalTicks');
 
-module.exports = function(startTime, limit) {
+module.exports = function(startTime, limit, creators) {
     let products, bids;
 
     let max = parseInt(limit/2);
 
     const url = 'https://api.thegraph.com/subgraphs/name/ourzora/zora-v1';
+    let creatorStr = creators.join('","');
+
     const query = `{
-        drops: medias(where:{createdAtTimestamp_gte: ${ parseInt(startTime / 1000) }}, first: ${max}) {
+        drops: medias(where:{createdAtTimestamp_gte: ${ parseInt(startTime / 1000) }, creator_in: ["${ creatorStr }"]}, first: ${max}) {
             id
             owner {
                 id
@@ -19,27 +21,6 @@ module.exports = function(startTime, limit) {
             contentURI
             metadataURI
             date: createdAtTimestamp
-        }
-
-        sales: inactiveBids(where:{inactivatedAtTimestamp_gte: ${ parseInt(startTime / 1000)}, type: Finalized }, first: ${max}) {
-            id
-            currency {
-                symbol id name decimals
-            }
-            amount
-            date: inactivatedAtTimestamp
-            bidder {
-                id
-            }
-            media {
-                id
-                contentURI
-                metadataURI
-                creator {
-                    id
-                }
-            }
-            type
         }
     }`
 
