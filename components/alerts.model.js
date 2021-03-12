@@ -3,7 +3,7 @@ const subdao = require('./daos/subscription.dao');
 const subscriptionFilter = require('./subscriptionFilter');
 
 const telegram = require('./messenger/telegram');
-const twitter = require('./messenger/twitter');
+// const twitter = require('./messenger/twitter');
 
 const messages = require('./messages');
 
@@ -23,23 +23,27 @@ module.exports = {
         .then(subscriptions => {
             let sortedMessages = {};
 
-            subscriptions.push({ chatID: 'all', messenger: 'twitter' });
+            // subscriptions.push({ chatID: 'all', messenger: 'twitter' });
 
-            sortedMessages.twitter = subscriptionFilter(payload, subscriptions.filter(i => i.messenger === 'twitter'));
+            // sortedMessages.twitter = subscriptionFilter(payload, subscriptions.filter(i => i.messenger === 'twitter'));
             sortedMessages.telegram = subscriptionFilter(payload, subscriptions.filter(i => i.messenger === 'telegram'));
 
             let telegramAlerts = sortedMessages.telegram.map(p =>  {
                 return { message: messages.alertMessage(p.payload, telegram.format), chatIDs: p.chatIDs }
             });
 
+            /*
             let twitterAlerts = sortedMessages.twitter.map(p =>  {
                 return { message: messages.alertMessage(p.payload, twitter.format), chatIDs: p.chatIDs }
             });
+            */
 
             let promises = telegramAlerts.map(p => telegram.sendMessage(p.message, p.chatIDs));
+            /*
             promises.push(
                 ...twitterAlerts.map(p => twitter.sendMessage(p.message, p.chatIDs))
             );
+            */
 
             return Promise.all(promises);
         }).catch(e => {
