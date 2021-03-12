@@ -13,7 +13,7 @@ module.exports = {
         const nfts = nftFn(startTime);
         return nfts.fetchEvents(limit)
         .then(res => {
-            // Temporary: sending texts for only sales and drops
+            // Temporary: sending only drops
             res = res.filter(i => ['drop'].includes(i.event));
 
             payload.push(...res);
