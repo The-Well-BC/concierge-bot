@@ -15,22 +15,13 @@ module.exports = {
             fs.createReadStream(path.resolve(__dirname, "./artists.csv"))
             .pipe(csv())
             .on('data', row => {
-                let {Zora, Rarible, Foundation, SuperRare} = row;
-
-                let [zora, foundation, rarible, superrare] = [Zora, Rarible, Foundation, SuperRare].map(i => {
-                    if(i == '')
-                        return null;
-                    else
-                        return i.toLowerCase()
-
-                });
+                let walletAddress = row['Wallet Address'];
                 artists.push({
                     name: row['Artist Name'],
-                    platforms: { zora, foundation, rarible, superrare }
+                    walletAddress
                 });
             })
             .on('end', () => {
-                console.log('CSV file read successfully');
                 resolve( artists );
             });
         });
