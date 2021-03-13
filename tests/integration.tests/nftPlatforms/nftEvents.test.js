@@ -27,14 +27,11 @@ describe('Fetch NFT events', function() {
     before(() => {
         return artistDAO.fetchArtists()
         .then(res => {
-            creators.foundation = res.map(i => i.platforms.foundation).filter(i => i != null);
-            creators.superrare = res.map(i => i.platforms.superrare).filter(i => i != null);
-            creators.zora = res.map(i => i.platforms.zora).filter(i => i != null);
-            creators.rarible = res.map(i => i.platforms.rarible).filter(i => i != null);
+            creators = res;
         });
     });
 
-    it('Fetch all events', function() {
+    it('#dev Fetch all events', function() {
         const limit = 15;
 
         return nftFn(startTime).fetchEvents( limit )
@@ -42,10 +39,16 @@ describe('Fetch NFT events', function() {
             expect(res, 'No undefined properties').to.all.have.noUndefinedKeys();
             expect(res, 'Nft Event test').to.all.be.nftEvent(startTime);
 
+            expect(res).to.all.satisfy(i => {
+                if(!i.creator || !i.creator.wallet)
+                    console.log('NO CREATOR WALLET:\n', i);
+
+                expect(i.creator).to.have.property('wallet');
+                expect(creators.map(a => a.walletAddress)).to.include(i.creator.wallet.address.toLowerCase());
+                return true;
+            })
+
             expect(res).to.satisfy(arr => {
-                expect(arr.some(i => i.platform === 'nifty'),
-                    'At least one Nifty Gateway i'
-                ).to.be.true;
                 expect(
                     arr.some(i => i.platform === 'superrare' ),
                     'At least one SuperRare item'
@@ -67,35 +70,18 @@ describe('Fetch NFT events', function() {
         });
     });
 
-    it('Fetch from Nifty Gateway', function() {
-        const limit = 30;
-        startTime = new Date().setDate(now.getDate() - 1);
-
-        return nifty.fetchEvents( startTime, limit )
-        .then(res => {
-            expect(res).to.not.be.empty.and.to.not.have.lengthOf.above(limit);
-            expect(res).to.not.have.lengthOf.above(limit);
-            expect(res).to.all.have.property('platform', 'nifty');
-
-            expect(res, 'No undefined properties').to.all.have.noUndefinedKeys();
-            expect(res, 'Nft Event test').to.all.be.nftEvent(startTime);
-        });
-    })
-
     it('#dev Fetch from Foundation', function() {
         const limit = 30;
         startTime = new Date().setDate(now.getDate() - 90);
 
-        return foundation.fetchEvents( startTime, limit, creators.foundation)
+        return foundation.fetchEvents( startTime, limit, creators)
         .then(res => {
             expect(res).to.not.be.empty.and.to.not.have.lengthOf.above(limit);
-
-            console.log('RES', res);
 
             expect(res).to.satisfy(arr => {
                 let c1 = arr.every(i => {
                     expect(i.creator).to.have.property('wallet');
-                    expect(creators.foundation).to.include(i.creator.wallet.address.toLowerCase());
+                    expect(creators).to.include(i.creator.wallet.address.toLowerCase());
                     return true;
                 })
 
@@ -110,20 +96,25 @@ describe('Fetch NFT events', function() {
         });
     })
 
-    it('Fetch from Zora', function() {
+    it('#dev Fetch from Zora', function() {
         const limit = 9;
-        startTime = new Date().setHours(now.getHours() - 3);
+        startTime = new Date().setHours(now.getHours() - 30);
 
-        return zora.fetchEvents( startTime, limit )
+        return zora.fetchEvents( startTime, limit, creators )
         .then(res => {
             console.log('EVENTS', res);
             expect(res).to.not.be.empty.and.to.not.have.lengthOf.above(limit);
 
             expect(res).to.satisfy(arr => {
+                let c1 = arr.every(i => {
+                    expect(i.creator).to.have.property('wallet');
+                    expect(creators).to.include(i.creator.wallet.address.toLowerCase());
+                    return true;
+                })
 
-                let c1 = arr.some(item => item.event === 'drop');
+                let c2 = arr.some(item => item.event === 'drop');
 
-                let c2 = arr.some(item => {
+                let c3 = arr.some(item => {
                     console.log('ITEM EVENT', item.event);
                     if(item.event === 'sale') {
                         expect(item).to.have.property('transaction');
@@ -133,7 +124,7 @@ describe('Fetch NFT events', function() {
                     return item.event === 'sale';
                 });
 
-                return c1 && c2;
+                return c1 && c2 && c3;
             });
 
             expect(res).to.not.have.lengthOf.above(limit);
