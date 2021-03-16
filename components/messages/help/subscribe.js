@@ -16,8 +16,6 @@ module.exports = function(messenger, format, params) {
     }, {
         text: helpC + ' subscribe events'
     }, {
-        text: helpC + ' subscribe platforms'
-    }, {
         text: helpC + ' subscription filters'
     }];
 
