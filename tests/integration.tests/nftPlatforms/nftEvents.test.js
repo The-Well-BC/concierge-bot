@@ -10,6 +10,7 @@ const nifty = require('../../../components/nftTradingPlatforms/nifty');
 const superrare = require('../../../components/nftTradingPlatforms/superrare');
 const foundation = require('../../../components/nftTradingPlatforms/foundation');
 const zora = require('../../../components/nftTradingPlatforms/zora');
+const rarible = require('../../../components/nftTradingPlatforms/rarible');
 
 const nftFn = require('../../../components/nftTradingPlatforms');
 
@@ -22,7 +23,7 @@ describe('Fetch NFT events', function() {
     const now = new Date();
     let startTime = new Date().setDate(now.getDate() - 30);
 
-    const platformArr = ['nifty', 'superrare', 'foundation', 'zora'];
+    const platformArr = ['nifty', 'superrare', 'foundation', 'zora', 'rarible'];
 
     before(() => {
         return artistDAO.fetchArtists()
@@ -32,7 +33,7 @@ describe('Fetch NFT events', function() {
     });
 
     it('#dev Fetch all events', function() {
-        const limit = 15;
+        const limit = 30;
 
         return nftFn(startTime).fetchEvents( limit )
         .then(res => {
@@ -49,6 +50,10 @@ describe('Fetch NFT events', function() {
                 expect(
                     arr.some(i => i.platform === 'foundation'),
                     'At least one Foundation item'
+                ).to.be.true;
+                expect(
+                    arr.some(i => i.platform === 'rarible'),
+                    'At least one Rarible item'
                 ).to.be.true;
                 expect(
                     arr.some(i => i.platform === 'zora'),
@@ -81,6 +86,16 @@ describe('Fetch NFT events', function() {
         .then(res => {
             expect(res).to.not.be.empty.and.to.not.have.lengthOf.above(limit);
             expect(res).to.all.have.property('platform', 'zora');
+        });
+    })
+
+    it('Fetch from Rarible', function() {
+        const limit = 15;
+
+        return rarible.fetchEvents(startTime, limit, creators )
+        .then(res => {
+            expect(res).to.not.be.empty.and.to.not.have.lengthOf.above(limit);
+            expect(res).to.all.have.property('platform', 'rarible');
         });
     })
 

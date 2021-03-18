@@ -1,13 +1,14 @@
 const creatorDAO = require('../daos/artists.dao');
 const foundation = require('./foundation');
 const zora = require('./zora');
+const rarible = require('./rarible');
 const superrare = require('./superrare');
 
 module.exports = (startTime, limit = 10) => {
     if(!startTime)
         throw new Error('No start time specified');
 
-    let platforms = [foundation, superrare, zora];
+    let platforms = [foundation, superrare, zora, rarible];
 
     let drops = [];
 
@@ -17,7 +18,7 @@ module.exports = (startTime, limit = 10) => {
 
         creatorIDs = creatorIDs.filter(i => i != null && i != '')
 
-        let ilimit = limit / platforms.length;
+        let ilimit = parseInt(limit / platforms.length);
 
         return Promise.all( platforms.map((p, index) => {
             return p.fetchEvents(startTime, ilimit, creatorIDs)
