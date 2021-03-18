@@ -12,7 +12,7 @@ module.exports = function(chai, utils) {
     let Assertion = chai.Assertion;
     let expect = chai.expect;
 
-    Assertion.addMethod('nftEvent', function(startTime) {
+    Assertion.addMethod('nftEvent', function(startTime, creators) {
         let obj = this._obj
         if( !Array.isArray(obj) )
             obj = [ obj ];
@@ -46,6 +46,16 @@ module.exports = function(chai, utils) {
                     item
                 );
             }
+
+            expect(item.creator).to.have.property('wallet');
+            assert(
+                creators.includes(item.creator.wallet.address.toLowerCase()) === true,
+                `Item from platform ${item.platform} should have one of the curated creators. #{act}`,
+                 '',
+                creators,
+                item.creator
+            );
+            expect(creators).to.include(item.creator.wallet.address.toLowerCase(), 'Every creator should have a wallet address');
 
             // NFT event images are not compulsory anymore
             if(item.img) {

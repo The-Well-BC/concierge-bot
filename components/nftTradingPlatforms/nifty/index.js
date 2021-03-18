@@ -2,10 +2,10 @@ let drops = require('./drops');
 let transactions = require('./transactions');
 
 module.exports = {
-    fetchEvents: (startTime, limit) => {
+    fetchEvents: (startTime, limit, creators) => {
         let events = [];
         let number = parseInt(limit/2);
-        return drops(startTime, number)
+        return drops(startTime, number, creators)
         .then(res => {
             events = res
             return transactions(startTime, number);

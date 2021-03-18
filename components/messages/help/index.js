@@ -26,7 +26,7 @@ module.exports = function(messenger, format, params) {
 
     if(!params) {
         response = {
-            text: 'Trade Drop Bot will alert you to transactions and new drops on NFT trading platforms. Currently, it supports Nifty Gateway and SuperRare',
+            text: 'The Concierge bot will alert you as soon as there are new drops from a curated list of artists.',
             replies: helpReplies
         }
     } else {

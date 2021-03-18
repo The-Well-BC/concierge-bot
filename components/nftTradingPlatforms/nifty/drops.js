@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-module.exports = function(startTime, limit = 3) {
+module.exports = function(startTime, limit = 3, creators) {
     if(typeof limit !== 'number')
         limit = 3;
 
@@ -19,6 +19,7 @@ module.exports = function(startTime, limit = 3) {
         }
 
         return drops.map(item => {
+            console.log('NFITY ITEM', item);
             let url = `https://niftygateway.com/collections/${ item.storeURL}`;
 
             return {

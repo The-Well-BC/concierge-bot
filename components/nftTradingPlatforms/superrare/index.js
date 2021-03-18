@@ -1,15 +1,12 @@
-let purchases = require('./purchases');
+let fetchAll = require('./fetchAll');
 
 module.exports = {
-    fetchEvents: (startTime, limit) => {
+    fetchEvents: (startTime, limit, creators) => {
         let events = [];
-        return purchases(startTime, limit)
+        return fetchAll(startTime, limit, creators)
         .then(res => {
             events = res
             return events
-            .filter(item => {
-                return new Date(item.date) >= startTime;
-            });
         });
     }
 }

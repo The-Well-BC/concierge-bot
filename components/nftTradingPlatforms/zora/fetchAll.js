@@ -4,7 +4,8 @@ const fetchHistoricalTicks = require('./fetchHistoricalTicks');
 module.exports = function(startTime, limit, creators) {
     let products, bids;
 
-    let max = parseInt(limit/2);
+    // let max = parseInt(limit/2);
+    let max = limit;
 
     const url = 'https://api.thegraph.com/subgraphs/name/ourzora/zora-v1';
     let creatorStr = creators.join('","');
@@ -30,8 +31,6 @@ module.exports = function(startTime, limit, creators) {
             throw res.data.errors;
         products = res.data.data.drops;
 
-        bids = res.data.data.bids;
-
         // Set event type
         let events = Object.keys(res.data.data).map(key => {
             let p = res.data.data[key];
@@ -52,8 +51,6 @@ module.exports = function(startTime, limit, creators) {
                 });
             }
         }).flat();
-
-        // console.log('EVENTS', events);
 
         return Promise.all(events.map(p => {
             let nft = (p.event == 'drop') ? p :
@@ -77,40 +74,15 @@ module.exports = function(startTime, limit, creators) {
                 if(!nft.creator)
                     throw new Error('Return NFT creator object');
 
-            // Fetch user Data
+                // Fetch user Data
                 // let users = [p.bidder, p.owner, p.buyer];
-                console.log('NFT', nft);
                 let users = [nft.creator];
 
                 //users.push(nft.creator);
 
                 users = users.filter(u => u != null && u != undefined);
 
-                console.log('USERS', users);
-
-                return Promise.all(users.map(user => {
-
-                    return axios.get(`https://zora.co/_next/data/lOaHd2a1dQOshnEFWCX-2/${user.id}.json`)
-                    .catch(e => {
-                        return { data: { } };
-                    })
-                    .then(res2 => {
-                        console.log('RES W2', res2.data);
-                        userData = res2.data.pageProps;
-
-                        if(userData) {
-                            console.log('USERDATA', userData);
-                            if(userData.user)
-                                user.name = userData.user.name || userData.user.username;
-                            /*
-                            else if(userData.seo)
-                                user.name = userData.seo.title
-                            */
-
-                            user.url = userData.seo.url;
-                        } else return false;
-                    })
-                })).then(() => p)
+                return nft;
             });
         }));
     }).catch(e => {

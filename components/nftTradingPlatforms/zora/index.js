@@ -3,9 +3,9 @@ let dropFormatter = require('./formatters/drops');
 let saleFormatter = require('./formatters/sales');
 
 module.exports = {
-    fetchEvents: (startTime, limit) => {
+    fetchEvents: (startTime, limit, creators) => {
         let events = [];
-        return fetchAll(startTime, limit)
+        return fetchAll(startTime, limit, creators)
         .then(res => {
             // console.log('ALL ITEMS', res);
             return res.map(item => {

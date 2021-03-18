@@ -1,7 +1,10 @@
 module.exports = function(p) {
-    console.log('SALE PAYLOAD\n', p);
-
     let { date } = p;
+
+    let creator = p.media;
+
+    if(creator.creator.id)
+        creator.id = creator.creator.id;
 
     let buyer = {
         id: p.bidder.id,
@@ -21,6 +24,12 @@ module.exports = function(p) {
     return {
         name: p.media.name,
         img,
+        ...creator.id && {creator: {
+            name: creator.name,
+            wallet: {
+                address: creator.id
+            }
+        }},
         buyer,
         transaction: {price},
         event: 'sale',

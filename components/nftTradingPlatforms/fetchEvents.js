@@ -13,16 +13,14 @@ module.exports = (startTime, limit = 10) => {
 
     return creatorDAO.fetchArtists()
     .then(res => {
-        console.log('ARTISTS', res);
         let creatorIDs = res.map(i => i.walletAddress);
 
-        console.log('CREATOR IDS', creatorIDs);
         creatorIDs = creatorIDs.filter(i => i != null && i != '')
 
-        console.log('CREATORS NICELY SORTED', creatorIDs);
+        let ilimit = limit / platforms.length;
 
         return Promise.all( platforms.map((p, index) => {
-            return p.fetchEvents(startTime, limit, creatorIDs)
+            return p.fetchEvents(startTime, ilimit, creatorIDs)
         }))
     }).then(res => res.flat());
 }

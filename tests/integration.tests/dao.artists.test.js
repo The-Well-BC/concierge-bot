@@ -6,7 +6,7 @@ const expect = chai.expect;
 
 const teardown = require('../teardown');
 
-describe('#dev Artist DAO', function() {
+describe('Artist DAO', function() {
     beforeEach(() => teardown());
 
     it('Fetch all artists', function() {
