@@ -13,6 +13,7 @@ describe('Send Telegram Messsage', function() {
         .then(res => {
             expect(res).to.all.satisfy(item => {
                 expect(item).to.have.property('ok', true);
+                expect(item).to.have.property('messenger', 'telegram');
                 expect(item.result.from).to.have.property('is_bot', true);
                 expect(item.result.chat.id).to.equal(641574672);
                 expect(item.result.text).to.equal(message.text);
@@ -29,7 +30,7 @@ describe('Send Telegram Messsage', function() {
             text: `Test: Send message to two chats on telegram`
         }]
 
-        const chatIDs = [641574672, 659038858]
+        const chatIDs = [641574672, 641574672]
 
         return telegram.sendMessage(messages, chatIDs)
         .then(res => {

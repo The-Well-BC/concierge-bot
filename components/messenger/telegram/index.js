@@ -28,6 +28,15 @@ module.exports = {
             }
         });
 
-        return Promise.all(promises);
+        return Promise.all(promises)
+        .then(res => {
+            return res.map(item => {
+                return {
+                    ...item,
+                    messenger: 'telegram'
+                }
+            });
+        });
+
     }
 }

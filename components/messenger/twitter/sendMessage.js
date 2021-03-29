@@ -22,12 +22,20 @@ module.exports = (message, chatIDs) => {
             promises.push( uploadMedia(msg) );
         } else {
             if(item.chatID) {
-                promises.push(sendDM(item));
+                promises.push(sendDM(item))
             } else {
                 promises.push(tweet(item));
             }
         }
     });
 
-    return Promise.all(promises);
+    return Promise.all(promises)
+    .then(res => {
+        return res.map(item => {
+            return {
+                ...item,
+                messenger: 'twitter'
+            }
+        });
+    });
 }

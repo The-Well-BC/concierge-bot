@@ -21,6 +21,7 @@ describe('Twitter methods: Send Text Message', function() {
             expect(res).to.not.be.empty;
 
             expect(res).to.all.satisfy( item => {
+                expect(item).to.have.property('messenger', 'twitter');
                 let text = (item.event) ? item.event.message_create.message_data.text : item.tweet.text;
                 let url = (item.event) ?  item.event.message_create.message_data.entities.urls[0].expanded_url : item.tweet.entities.urls[0].expanded_url;
 
