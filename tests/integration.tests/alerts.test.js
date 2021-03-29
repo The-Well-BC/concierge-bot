@@ -18,22 +18,21 @@ describe('Sending alerts', function() {
         });
     });
 
-    it('Send alerts for 1 day period', function() {
+    it('#dev Send alerts for 1 day period', function() {
         let now = new Date();
-        let startTime = new Date(new Date().setDate(now.getDate() - 1));
+        let startTime = new Date(new Date().setDate(now.getDate() - 10));
 
         return alertsModel.sendAlerts(startTime)
         .then(res => {
             expect(res).to.satisfy( arr => {
-                let oneTwitter = arr.some(item => {
-                    return item.event;
-                });
+                expect(arr).to.not.be.empty;
+                let oneTelegram = arr.some(item => item.messenger === 'telegram');
 
-                if(oneTwitter !== true) { 
+                if(oneTelegram !== true) { 
                     assert.fail(
                         arr,
-                        [{event: { type: 'message_create' }}],
-                        'Missing Expected there to be at least one twitter message object.with property "event"'
+                        [{messenger: 'telegram' }],
+                        'Missing Expected there to be at least one telegram message object'
                     );
                 }
 
@@ -48,7 +47,7 @@ describe('Sending alerts', function() {
                         text = item.event.message_create.message_data.text;
                     }
 
-                    assert.match(text, /(released\s.*on)|(bought\s.*on)/);
+                    assert.match(text, /(just\sreleased)|(bought\s.*on)/);
 
                     return true;
                 });
@@ -56,13 +55,13 @@ describe('Sending alerts', function() {
         });
     });
 
-    it('Send alerts for 5 minute period', function() {
+    it('Send alerts for x minutes period', function() {
         let now = new Date();
-        let startTime = new Date(new Date().setMinutes(now.getMinutes() - 5));
+        let startTime = new Date(new Date().setMinutes(now.getMinutes() - 500));
 
         return alertsModel.sendAlerts(startTime)
         .then(res => {
-            console.log('ARR', res);
+            expect(res).not.to.be.empty;
             expect(res).to.satisfy( arr => {
                 if(arr.length > 1) {
                     let oneTwitter = arr.some(item => {
