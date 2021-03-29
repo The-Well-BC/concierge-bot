@@ -8,7 +8,7 @@ module.exports = {
     prepareMessage: prepareMessages,
     parseMessage,
 
-    format: 'markdown',
+    format: 'markdownV2',
 
     sendMessage(payload, chatIDs) {
 
