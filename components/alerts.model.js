@@ -13,6 +13,7 @@ module.exports = {
         const nfts = nftFn(startTime);
         return nfts.fetchEvents(limit)
         .then(res => {
+            console.log('EVENTS', res);
             // Temporary: sending only drops
             res = res.filter(i => ['drop'].includes(i.event));
 
