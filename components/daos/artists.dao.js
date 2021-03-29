@@ -11,8 +11,10 @@ const defaultFilterOrder = 'ORDER BY _id ASC';
 module.exports = {
     fetchArtists() {
         let artists = [];
+        let filePath = (process.env.NODE_ENV === 'test') ? '../../tests/artists.csv' : "./artists.csv";
+
         return new Promise((resolve, reject) => {
-            fs.createReadStream(path.resolve(__dirname, "./artists.csv"))
+            fs.createReadStream(path.resolve(__dirname, filePath))
             .pipe(csv())
             .on('data', row => {
                 let walletAddress = row['Wallet Address'];
