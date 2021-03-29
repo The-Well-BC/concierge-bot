@@ -8,7 +8,7 @@ const messengers = ['twitter', 'telegram']
 let commandChars = ['!', '/'];
 
 describe('Test Help commands: Subscribe help', function() {
-    it('Help command: subscribe', function() {
+    it('#dev Help command: subscribe', function() {
         let payload = {
             command: {
                 name: 'help',

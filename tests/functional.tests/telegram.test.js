@@ -29,6 +29,25 @@ describe('Telegram routes', function() {
         });
     });
 
+    it('#dev Help Command: Subscribe', function() {
+        const payload = clone(samplePayloads.commands.subscribe);
+
+        const chatID = '641574672';
+        payload.message.text = '/help subscribe';
+
+        return request(app).post(links.telegramWebhook).send(payload)
+        .then(res => {
+            expect(res.body).to.have.keys('chat_id', 'text', 'method', 'parse_mode', 'reply_markup');
+
+            expect(res.body.chat_id).to.equal(chatID);
+            expect(res.body.text).to.have.string('Nifty Gateway');
+            return subdao.fetchSubscription(chatID)
+            .then(res => {
+                expect(res).to.be.empty;
+            });
+        });
+    });
+
     it('Subscribe user to all services', function() {
         const payload = clone(samplePayloads.commands.subscribe);
 

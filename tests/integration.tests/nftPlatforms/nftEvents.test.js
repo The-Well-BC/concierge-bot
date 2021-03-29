@@ -32,11 +32,12 @@ describe('Fetch NFT events', function() {
         });
     });
 
-    it('#dev Fetch all events', function() {
+    it('Fetch all events', function() {
         const limit = 30;
 
         return nftFn(startTime).fetchEvents( limit )
         .then(res => {
+            expect(res).to.not.be.empty.and.to.not.have.lengthOf.above(limit);
             expect(res, 'No undefined properties').to.all.have.noUndefinedKeys();
             expect(res, 'Nft Event test').to.all.be.nftEvent(startTime, creators);
 
