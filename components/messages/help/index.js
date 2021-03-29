@@ -6,23 +6,15 @@ const filter = require('./subscriptionFilter');
 
 module.exports = function(messenger, format, params) {
     let subC = commands.subscribe[messenger ];
+    let browseC = commands.browseCreators[messenger ];
 
     let helpReplies = [
+        { text: browseC },
         { text: commands.help[messenger] + ' subscribe' },
         { text: commands.help[messenger] + ' unsubscribe' },
     ];
 
     let helpC = commands.help[messenger];
-
-    let subscribeReplies = [{
-        text: commands.subscribe[messenger]
-    }, {
-        text: helpC + ' subscribe creators'
-    }, {
-        text: helpC + ' subscribe events'
-    }, {
-        text: helpC + ' subscribe platforms'
-    }];
 
     if(!params) {
         response = {

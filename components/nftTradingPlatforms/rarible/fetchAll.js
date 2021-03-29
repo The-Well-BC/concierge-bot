@@ -30,7 +30,6 @@ module.exports = function(startTime, limit = 10, creators) {
             return axios.get(i.tokenURI)
             .then(r2 => {
                 r2 = r2.data;
-                console.log('TOKEN DATA', r2);
 
                 i.event = 'drop';
                 i.name = r2.name;

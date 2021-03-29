@@ -9,15 +9,13 @@ module.exports = function(messenger, format, params) {
     let subC = commands.subscribe[messenger ];
     let helpC = commands.help[messenger];
 
-    let helpReplies = [{
-        text: commands.subscribe[messenger]
-    }, {
-        text: helpC + ' subscribe creators'
-    }, {
-        text: helpC + ' subscribe events'
-    }, {
-        text: helpC + ' subscription filters'
-    }];
+    let helpReplies = [
+        { text: commands.subscribe[messenger] },
+        { text: helpC + ' subscribe creators' },
+        { text: helpC + ' subscribe events' },
+        { text: helpC + ' subscribe platforms' },
+        { text: helpC + ' subscription filters' }
+    ];
 
 
     let helpParameter = params;
