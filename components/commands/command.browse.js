@@ -1,11 +1,14 @@
-const fetchCreators = require('../nftTradingPlatforms/fetchCreators');
+const { ArtistDAO } = require('../daos/artists.dao');
 
-module.exports = (payload, messenger, formatter, commands) => {
-
+module.exports = (payload, messenger, formatter, commands, useTestFile) => {
     if(!payload.command.params)
         return Promise.resolve(formatter.browse(messenger, commands));
     else {
-        return fetchCreators(3)
+        let artists = new ArtistDAO();
+        if(useTestFile)
+            artists.useTestFile = useTestFile;
+
+        return artists.fetchArtists(3)
         .then(res => {
             return formatter.creatorSummary(res, messenger);
         });

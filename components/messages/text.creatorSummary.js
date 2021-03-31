@@ -9,11 +9,14 @@ module.exports = (creators, messenger) => {
         creators = [ creators ];
 
     creators.forEach(creator => {
-        replies.push({ text: `${ commands.subscribe[messenger] } creator "${ creator.name }"` });
+        replies.push({ text: `${ commands.subscribe[messenger] } creator ${ creator.name }` });
         if(creators[0] !== creator)
             text += '\n\n';
 
         let t = creator.name;
+
+        if(creator.bio && creator.bio.length > 1)
+            t += ' - ' + creator.bio;
 
         if(creator.moniker)
             t += ` (${ creator.moniker })`;
@@ -36,6 +39,8 @@ module.exports = (creators, messenger) => {
 
         text += t;
     });
+
+    // console.log('CREATOR TEXT', text);
 
     return { text, replies };
 }
