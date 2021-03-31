@@ -6,6 +6,7 @@ const subdao = require('../../components/daos/subscription.dao');
 
 const formats = ['plain', 'markdown'];
 const messengers = ['twitter', 'telegram']
+let commandChars = ['', '/'];
 
 const chatIDs = ['1234', '5673', '9102', '4567'];
 
@@ -32,9 +33,22 @@ describe('The Subscribe Command', function() {
         });
 
         return Promise.all(promises)
-        .then(message => {
-            expect(message).to.all.have.property('text');
-            expect(message).to.all.have.property('text', 'You have opted to receive notifications whenever any NFTs are traded or released.');
+        .then(messages => {
+            expect(messages).to.all.have.property('text');
+            expect(messages).to.all.have.property('text', 'The Concierge bot will alert you when there is activity on NFTs from our curated list of NFT creators');
+            expect(messages).to.all.have.property('replies');
+            expect(messages).to.satisfy(arr => {
+                return arr.every((item, i) => {
+                    let c = commandChars[i];
+
+                    expect(item.replies).to.have.deep.members([
+                        { text: `${c}browse creators` }
+                    ]);
+
+                    return true;
+                });
+            });
+
             return subdao.fetchSubscription(chatID)
         }).then(res => {
             expect(res).to.have.lengthOf(2);

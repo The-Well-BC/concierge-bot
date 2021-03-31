@@ -39,8 +39,14 @@ module.exports = (payload, messenger) => {
                 else {
                     subFilters = {...res.filters }
                 }
+                let mc = { };
+                Object.keys(messengerCommands).forEach(k => 
+                    mc[k] = messengerCommands[k][messenger]
+                )
 
-                response = formatter.subscribe(subFilters, messengerCommands);
+                response = formatter.subscribe(subFilters,
+                    mc
+                );
                 return response;
             })
             .catch(e => {

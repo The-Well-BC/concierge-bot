@@ -5,7 +5,7 @@ const commands = require('../../components/commands');
 
 const formats = ['plain', 'markdown'];
 const messengers = ['twitter', 'telegram']
-let commandChars = ['!', '/'];
+let commandChars = ['', '/'];
 
 describe('Test Help commands: Subscribe help', function() {
     it('#dev Help command: subscribe', function() {

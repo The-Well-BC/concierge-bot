@@ -29,38 +29,4 @@ describe('The Browse Command', function() {
             expect(message.text).to.equal('Browse and subscribe to creators, NFT categories');
         });
     });
-
-    it('Browse creators', function() {
-        const payload = {
-            ...payload_,
-            command: {
-                name: 'browse',
-                params: 'creators'
-            },
-        }
-
-        let promises = [
-            commands(payload, 'telegram'),
-            commands(payload, 'twitter')
-        ]
-
-        return Promise.all(promises)
-        .then(messages => {
-            expect(messages).to.all.have.keys('text', 'replies');
-            expect(messages[0].text).to.contain('NFTs released');
-            expect(messages[1].text).to.contain('NFTs released');
-
-            expect(messages[0].replies).to.all.satisfy(r => {
-                assert.match(r.text, /\/subscribe creator/);
-                assert.notMatch(r.text, /undefined creator/);
-                return true;
-            });
-            expect(messages[1].replies).to.all.satisfy(r => {
-                assert.match(r.text, /!subscribe creator/);
-                assert.notMatch(r.text, /undefined creator/);
-                return true;
-            });
-        });
-    });
 });
-

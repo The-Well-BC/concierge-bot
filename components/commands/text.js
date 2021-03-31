@@ -1,30 +1,30 @@
 module.exports = {
     browse: {
         telegram: '/browse',
-        twitter: '!browse'
+        twitter: 'browse'
     },
     subscriptionFilters: {
         telegram: '/filters',
-        twitter: '!filters'
+        twitter: 'filters'
     },
     subscriptionFilter: {
         telegram: '/filter',
-        twitter: '!filter'
+        twitter: 'filter'
     },
     browseCreators: {
         telegram: '/browse creators',
-        twitter: '!browse creators'
+        twitter: 'browse creators'
     },
     subscribe: {
         telegram: '/subscribe',
-        twitter: '!subscribe'
+        twitter: 'subscribe'
     },
     unsubscribe: {
         telegram: '/unsubscribe',
-        twitter: '!unsubscribe'
+        twitter: 'unsubscribe'
     },
     help: {
         telegram: '/help',
-        twitter: '!help'
+        twitter: 'help'
     }
 }

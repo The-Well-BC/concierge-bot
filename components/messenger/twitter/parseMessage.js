@@ -9,8 +9,10 @@ module.exports = (payload) => {
 
     let text_ = message.text;
 
-    if(text_.indexOf('!') == 0) {
-        command = text_.match(/(?<=\!)\w+/)[0];
+    if(/^help/ig.test(text_)) {
+        command = 'help'
+    } else {
+        command = text_.match(/\w+/)[0];
 
         let paramsText = text_.replace(/\s+/g, ' ').match(/(?<=\!\w+\s+).+/g);
 
@@ -18,9 +20,8 @@ module.exports = (payload) => {
 
         if(command === 'subscribe' && params == null)
             params = 'all';
-    } else if(/^help/ig.test(text_)) {
         command = 'help'
-    } else {
+
         text = text_;
     }
 
